@@ -1,0 +1,29 @@
+---
+- hosts: all
+  remote_user: admin
+  become: yes
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Create docker database volume
+      shell: "docker volume create --name={{ stack_name }}-database --opt=size=10 --driver=rexray/dobs"
+
+    - name: Create docker objectstore volume
+      shell: "docker volume create --name={{ stack_name }}-objectstore --opt=size=10 --driver=rexray/dobs"
+
+    - name: Add docker compose file
+      copy:
+        src: docker-compose.yml
+        dest: /docker-compose.yml
+
+    - name: Deploy docker stack
+      shell: docker stack deploy --with-registry-auth -c /docker-compose.yml {{ stack_name }}
+      environment:
+        STACK_NAME: "{{ stack_name }}"
+        STACK_DOMAIN: "{{ stack_name }}.staging.sephton.io"
+
+    - name: Remove docker compose file
+      file:
+        state: absent
+        path: /docker-compose.yml
