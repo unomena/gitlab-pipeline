@@ -2,13 +2,15 @@
 - hosts: all
   remote_user: admin
   become: yes
-  vars_files:
-    - vars.yml
+  vars:
+    ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_ssh_private_key_file: keys/id_rsa
 
   tasks:
-    - name: Create docker volume
-      shell: "docker volume create --name={{ item.name }} --opt=size={{ item.size }} --driver={{ item.driver }}"
-      with_items: "{{ volumes }}"
+    #- name: Create docker volume
+    #  shell: "docker volume create --name={{ item.name }} --opt=size={{ item.size }} --driver={{ item.driver }}"
+    #  with_items: "{{ volumes }}"
 
     #- name: Create docker objectstore volume
     #  shell: "docker volume create --name={{ stack_name }}-objectstore --opt=size=10 --driver=rexray/dobs"
