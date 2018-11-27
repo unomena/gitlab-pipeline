@@ -29,4 +29,5 @@ staging:
     - chmod 700 keys/id_rsa
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.yml
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/inventory.py
+    - chmod +x inventory.py
     - ansible-playbook -i inventory.py --extra-vars "ansible_sudo_pass=$QA_CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY stack_name=$STACK_NAME" deploy.yml
