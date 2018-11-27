@@ -25,6 +25,6 @@ staging:
     - apt-get -yy update && apt-get install -y openssh-client
     - pip install ansible
     - mkdir keys
-    - echo $QA_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY > keys/id_rsa
+    - cp /tmp/keys/QA_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY keys/id_rsa
     - chmod 700 keys/id_rsa
     - ansible-playbook -i $QA_CLUSTER_IP, --extra-vars "ansible_sudo_pass=$QA_CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY stack_name=$STACK_NAME" deploy.yml
