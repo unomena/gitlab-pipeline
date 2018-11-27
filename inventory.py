@@ -30,7 +30,7 @@ elif args.host:
     #        volumes.append(volume)
 
     print(json.dumps({
-        #'ansible_host': os.environ['QA_CLUSTER_IP'],
+        'ansible_host': os.environ['QA_CLUSTER_IP'],
         #'volumes': volumes,
         'ansible_ssh_extra_args': "-o StrictHostKeyChecking=no",
         'ansible_python_interpreter': '/usr/bin/python3',
