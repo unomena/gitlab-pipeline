@@ -26,8 +26,7 @@ elif args.host:
             volume = {
                 'name': spec['name']
             }
-            for label in spec['labels']:
-                volume.update(label)
+            volume.update(spec['labels'])
             volumes.append(volume)
 
     print(json.dumps({
