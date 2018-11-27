@@ -22,7 +22,7 @@ staging:
   stage: deploy
   image: python:3.7-slim
   script:
-    - apt-get -yy update && apt-get install -y openssh-client
+    - apt-get -yy update && apt-get install -y openssh-client wget
     - pip install ansible
     - mkdir keys
     - cp /tmp/keys/QA_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY keys/id_rsa
