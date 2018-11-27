@@ -19,19 +19,19 @@ if args.list:
     }))
 
 elif args.host:
-    volumes = []
-    compose_yaml = yaml.load(open('docker-compose.yml', 'r').read())
-    for volume, spec in compose_yaml['volumes'].items():
-        if spec['external']:
-            volume = {
-                'name': spec['name']
-            }
-            volume.update(spec['labels'])
-            volumes.append(volume)
+    #volumes = []
+    #compose_yaml = yaml.load(open('docker-compose.yml', 'r').read())
+    #for volume, spec in compose_yaml['volumes'].items():
+    #    if spec['external']:
+    #        volume = {
+    #            'name': spec['name']
+    #        }
+    #        volume.update(spec['labels'])
+    #        volumes.append(volume)
 
     print(json.dumps({
-        'ansible_host': os.environ['QA_CLUSTER_IP'],
-        'volumes': volumes,
+        #'ansible_host': os.environ['QA_CLUSTER_IP'],
+        #'volumes': volumes,
         'ansible_ssh_extra_args': "-o StrictHostKeyChecking=no",
         'ansible_python_interpreter': '/usr/bin/python3',
         'ansible_ssh_private_key_file': 'keys/id_rsa',

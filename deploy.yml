@@ -6,11 +6,11 @@
     - vars.yml
 
   tasks:
-    - name: Create docker database volume
-      shell: "docker volume create --name={{ stack_name }}-database --opt=size=10 --driver=rexray/dobs"
+    #- name: Create docker database volume
+    #  shell: "docker volume create --name={{ stack_name }}-database --opt=size=10 --driver=rexray/dobs"
 
-    - name: Create docker objectstore volume
-      shell: "docker volume create --name={{ stack_name }}-objectstore --opt=size=10 --driver=rexray/dobs"
+    #- name: Create docker objectstore volume
+    #  shell: "docker volume create --name={{ stack_name }}-objectstore --opt=size=10 --driver=rexray/dobs"
 
     - name: Add docker compose file
       copy:
