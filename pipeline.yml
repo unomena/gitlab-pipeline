@@ -52,7 +52,7 @@ qa:
   only:
     - web
 
-stop_qa:
+stop:
   stage: deploy
   script: echo "Stopping QA"
   environment:
