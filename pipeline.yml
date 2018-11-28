@@ -42,7 +42,7 @@ qa:
     CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/STAGING_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
   environment:
     name: qa-$CI_COMMIT_REF_SLUG
-    url: https://$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.staging.sephton.io
+    url: https://$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.sephton.io
     on_stop: stop_qa
   script:
     - apt-get -yy update && apt-get install -y openssh-client wget
