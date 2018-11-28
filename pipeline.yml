@@ -9,6 +9,7 @@
 
 stages:
   - build
+  - qa
   - deploy
 
 build:
@@ -22,13 +23,11 @@ build:
     - docker login --username gitlab-ci-token --password $CI_JOB_TOKEN $CI_REGISTRY
     - docker-compose --file docker-compose-build.yml build --pull
     - docker-compose --file docker-compose-build.yml push
-  only:
-    - tags
-  except:
-    - branches
+  only: tags
+  except: branches
 
 staging:
-  stage: deploy
+  stage: qa
   image: python:3.7-slim
   variables:
     RESOURCE_PREFIX: io-sephton-staging-$CI_PROJECT_NAME
@@ -46,7 +45,28 @@ staging:
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/inventory.py
     - chmod +x inventory.py
     - ansible-playbook -i $CLUSTER_IP, --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME" deploy.yml
-  only:
-    - tags
-  except:
-    - branches
+  only: tags
+  except: branches
+
+production:
+  stage: deploy
+  image: python:3.7-slim
+  variables:
+    RESOURCE_PREFIX: io-sephton-production-$CI_PROJECT_NAME
+    STACK_HOSTNAME: $PRODUCTION_STACK_HOSTNAME
+    CLUSTER_IP: $PRODUCTION_CLUSTER_IP
+    CLUSTER_ADMIN_USER_PASSWORD: $PRODUCTION_CLUSTER_ADMIN_USER_PASSWORD
+    CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/PRODUCTION_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
+  script:
+    - apt-get -yy update && apt-get install -y openssh-client wget
+    - pip install ansible
+    - mkdir keys
+    - cp $CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE keys/id_rsa
+    - chmod 700 keys/id_rsa
+    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.yml
+    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/inventory.py
+    - chmod +x inventory.py
+    - ansible-playbook -i $CLUSTER_IP, --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME" deploy.yml
+  only: tags
+  except: branches
+  when: manual
