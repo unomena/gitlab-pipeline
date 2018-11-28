@@ -21,10 +21,10 @@
         dest: /docker-compose.yml
 
     - name: Deploy docker stack
-      shell: docker stack deploy --with-registry-auth -c /docker-compose.yml {{ stack_name }}
+      shell: docker stack deploy --with-registry-auth -c /docker-compose.yml {{ resource_prefix }}
       environment:
-        STACK_NAME: "{{ stack_name }}"
-        STACK_DOMAIN: "{{ stack_name }}.staging.sephton.io"
+        RESOURCE_PREFIX: "{{ resource_prefix }}"
+        STACK_HOSTNAME: "{{ stack_hostname }}"
 
     - name: Remove docker compose file
       file:
