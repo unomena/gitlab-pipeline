@@ -79,10 +79,12 @@ stop_qa:
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/inventory.py
     - chmod +x inventory.py
     - ansible-playbook -i $CLUSTER_IP, --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME" destroy.yml
-  when: manual
   environment:
     name: qa/$CI_COMMIT_REF_SLUG
     action: stop
+  when: manual
+  only:
+    - web
 
 
 build:
