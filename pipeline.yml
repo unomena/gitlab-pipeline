@@ -57,6 +57,7 @@ deploy_qa:
 
 stop_qa:
   stage: deploy
+  image: python:3.7-slim
   variables:
     GIT_STRATEGY: none
     RESOURCE_PREFIX: io-sephton-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
