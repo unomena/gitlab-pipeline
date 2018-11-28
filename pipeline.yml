@@ -8,9 +8,13 @@
 #  PRODUCTION_STACK_HOSTNAME: $CI_PROJECT_NAME.production.sephton.io
 
 stages:
+  - test
   - build
-  - qa
   - deploy
+
+test:
+  stage: test
+  script: echo "Running tests"
 
 build:
   stage: build
@@ -29,7 +33,7 @@ build:
     - branches
 
 staging:
-  stage: qa
+  stage: deploy
   image: python:3.7-slim
   variables:
     RESOURCE_PREFIX: io-sephton-staging-$CI_PROJECT_NAME
