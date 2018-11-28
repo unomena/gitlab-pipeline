@@ -55,7 +55,6 @@ qa:
 stop_qa:
   stage: deploy
   script: echo "Stopping QA"
-  when: manual
   environment:
     name: qa-$CI_COMMIT_REF_SLUG
     action: stop
