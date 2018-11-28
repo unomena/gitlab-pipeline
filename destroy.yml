@@ -6,7 +6,26 @@
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
     ansible_ssh_private_key_file: keys/id_rsa
+    volumes_format_string: !unsafe "{{range .Spec.TaskTemplate.ContainerSpec.Mounts}}{{.Source}}{{end}}"
 
   tasks:
-    - name: Deploy docker stack
-      shell: docker stack rm {{ resource_prefix }}
+    - name: Resolve stack service ids
+      command: docker service ls --filter "label=com.docker.stack.namespace={{ resource_prefix }}" -q
+      register: stack_services
+
+    - name: Resolve stack service volumes
+      command: "docker service inspect -f '{{ volumes_format_string }}' {{ item }}"
+      register: stack_volumes
+      with_items: "{{ stack_services.stdout_lines }}"
+
+    - name: Stop stack services
+      command: docker service scale {{ item }}=0
+      with_items:
+        - "{{ stack_services.stdout_lines }}"
+
+    - name: Remove stack service volumes
+      command: "docker volume rm {{ item }}"
+      with_items: "{{stack_volumes.results|map(attribute='stdout_lines')|list}}"
+
+    - name: Remove stack
+      command: "docker stack rm {{ resource_prefix }}"
