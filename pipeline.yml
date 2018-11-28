@@ -37,6 +37,9 @@ staging:
     CLUSTER_IP: $STAGING_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $STAGING_CLUSTER_ADMIN_USER_PASSWORD
     CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/STAGING_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
+  environment:
+    name: staging
+    url: https://$STACK_HOSTNAME
   script:
     - apt-get -yy update && apt-get install -y openssh-client wget
     - pip install ansible
@@ -61,6 +64,9 @@ production:
     CLUSTER_IP: $PRODUCTION_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $PRODUCTION_CLUSTER_ADMIN_USER_PASSWORD
     CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/PRODUCTION_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
+  environment:
+    name: production
+    url: https://$STACK_HOSTNAME
   script:
     - apt-get -yy update && apt-get install -y openssh-client wget
     - pip install ansible
