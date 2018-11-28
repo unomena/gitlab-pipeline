@@ -29,8 +29,13 @@ build:
     - docker-compose --file docker-compose-build.yml push
   only:
     - tags
-  except:
-    - branches
+    - /^feature/[0-9]+(?:.[0-9]+)+$/
+
+qa:
+  stage: deploy
+  script: echo "Running tests"
+  only:
+    - /^feature/[0-9]+(?:.[0-9]+)+$/
 
 staging:
   stage: deploy
