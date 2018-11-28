@@ -43,7 +43,7 @@ staging:
     CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/STAGING_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
   environment:
     name: staging
-    url: https://${STACK_HOSTNAME}
+    url: https://$CI_PROJECT_NAME.staging.sephton.io
   script:
     - apt-get -yy update && apt-get install -y openssh-client wget
     - pip install ansible
@@ -70,7 +70,7 @@ production:
     CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/PRODUCTION_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
   environment:
     name: production
-    url: https://${STACK_HOSTNAME}
+    url: https://$PRODUCTION_STACK_HOSTNAME
   script:
     - apt-get -yy update && apt-get install -y openssh-client wget
     - pip install ansible
