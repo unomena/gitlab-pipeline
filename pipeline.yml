@@ -12,9 +12,9 @@ stages:
   - build
   - deploy
 
-test:
-  stage: test
-  script: echo "Running tests"
+#test:
+#  stage: test
+#  script: echo "Running tests"
 
 build:
   stage: build
@@ -29,13 +29,13 @@ build:
     - docker-compose --file docker-compose-build.yml push
   only:
     - tags
-    - /^feature/[0-9]+(?:.[0-9]+)+$/
+    - /^feature/.*?$
 
 qa:
   stage: deploy
   script: echo "Running tests"
   only:
-    - /^feature/[0-9]+(?:.[0-9]+)+$/
+    - /^feature/.*?$
 
 staging:
   stage: deploy
