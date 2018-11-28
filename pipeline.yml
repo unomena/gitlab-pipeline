@@ -23,8 +23,10 @@ build:
     - docker login --username gitlab-ci-token --password $CI_JOB_TOKEN $CI_REGISTRY
     - docker-compose --file docker-compose-build.yml build --pull
     - docker-compose --file docker-compose-build.yml push
-  only: tags
-  except: branches
+  only:
+    - tags
+  except:
+    - branches
 
 staging:
   stage: qa
@@ -45,8 +47,10 @@ staging:
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/inventory.py
     - chmod +x inventory.py
     - ansible-playbook -i $CLUSTER_IP, --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME" deploy.yml
-  only: tags
-  except: branches
+  only:
+    - tags
+  except:
+    - branches
 
 production:
   stage: deploy
@@ -67,6 +71,8 @@ production:
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/inventory.py
     - chmod +x inventory.py
     - ansible-playbook -i $CLUSTER_IP, --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME" deploy.yml
-  only: tags
-  except: branches
+  only:
+    - tags
+  except:
+    - branches
   when: manual
