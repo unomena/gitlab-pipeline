@@ -35,13 +35,13 @@ deploy_qa:
   image: python:3.7-slim
   variables:
     RESOURCE_PREFIX: io-sephton-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
-    STACK_HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.sephton.io
-    CLUSTER_IP: $STAGING_CLUSTER_IP
-    CLUSTER_ADMIN_USER_PASSWORD: $STAGING_CLUSTER_ADMIN_USER_PASSWORD
-    CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/STAGING_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
+    STACK_HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.cluster.unomena.net
+    CLUSTER_IP: $QA_CLUSTER_IP
+    CLUSTER_ADMIN_USER_PASSWORD: $QA_CLUSTER_ADMIN_USER_PASSWORD
+    CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/QA_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
   environment:
     name: qa/$CI_COMMIT_REF_SLUG
-    url: https://$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.sephton.io
+    url: https://$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.cluster.unomena.net
     on_stop: stop_qa
   script:
     - apt-get -yy update && apt-get install -y openssh-client wget
@@ -66,10 +66,10 @@ stop_qa:
   variables:
     GIT_STRATEGY: none
     RESOURCE_PREFIX: io-sephton-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
-    STACK_HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.sephton.io
-    CLUSTER_IP: $STAGING_CLUSTER_IP
-    CLUSTER_ADMIN_USER_PASSWORD: $STAGING_CLUSTER_ADMIN_USER_PASSWORD
-    CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/STAGING_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
+    STACK_HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.cluster.unomena.net
+    CLUSTER_IP: $QA_CLUSTER_IP
+    CLUSTER_ADMIN_USER_PASSWORD: $QA_CLUSTER_ADMIN_USER_PASSWORD
+    CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/QA_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
   script:
     - apt-get -yy update && apt-get install -y openssh-client wget
     - pip install ansible
@@ -111,13 +111,13 @@ staging:
   image: python:3.7-slim
   variables:
     RESOURCE_PREFIX: io-sephton-staging-$CI_PROJECT_NAME
-    STACK_HOSTNAME: $CI_PROJECT_NAME.staging.sephton.io
+    STACK_HOSTNAME: $CI_PROJECT_NAME.staging.cluster.unomena.net
     CLUSTER_IP: $STAGING_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $STAGING_CLUSTER_ADMIN_USER_PASSWORD
     CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/STAGING_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
   environment:
     name: staging
-    url: https://$CI_PROJECT_NAME.staging.sephton.io
+    url: https://$CI_PROJECT_NAME.staging.cluster.unomena.net
   script:
     - apt-get -yy update && apt-get install -y openssh-client wget
     - pip install ansible
