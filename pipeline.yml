@@ -80,6 +80,10 @@ stop_qa:
   when: manual
   only:
     - web
+  except:
+    - master
+    - develop
+    - tags
 
 
 build:
