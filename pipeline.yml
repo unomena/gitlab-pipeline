@@ -35,7 +35,7 @@ deploy_qa:
   stage: deploy
   image: python:3.7-slim
   variables:
-    RESOURCE_PREFIX: io-sephton-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    RESOURCE_PREFIX: unomena-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     STACK_HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.cluster.unomena.net
     CLUSTER_IP: $QA_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $QA_CLUSTER_ADMIN_USER_PASSWORD
@@ -66,7 +66,7 @@ stop_qa:
   image: python:3.7-slim
   variables:
     GIT_STRATEGY: none
-    RESOURCE_PREFIX: io-sephton-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    RESOURCE_PREFIX: unomena-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     STACK_HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.cluster.unomena.net
     CLUSTER_IP: $QA_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $QA_CLUSTER_ADMIN_USER_PASSWORD
@@ -112,7 +112,7 @@ staging:
   stage: deploy
   image: python:3.7-slim
   variables:
-    RESOURCE_PREFIX: io-sephton-staging-$CI_PROJECT_NAME
+    RESOURCE_PREFIX: unomena-staging-$CI_PROJECT_NAME
     STACK_HOSTNAME: $CI_PROJECT_NAME.staging.cluster.unomena.net
     CLUSTER_IP: $STAGING_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $STAGING_CLUSTER_ADMIN_USER_PASSWORD
@@ -140,7 +140,7 @@ production:
   stage: deploy
   image: python:3.7-slim
   variables:
-    RESOURCE_PREFIX: io-sephton-production-$CI_PROJECT_NAME
+    RESOURCE_PREFIX: unomena-production-$CI_PROJECT_NAME
     STACK_HOSTNAME: $PRODUCTION_STACK_HOSTNAME
     CLUSTER_IP: $PRODUCTION_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $PRODUCTION_CLUSTER_ADMIN_USER_PASSWORD
