@@ -51,6 +51,7 @@ deploy_qa:
   except:
     - master
     - develop
+    - tags
 
 
 stop_qa:
