@@ -20,6 +20,7 @@ build_qa:
   except:
     - master
     - develop
+    - tags
 
 
 deploy_qa:
