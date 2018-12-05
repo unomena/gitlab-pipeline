@@ -9,7 +9,7 @@ build_qa:
   services:
     - docker:dind
   script:
-    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/build.yml
+    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/build.sh
     - chmod +x build.sh
     - ./build.sh
   only:
@@ -89,7 +89,7 @@ build:
   services:
     - docker:dind
   script:
-    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/build.yml
+    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/build.sh
     - chmod +x build.sh
     - ./build.sh
   only:
