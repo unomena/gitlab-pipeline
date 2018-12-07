@@ -16,6 +16,8 @@
     - name: Deploy docker stack
       shell: docker stack deploy --with-registry-auth -c /docker-compose.yml {{ resource_prefix }}
       environment:
+        AWS_ACCESS_KEY: "{{ aws_access_key }}"
+        AWS_SECRET_KEY: "{{ aws_secret_key }}"
         STAGE: "{{ stage }}"
         RESOURCE_PREFIX: "{{ resource_prefix }}"
         STACK_HOSTNAME: "{{ stack_hostname }}"
