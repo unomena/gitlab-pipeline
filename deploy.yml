@@ -16,6 +16,7 @@
     - name: Deploy docker stack
       shell: docker stack deploy --with-registry-auth -c /docker-compose.yml {{ resource_prefix }}
       environment:
+        STAGE: "{{ stage }}"
         RESOURCE_PREFIX: "{{ resource_prefix }}"
         STACK_HOSTNAME: "{{ stack_hostname }}"
         CI_COMMIT_REF_SLUG: "{{ lookup('env', 'CI_COMMIT_REF_SLUG') }}"

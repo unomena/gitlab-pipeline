@@ -26,6 +26,7 @@ deploy_qa:
   stage: deploy
   image: python:3.7-slim
   variables:
+    STAGE: qa
     RESOURCE_PREFIX: unomena-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     STACK_HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.cluster.unomena.net
     CLUSTER_IP: $INTERNAL_CLUSTER_IP
@@ -57,6 +58,7 @@ stop_qa:
   stage: deploy
   image: python:3.7-slim
   variables:
+    STAGE: qa
     GIT_STRATEGY: none
     RESOURCE_PREFIX: unomena-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     STACK_HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.cluster.unomena.net
@@ -72,7 +74,7 @@ stop_qa:
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/destroy.yml
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/inventory.py
     - chmod +x inventory.py
-    - ansible-playbook -i $CLUSTER_IP, -vvv --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME" destroy.yml
+    - ansible-playbook -i $CLUSTER_IP, -vvv --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE" destroy.yml
   environment:
     name: qa/$CI_COMMIT_REF_SLUG
     action: stop
@@ -104,6 +106,7 @@ staging:
   stage: deploy
   image: python:3.7-slim
   variables:
+    STAGE: staging
     RESOURCE_PREFIX: unomena-staging-$CI_PROJECT_NAME
     STACK_HOSTNAME: $CI_PROJECT_NAME.staging.cluster.unomena.net
     CLUSTER_IP: $INTERNAL_CLUSTER_IP
@@ -121,7 +124,7 @@ staging:
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.yml
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/inventory.py
     - chmod +x inventory.py
-    - ansible-playbook -i $CLUSTER_IP, -vvv --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME" deploy.yml
+    - ansible-playbook -i $CLUSTER_IP, -vvv --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE" deploy.yml
   only:
     - tags
   except:
@@ -132,6 +135,7 @@ production:
   stage: deploy
   image: python:3.7-slim
   variables:
+    STAGE: production
     RESOURCE_PREFIX: unomena-production-$CI_PROJECT_NAME
     STACK_HOSTNAME: $PRODUCTION_STACK_HOSTNAME
     CLUSTER_IP: $PRODUCTION_CLUSTER_IP
@@ -149,7 +153,7 @@ production:
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.yml
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/inventory.py
     - chmod +x inventory.py
-    - ansible-playbook -i $CLUSTER_IP, -vvv --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME" deploy.yml
+    - ansible-playbook -i $CLUSTER_IP, -vvv --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE" deploy.yml
   only:
     - tags
   except:
