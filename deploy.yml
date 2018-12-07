@@ -19,6 +19,7 @@
         RESOURCE_PREFIX: "{{ resource_prefix }}"
         STACK_HOSTNAME: "{{ stack_hostname }}"
         CI_COMMIT_REF_SLUG: "{{ lookup('env', 'CI_COMMIT_REF_SLUG') }}"
+        CI_PROJECT_REGISTRY: "{{ lookup('env', 'CI_PROJECT_REGISTRY') }}"
 
     - name: Remove docker compose file
       file:
