@@ -7,7 +7,7 @@ then
     rm -f .env docker-compose.override.yml
     docker login --username gitlab-ci-token --password $CI_JOB_TOKEN $CI_REGISTRY
     docker-compose --file docker-compose-build.yml pull
-    docker-compose --file docker-compose-build.yml build --pull
+    docker-compose --file docker-compose-build.yml build
     docker-compose --file docker-compose-build.yml push
 else
     echo "No docker-compose-build.yml file found, nothing to build."
