@@ -25,7 +25,7 @@
         CI_PROJECT_REGISTRY: "{{ lookup('env', 'CI_PROJECT_REGISTRY') }}"
 
     - name: Execute post deploy
-      shell: docker run --network={{ resource_prefix }}_default -ti ./docker/commands/post_deploy_qa.sh
+      shell: "docker run --network={{ resource_prefix }}_default -ti {{ lookup('env', 'CI_PROJECT_REGISTRY') }}/workspace:{{ lookup('env', 'CI_COMMIT_REF_SLUG') }} ./docker/commands/post_deploy_qa.sh
       environment:
         AWS_ACCESS_KEY: "{{ aws_access_key }}"
         AWS_SECRET_KEY: "{{ aws_secret_key }}"
