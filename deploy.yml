@@ -32,7 +32,7 @@
         --network={{ resource_prefix }}_default
         -ti
         {{ lookup('env', 'CI_PROJECT_REGISTRY') }}/workspace:{{ lookup('env', 'CI_COMMIT_REF_SLUG') }}
-        ./docker/commands/post_deploy_qa.sh"
+        ./docker/commands/post_deploy_qa.sh
       environment:
         AWS_ACCESS_KEY: "{{ aws_access_key }}"
         AWS_SECRET_KEY: "{{ aws_secret_key }}"
