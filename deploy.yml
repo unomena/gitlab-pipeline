@@ -16,7 +16,7 @@
         dest: "/{{ compose_file }}"
 
     - name: Deploy docker stack
-      shell: docker stack deploy --resolve-image --with-registry-auth -c /{{ compose_file }} {{ resource_prefix }}
+      shell: docker stack deploy --with-registry-auth -c /{{ compose_file }} {{ resource_prefix }}
       environment:
         AWS_ACCESS_KEY: "{{ aws_access_key }}"
         AWS_SECRET_KEY: "{{ aws_secret_key }}"
