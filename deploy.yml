@@ -46,7 +46,10 @@
       register: post_deploy
 
     - debug:
-        var: post_deploy
+        var: post_deploy.stdout_lines
+
+    - debug:
+        var: post_deploy.stderr_lines
 
     - name: Remove docker compose file
       file:
