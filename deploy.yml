@@ -10,11 +10,11 @@
   tasks:
     - name: Add docker compose file
       copy:
-        src: docker-compose.yml
-        dest: /docker-compose.yml
+        src: "{{ compose_file }}"
+        dest: "/{{ compose_file }}"
 
     - name: Deploy docker stack
-      shell: docker stack deploy --with-registry-auth -c /docker-compose.yml {{ resource_prefix }}
+      shell: docker stack deploy --with-registry-auth -c /{{ compose_file }} {{ resource_prefix }}
       environment:
         AWS_ACCESS_KEY: "{{ aws_access_key }}"
         AWS_SECRET_KEY: "{{ aws_secret_key }}"
@@ -27,4 +27,4 @@
     - name: Remove docker compose file
       file:
         state: absent
-        path: /docker-compose.yml
+        path: "/{{ compose_file }}"

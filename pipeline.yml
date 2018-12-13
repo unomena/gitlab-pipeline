@@ -4,6 +4,9 @@ stages:
 
 variables:
   CI_PROJECT_REGISTRY: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
+  QA_COMPOSE_FILE: docker-compose.yml
+  PRODUCTION_COMPOSE_FILE: docker-compose.yml
+  STAGING_COMPOSE_FILE: docker-compose.yml
 
 
 build_master:
@@ -61,7 +64,7 @@ deploy_qa:
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.yml
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/inventory.py
     - chmod +x inventory.py
-    - ansible-playbook -i $CLUSTER_IP, -vvv --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_KEY" deploy.yml
+    - ansible-playbook -i $CLUSTER_IP, -vvv --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_KEY compose_file=$QA_COMPOSE_FILE" deploy.yml
   only:
     - web
   except:
@@ -140,7 +143,7 @@ staging:
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.yml
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/inventory.py
     - chmod +x inventory.py
-    - ansible-playbook -i $CLUSTER_IP, -vvv --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_KEY" deploy.yml
+    - ansible-playbook -i $CLUSTER_IP, -vvv --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_KEY compose_file=$STAGING_COMPOSE_FILE" deploy.yml
   only:
     - tags
   except:
@@ -169,7 +172,7 @@ production:
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.yml
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/inventory.py
     - chmod +x inventory.py
-    - ansible-playbook -i $CLUSTER_IP, -vvv --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_KEY" deploy.yml
+    - ansible-playbook -i $CLUSTER_IP, -vvv --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_KEY compose_file=$PRODUCTION_COMPOSE_FILE" deploy.yml
   only:
     - tags
   except:
