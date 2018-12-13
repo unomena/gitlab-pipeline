@@ -32,6 +32,7 @@
         --env AWS_ACCESS_KEY
         --env AWS_SECRET_KEY
         --network={{ resource_prefix }}_default
+        --rm
         -ti
         {{ postdeploy_image }}
         {{ postdeploy_command }}
