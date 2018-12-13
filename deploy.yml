@@ -24,6 +24,17 @@
         CI_COMMIT_REF_SLUG: "{{ lookup('env', 'CI_COMMIT_REF_SLUG') }}"
         CI_PROJECT_REGISTRY: "{{ lookup('env', 'CI_PROJECT_REGISTRY') }}"
 
+    - name: Execute post deploy
+      shell: docker run --network={{ resource_prefix }}_default -ti ./docker/commands/post_deploy_qa.sh
+      environment:
+        AWS_ACCESS_KEY: "{{ aws_access_key }}"
+        AWS_SECRET_KEY: "{{ aws_secret_key }}"
+        STAGE: "{{ stage }}"
+        RESOURCE_PREFIX: "{{ resource_prefix }}"
+        STACK_HOSTNAME: "{{ stack_hostname }}"
+        CI_COMMIT_REF_SLUG: "{{ lookup('env', 'CI_COMMIT_REF_SLUG') }}"
+        CI_PROJECT_REGISTRY: "{{ lookup('env', 'CI_PROJECT_REGISTRY') }}"
+
     - name: Remove docker compose file
       file:
         state: absent
