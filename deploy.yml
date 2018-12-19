@@ -28,6 +28,7 @@
 
     - name: Execute post deploy
       shell: >
+        docker login --username gitlab-ci-token --password CI_JOB_TOKEN CI_REGISTRY;
         docker pull {{ postdeploy_image }};
         docker run
         --env AWS_ACCESS_KEY
@@ -45,6 +46,8 @@
         STACK_HOSTNAME: "{{ stack_hostname }}"
         CI_COMMIT_REF_SLUG: "{{ lookup('env', 'CI_COMMIT_REF_SLUG') }}"
         CI_PROJECT_REGISTRY: "{{ lookup('env', 'CI_PROJECT_REGISTRY') }}"
+        CI_REGISTRY: "{{ lookup('env', 'CI_REGISTRY') }}"
+        CI_JOB_TOKEN: "{{ lookup('env', 'CI_JOB_TOKEN') }}"
       register: post_deploy
 
     - debug:
