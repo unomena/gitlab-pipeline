@@ -134,14 +134,10 @@ staging:
     name: staging
     url: https://$CI_PROJECT_NAME.staging.cluster.unomena.net
   script:
-    - apt-get -yy update && apt-get install -y openssh-client wget
-    - pip install ansible
-    - mkdir keys
-    - cp $CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE keys/id_rsa
-    - chmod 700 keys/id_rsa
-    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.yml
-    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/ansible.cfg
-    - ansible-playbook -i $CLUSTER_IP, --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_KEY compose_file=$STAGING_COMPOSE_FILE" deploy.yml
+    - apt-get -yy update && apt-get install -y wget
+    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh
+    - chmod +x deploy.sh
+    - ./deploy.sh
   only:
     - tags
   except:
@@ -163,14 +159,10 @@ production:
     name: production
     url: https://$PRODUCTION_STACK_HOSTNAME
   script:
-    - apt-get -yy update && apt-get install -y openssh-client wget
-    - pip install ansible
-    - mkdir keys
-    - cp $CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE keys/id_rsa
-    - chmod 700 keys/id_rsa
-    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.yml
-    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/ansible.cfg
-    - ansible-playbook -i $CLUSTER_IP, --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_KEY compose_file=$PRODUCTION_COMPOSE_FILE" deploy.yml
+    - apt-get -yy update && apt-get install -y wget
+    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh
+    - chmod +x deploy.sh
+    - ./deploy.sh
   only:
     - tags
   except:
