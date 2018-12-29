@@ -66,8 +66,7 @@ deploy_qa:
     - cp $CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE keys/id_rsa
     - chmod 700 keys/id_rsa
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.yml
-    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/inventory.py
-    - chmod +x inventory.py
+    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/ansible.cfg
     - ansible-playbook -i $CLUSTER_IP, --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_KEY compose_file=$QA_COMPOSE_FILE" deploy.yml
   only:
     - web
@@ -95,8 +94,7 @@ stop_qa:
     - cp $CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE keys/id_rsa
     - chmod 700 keys/id_rsa
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/destroy.yml
-    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/inventory.py
-    - chmod +x inventory.py
+    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/ansible.cfg
     - ansible-playbook -i $CLUSTER_IP, --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE" destroy.yml
   environment:
     name: qa/$CI_COMMIT_REF_SLUG
@@ -146,8 +144,7 @@ staging:
     - cp $CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE keys/id_rsa
     - chmod 700 keys/id_rsa
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.yml
-    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/inventory.py
-    - chmod +x inventory.py
+    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/ansible.cfg
     - ansible-playbook -i $CLUSTER_IP, --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_KEY compose_file=$STAGING_COMPOSE_FILE" deploy.yml
   only:
     - tags
@@ -176,8 +173,7 @@ production:
     - cp $CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE keys/id_rsa
     - chmod 700 keys/id_rsa
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.yml
-    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/inventory.py
-    - chmod +x inventory.py
+    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/ansible.cfg
     - ansible-playbook -i $CLUSTER_IP, --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_KEY compose_file=$PRODUCTION_COMPOSE_FILE" deploy.yml
   only:
     - tags

@@ -38,7 +38,6 @@
         {{ postdeploy_image }}
         {{ postdeploy_command }}
       environment:
-        ANSIBLE_STDOUT_CALLBACK: "debug"
         AWS_ACCESS_KEY: "{{ aws_access_key }}"
         AWS_SECRET_KEY: "{{ aws_secret_key }}"
         STAGE: "{{ stage }}"
