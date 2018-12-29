@@ -1,7 +1,7 @@
 #! /bin/sh -
 
 # Install required packages and ansible.
-apt-get -yy update && apt-get install -y openssh-client wget
+apt-get -yy update && apt-get install -y openssh-client
 pip install ansible
 
 # Set working dir perms to avoud ansible.cfg security error, see
