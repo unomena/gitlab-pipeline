@@ -45,6 +45,13 @@
         STACK_HOSTNAME: "{{ stack_hostname }}"
         CI_COMMIT_REF_SLUG: "{{ lookup('env', 'CI_COMMIT_REF_SLUG') }}"
         CI_PROJECT_REGISTRY: "{{ lookup('env', 'CI_PROJECT_REGISTRY') }}"
+      register: post_deploy
+
+    - debug:
+      var: post_deploy.stdout_lines
+
+    - debug:
+      var: post_deploy.stderr_lines
 
     - name: Remove docker compose file
       file:
