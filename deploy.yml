@@ -8,6 +8,7 @@
     ansible_ssh_private_key_file: keys/id_rsa
     postdeploy_image: "{{ lookup('env', 'POSTDEPLOY_IMAGE') }}"
     postdeploy_command: "{{ lookup('env', 'POSTDEPLOY_COMMAND') }}"
+    services_format_string: !unsafe "{{.Replicas}}"
 
   tasks:
     - name: Add docker compose file
@@ -27,7 +28,7 @@
         CI_PROJECT_REGISTRY: "{{ lookup('env', 'CI_PROJECT_REGISTRY') }}"
 
     - name: Wait for all stack services to have replicated tasks
-      command: docker stack services {{ resource_prefix }} --format "{{.Replicas}}"
+      command: "docker stack services {{ resource_prefix }} --format '{{ services_format_string }}'"
       register: cmd_res
       retries: 15
       delay: 2
