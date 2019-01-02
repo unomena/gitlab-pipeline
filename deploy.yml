@@ -26,6 +26,13 @@
         CI_COMMIT_REF_SLUG: "{{ lookup('env', 'CI_COMMIT_REF_SLUG') }}"
         CI_PROJECT_REGISTRY: "{{ lookup('env', 'CI_PROJECT_REGISTRY') }}"
 
+    - name: Wait for all stack services to have replicated tasks
+      command: docker stack services {{ resource_prefix }} --format "{{.Replicas}}"
+      register: cmd_res
+      retries: 15
+      delay: 2
+      until: cmd_res.stdout_lines | reject('search','^(?!0)') | list | count == 0
+
     - name: Execute post deploy
       shell: >
         docker pull {{ postdeploy_image }};
