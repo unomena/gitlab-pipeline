@@ -14,6 +14,8 @@
     - name: Create database
       postgresql_db:
         name: "{{ postgres_database_name }}"
+      become: true
+      become_user: postgres
       when: postgres_database_name != ""
 
     - name: Create database user
@@ -21,6 +23,8 @@
         db: "{{ postgres_database_name }}"
         name: "{{ postgres_database_username }}"
         password: "{{ postgres_database_password }}"
+      become: true
+      become_user: postgres
       when:
         - postgres_database_name != ""
         - postgres_database_username != ""
