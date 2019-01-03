@@ -14,7 +14,7 @@
     - name: Create database
       postgresql_db:
         name: "{{ postgres_database_name }}"
-      when: postgres_database_name
+      when: postgres_database_name != ""
 
     - name: Create database user
       postgresql_user:
@@ -22,9 +22,9 @@
         name: "{{ postgres_database_username }}"
         password: "{{ postgres_database_password }}"
       when:
-        - postgres_database_name
-        - postgres_database_username
-        - postgres_database_password
+        - postgres_database_name != ""
+        - postgres_database_username != ""
+        - postgres_database_password != ""
 
 - hosts: manager0
   remote_user: admin
