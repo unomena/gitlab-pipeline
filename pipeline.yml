@@ -48,6 +48,7 @@ deploy_qa:
   stage: deploy
   image: python:3.7-slim
   variables:
+    COMPOSE_FILE: $QA_COMPOSE_FILE
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_QA
     STAGE: qa
     RESOURCE_PREFIX: unomena-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
@@ -123,6 +124,7 @@ staging:
   stage: deploy
   image: python:3.7-slim
   variables:
+    COMPOSE_FILE: $STAGING_COMPOSE_FILE
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_STAGING
     STAGE: staging
     RESOURCE_PREFIX: unomena-staging-$CI_PROJECT_NAME
@@ -178,6 +180,7 @@ production:
   stage: deploy
   image: python:3.7-slim
   variables:
+    COMPOSE_FILE: $PRODUCTION_COMPOSE_FILE
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_PRODUCTION
     STAGE: production
     RESOURCE_PREFIX: unomena-production-$CI_PROJECT_NAME
