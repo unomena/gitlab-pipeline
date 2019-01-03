@@ -30,7 +30,7 @@
     - name: Wait for all stack services to have replicated tasks
       command: "docker stack services {{ resource_prefix }} --format '{{ services_format_string }}'"
       register: cmd_res
-      retries: 15
+      retries: 30
       delay: 2
       until: cmd_res.stdout_lines | reject('search','^(?!0)') | list | count == 0
 
