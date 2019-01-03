@@ -72,6 +72,7 @@
         --env AWS_ACCESS_KEY
         --env AWS_SECRET_KEY
         --network={{ resource_prefix }}_default
+        --add-host=database0
         --rm
         -ti
         {{ postdeploy_image }}
