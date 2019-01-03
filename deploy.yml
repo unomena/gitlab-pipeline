@@ -57,6 +57,7 @@
         STACK_HOSTNAME: "{{ stack_hostname }}"
         CI_COMMIT_REF_SLUG: "{{ lookup('env', 'CI_COMMIT_REF_SLUG') }}"
         CI_PROJECT_REGISTRY: "{{ lookup('env', 'CI_PROJECT_REGISTRY') }}"
+        DATABASE0_IP: "{{ hostvars['database0'].ansible_host }}"
 
     - name: Wait for all stack services to have replicated tasks
       command: "docker stack services {{ resource_prefix }} --format '{{ services_format_string }}'"
@@ -72,7 +73,7 @@
         --env AWS_ACCESS_KEY
         --env AWS_SECRET_KEY
         --network={{ resource_prefix }}_default
-        --add-host=database0
+        --add-host=database0:{{ hostvars['database0'].ansible_host }}
         --rm
         -ti
         {{ postdeploy_image }}
