@@ -4,8 +4,9 @@
 set -e
 
 # Install required packages and ansible.
-apt-get -yy update && apt-get install -y openssh-client
-pip install ansible psycopg2
+apt-get -yy update
+apt-get install -y openssh-client
+pip install ansible
 
 # Set working dir perms to avoud ansible.cfg security error, see
 # https://docs.ansible.com/ansible/devel/reference_appendices/config.html#cfg-in-world-writable-dir
