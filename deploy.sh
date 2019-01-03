@@ -13,6 +13,9 @@ mkdir keys &&
 cp $CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE keys/id_rsa &&
 chmod 700 keys/id_rsa &&
 
+# Fetch cluster host key
+ssh-keygen -R $CLUSTER_IP
+
 # Fetch ansible playbook and config.
 wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.yml &&
 wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/ansible.cfg &&
