@@ -61,7 +61,8 @@ deploy_qa:
     url: https://$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.cluster.unomena.net
     on_stop: stop_qa
   script:
-    - apt-get -yy update && apt-get install -y wget
+    - apt-get -yy update
+    - apt-get install -y wget
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh
     - chmod +x deploy.sh
     - ./deploy.sh
@@ -85,14 +86,11 @@ stop_qa:
     CLUSTER_ADMIN_USER_PASSWORD: $INTERNAL_CLUSTER_ADMIN_USER_PASSWORD
     CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/INTERNAL_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
   script:
-    - apt-get -yy update && apt-get install -y openssh-client wget
-    - pip install ansible
-    - mkdir keys
-    - cp $CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE keys/id_rsa
-    - chmod 700 keys/id_rsa
-    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/destroy.yml
-    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/ansible.cfg
-    - ansible-playbook -i $CLUSTER_IP, --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE" destroy.yml
+    - apt-get -yy update
+    - apt-get install -y wget
+    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/destroy.sh
+    - chmod +x destroy.sh
+    - ./destroy.sh
   environment:
     name: qa/$CI_COMMIT_REF_SLUG
     action: stop
@@ -137,7 +135,8 @@ staging:
     url: https://$CI_PROJECT_NAME.staging.cluster.unomena.net
     on_stop: stop_staging
   script:
-    - apt-get -yy update && apt-get install -y wget
+    - apt-get -yy update
+    - apt-get install -y wget
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh
     - chmod +x deploy.sh
     - ./deploy.sh
@@ -158,14 +157,11 @@ stop_staging:
     CLUSTER_ADMIN_USER_PASSWORD: $INTERNAL_CLUSTER_ADMIN_USER_PASSWORD
     CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/INTERNAL_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
   script:
-    - apt-get -yy update && apt-get install -y openssh-client wget
-    - pip install ansible
-    - mkdir keys
-    - cp $CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE keys/id_rsa
-    - chmod 700 keys/id_rsa
-    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/destroy.yml
-    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/ansible.cfg
-    - ansible-playbook -i $CLUSTER_IP, --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE" destroy.yml
+    - apt-get -yy update
+    - apt-get install -y wget
+    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/destroy.sh
+    - chmod +x destroy.sh
+    - ./destroy.sh
   environment:
     name: staging
     action: stop
@@ -192,7 +188,8 @@ production:
     name: production
     url: https://$PRODUCTION_STACK_HOSTNAME
   script:
-    - apt-get -yy update && apt-get install -y wget
+    - apt-get -yy update
+    - apt-get install -y wget
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh
     - chmod +x deploy.sh
     - ./deploy.sh

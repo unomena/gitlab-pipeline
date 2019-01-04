@@ -89,6 +89,15 @@
         - minio_access_key != ""
         - minio_secret_key != ""
 
+    - name: Remove objectstore user policy definition
+      file:
+        state: absent
+        path: "/tmp/minio_policy_{{ minio_bucket_name }}.json"
+      when:
+        - minio_bucket_name != ""
+        - minio_access_key != ""
+        - minio_secret_key != ""
+
     - name: Create objectstore user
       command: "mc admin user add minio {{ minio_access_key }} {{ minio_secret_key }} readwrite-{{ minio_bucket_name }}"
       when:

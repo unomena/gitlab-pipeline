@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: manager0
   remote_user: admin
   become: yes
   vars:
@@ -29,3 +29,62 @@
 
     - name: Remove stack
       command: "docker stack rm {{ resource_prefix }}"
+
+- hosts: objectstore0
+  remote_user: admin
+  become: yes
+  vars:
+    ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_ssh_private_key_file: keys/id_rsa
+    minio_bucket_name: "{{ lookup('env', 'MINIO_BUCKET_NAME') }}"
+    minio_access_key: "{{ lookup('env', 'MINIO_ACCESS_KEY') }}"
+    minio_secret_key: "{{ lookup('env', 'MINIO_SECRET_KEY') }}"
+
+  tasks:
+    - name: Remove objectstore bucket
+      command: "mc rm minio/{{ minio_bucket_name }}"
+      when:
+        - minio_bucket_name != ""
+
+    - name: Remove objectstore user
+      command: "mc admin use remove minio {{ minio_access_key }}"
+      when:
+        - minio_access_key != ""
+
+    - name: Remove objectstore policy
+      command: "mc admin policy remove minio readwrite-{{ minio_bucket_name }}"
+      when:
+        - minio_access_key != ""
+
+- hosts: database0
+  remote_user: admin
+  become: yes
+  vars:
+    ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_ssh_private_key_file: keys/id_rsa
+    postgres_database_name: "{{ lookup('env', 'POSTGRES_DATABASE_NAME') }}"
+    postgres_database_username: "{{ lookup('env', 'POSTGRES_DATABASE_USERNAME') }}"
+    postgres_database_password: "{{ lookup('env', 'POSTGRES_DATABASE_PASSWORD') }}"
+
+  tasks:
+    - name: Remove database
+      postgresql_db:
+        name: "{{ postgres_database_name }}"
+        state: absent
+      become: true
+      become_user: postgres
+      when: postgres_database_name != ""
+
+    - name: Remove database user
+      postgresql_user:
+        db: "{{ postgres_database_name }}"
+        name: "{{ postgres_database_username }}"
+        priv: ALL
+        state: absent
+      become: true
+      become_user: postgres
+      when:
+        - postgres_database_name != ""
+        - postgres_database_username != ""
