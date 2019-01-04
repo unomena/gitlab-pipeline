@@ -30,6 +30,84 @@
         - postgres_database_username != ""
         - postgres_database_password != ""
 
+- hosts: objectstore0
+  remote_user: admin
+  become: yes
+  vars:
+    ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_ssh_private_key_file: keys/id_rsa
+    minio_bucket_name: "{{ lookup('env', 'MINIO_BUCKET_NAME') }}"
+    minio_access_key: "{{ lookup('env', 'MINIO_ACCESS_KEY') }}"
+    minio_secret_key: "{{ lookup('env', 'MINIO_SECRET_KEY') }}"
+
+  tasks:
+    - name: Add objectstore policy definition
+      copy:
+        content: |
+          {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "s3:GetBucketLocation",
+                  "s3:ListBucket",
+                  "s3:ListBucketMultipartUploads"
+                ],
+                "Resource": [
+                  "arn:aws:s3:::{{ minio_bucket_name }}"
+                ],
+                "Sid": ""
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "s3:AbortMultipartUpload",
+                  "s3:DeleteObject",
+                  "s3:GetObject",
+                  "s3:ListMultipartUploadParts",
+                  "s3:PutObject"
+                ],
+                "Resource": [
+                  "arn:aws:s3:::{{ minio_bucket_name }}/*"
+                ],
+                "Sid": ""
+              }
+            ]
+          }
+        dest: /tmp/minio_policy_{{ minio_bucket_name }}.json
+      when:
+        - minio_bucket_name != ""
+        - minio_access_key != ""
+        - minio_secret_key != ""
+
+    - name: Create objectstore policy
+      command: "mc admin policy add minio readwrite-{{ minio_bucket_name }} /tmp/minio_policy_{{ minio_bucket_name }}.json"
+      when:
+        - minio_bucket_name != ""
+        - minio_access_key != ""
+        - minio_secret_key != ""
+
+    - name: Create objectstore user
+      command: "mc admin user add minio {{ minio_access_key }} {{ minio_secret_key }} readwrite-{{ minio_bucket_name }}"
+      when:
+        - minio_bucket_name != ""
+        - minio_access_key != ""
+        - minio_secret_key != ""
+
+    - name: List objectstore buckets
+      command: mc ls minio
+      register: minio_buckets
+
+    - name: Create objectstore bucket
+      command: mc mb minio/{{ minio_bucket_name }}
+      when:
+        - minio_bucket_name != ""
+        - minio_access_key != ""
+        - minio_secret_key != ""
+        - "' ' ~ minio_bucket_name ~ '/' not in minio_buckets.stdout"
+
 - hosts: manager0
   remote_user: admin
   become: yes
