@@ -71,14 +71,11 @@
   tasks:
     - name: Remove database user
       postgresql_user:
-        db: "{{ postgres_database_name }}"
         name: "{{ postgres_database_username }}"
-        priv: ALL
         state: absent
       become: true
       become_user: postgres
       when:
-        - postgres_database_name != ""
         - postgres_database_username != ""
 
     - name: Remove database
