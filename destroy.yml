@@ -37,7 +37,7 @@
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
     ansible_ssh_private_key_file: keys/id_rsa
-    minio_bucket_name: "{{ lookup('env', 'MINIO_BUCKET_NAME') }}"
+    minio_bucket_name: "{{ resource_prefix }}"
     minio_access_key: "{{ lookup('env', 'MINIO_ACCESS_KEY') }}"
     minio_secret_key: "{{ lookup('env', 'MINIO_SECRET_KEY') }}"
 
@@ -64,7 +64,7 @@
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
     ansible_ssh_private_key_file: keys/id_rsa
-    postgres_database_name: "{{ lookup('env', 'POSTGRES_DATABASE_NAME') }}"
+    postgres_database_name: "{{ resource_prefix }}"
     postgres_database_username: "{{ lookup('env', 'POSTGRES_DATABASE_USERNAME') }}"
     postgres_database_password: "{{ lookup('env', 'POSTGRES_DATABASE_PASSWORD') }}"
 

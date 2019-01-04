@@ -6,7 +6,7 @@
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
     ansible_ssh_private_key_file: keys/id_rsa
-    postgres_database_name: "{{ lookup('env', 'POSTGRES_DATABASE_NAME') }}"
+    postgres_database_name: "{{ resource_prefix }}"
     postgres_database_username: "{{ lookup('env', 'POSTGRES_DATABASE_USERNAME') }}"
     postgres_database_password: "{{ lookup('env', 'POSTGRES_DATABASE_PASSWORD') }}"
 
@@ -16,7 +16,10 @@
         name: "{{ postgres_database_name }}"
       become: true
       become_user: postgres
-      when: postgres_database_name != ""
+      when:
+        - postgres_database_name != ""
+        - postgres_database_username != ""
+        - postgres_database_password != ""
 
     - name: Create database user
       postgresql_user:
@@ -37,7 +40,7 @@
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
     ansible_ssh_private_key_file: keys/id_rsa
-    minio_bucket_name: "{{ lookup('env', 'MINIO_BUCKET_NAME') }}"
+    minio_bucket_name: "{{ resource_prefix }}"
     minio_access_key: "{{ lookup('env', 'MINIO_ACCESS_KEY') }}"
     minio_secret_key: "{{ lookup('env', 'MINIO_SECRET_KEY') }}"
 
@@ -155,6 +158,12 @@
         CI_PROJECT_REGISTRY: "{{ lookup('env', 'CI_PROJECT_REGISTRY') }}"
         DATABASE_IP: "{{ hostvars['database0'].ansible_host }}"
         OBJECTSTORE_IP: "{{ hostvars['objectstore0'].ansible_host }}"
+        POSTGRES_DATABASE_NAME: "{{ resource_prefix }}"
+        POSTGRES_DATABASE_USERNAME: "{{ lookup('env', 'POSTGRES_DATABASE_USERNAME') }}"
+        POSTGRES_DATABASE_PASSWORD: "{{ lookup('env', 'POSTGRES_DATABASE_PASSWORD') }}"
+        MINIO_BUCKET_NAME: "{{ resource_prefix }}"
+        MINIO_ACCESS_KEY: "{{ lookup('env', 'MINIO_ACCESS_KEY') }}"
+        MINIO_SECRET_KEY: "{{ lookup('env', 'MINIO_SECRET_KEY') }}"
 
     - name: Wait for all stack services to have replicated tasks
       command: "docker stack services {{ resource_prefix }} --format '{{ services_format_string }}'"
@@ -169,6 +178,12 @@
         docker run
         --env AWS_ACCESS_KEY
         --env AWS_SECRET_KEY
+        --env POSTGRES_DATABASE_NAME
+        --env POSTGRES_DATABASE_USERNAME
+        --env POSTGRES_DATABASE_PASSWORD
+        --env MINIO_BUCKET_NAME
+        --env MINIO_ACCESS_KEY
+        --env MINIO_SECRET_KEY
         --network={{ resource_prefix }}_default
         --add-host=database:{{ hostvars['database0'].ansible_host }}
         --add-host=objectstore:{{ hostvars['objectstore0'].ansible_host }}
@@ -184,6 +199,12 @@
         STACK_HOSTNAME: "{{ stack_hostname }}"
         CI_COMMIT_REF_SLUG: "{{ lookup('env', 'CI_COMMIT_REF_SLUG') }}"
         CI_PROJECT_REGISTRY: "{{ lookup('env', 'CI_PROJECT_REGISTRY') }}"
+        POSTGRES_DATABASE_NAME: "{{ resource_prefix }}"
+        POSTGRES_DATABASE_USERNAME: "{{ lookup('env', 'POSTGRES_DATABASE_USERNAME') }}"
+        POSTGRES_DATABASE_PASSWORD: "{{ lookup('env', 'POSTGRES_DATABASE_PASSWORD') }}"
+        MINIO_BUCKET_NAME: "{{ resource_prefix }}"
+        MINIO_ACCESS_KEY: "{{ lookup('env', 'MINIO_ACCESS_KEY') }}"
+        MINIO_SECRET_KEY: "{{ lookup('env', 'MINIO_SECRET_KEY') }}"
       register: post_deploy
 
     - debug:
