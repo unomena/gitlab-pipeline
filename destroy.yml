@@ -43,12 +43,12 @@
 
   tasks:
     - name: Remove objectstore bucket
-      command: "mc rm minio/{{ minio_bucket_name }}"
+      command: "mc rm minio/{{ minio_bucket_name }} --recursive --force"
       when:
         - minio_bucket_name != ""
 
     - name: Remove objectstore user
-      command: "mc admin use remove minio {{ minio_access_key }}"
+      command: "mc admin user remove minio {{ minio_access_key }}"
       when:
         - minio_access_key != ""
 
