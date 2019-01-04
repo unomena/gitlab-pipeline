@@ -69,18 +69,6 @@
     postgres_database_password: "{{ lookup('env', 'POSTGRES_DATABASE_PASSWORD') }}"
 
   tasks:
-    - name: Remove database user
-      postgresql_user:
-        db: "{{ postgres_database_name }}"
-        name: "{{ postgres_database_username }}"
-        priv: ALL
-        state: absent
-      become: true
-      become_user: postgres
-      when:
-        - postgres_database_name != ""
-        - postgres_database_username != ""
-
     - name: Remove database
       postgresql_db:
         name: "{{ postgres_database_name }}"
@@ -88,4 +76,14 @@
       become: true
       become_user: postgres
       when: postgres_database_name != ""
+
+    - name: Remove database user
+      postgresql_user:
+        name: "{{ postgres_database_username }}"
+        state: absent
+      become: true
+      become_user: postgres
+      when:
+        - postgres_database_username != ""
+
 
