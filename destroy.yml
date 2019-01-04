@@ -30,7 +30,7 @@
     - name: Remove stack
       command: "docker stack rm {{ resource_prefix }}"
 
-- hosts: objectstore0
+- hosts: 0objectstore0
   remote_user: admin
   become: yes
   vars:
