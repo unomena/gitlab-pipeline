@@ -42,7 +42,7 @@
     minio_secret_key: "{{ lookup('env', 'MINIO_SECRET_KEY') }}"
 
   tasks:
-    - name: Add objectstore policy definition
+    - name: Add objectstore user policy definition
       copy:
         content: |
           {
@@ -82,7 +82,7 @@
         - minio_access_key != ""
         - minio_secret_key != ""
 
-    - name: Create objectstore policy
+    - name: Create objectstore user policy
       command: "mc admin policy add minio readwrite-{{ minio_bucket_name }} /tmp/minio_policy_{{ minio_bucket_name }}.json"
       when:
         - minio_bucket_name != ""
@@ -101,12 +101,21 @@
       register: minio_buckets
 
     - name: Create objectstore bucket
-      command: mc mb minio/{{ minio_bucket_name }}
+      command: "mc mb minio/{{ minio_bucket_name }}"
       when:
         - minio_bucket_name != ""
         - minio_access_key != ""
         - minio_secret_key != ""
         - "' ' ~ minio_bucket_name ~ '/' not in minio_buckets.stdout"
+
+    # This is set to enable unauthenticated download of all content contained in the bucket
+    # via nginx proxy_pass directive.
+    - name: Set bucket download policy
+      command: "mc policy download minio/{{ minio_bucket_name }}"
+      when:
+        - minio_bucket_name != ""
+        - minio_access_key != ""
+        - minio_secret_key != ""
 
 - hosts: manager0
   remote_user: admin
