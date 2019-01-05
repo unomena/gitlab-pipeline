@@ -30,6 +30,36 @@
     - name: Remove stack
       command: "docker stack rm {{ resource_prefix }}"
 
+- hosts: queue0
+  remote_user: admin
+  become: yes
+  vars:
+    ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_ssh_private_key_file: keys/id_rsa
+    rabbitmq_vhost: "/{{ resource_prefix }}-vhost"
+    rabbitmq_username: "{{ resource_prefix }}-user"
+    rabbitmq_password: "{{ lookup('env', 'RABBITMQ_PASSWORD') }}"
+
+  tasks:
+    - name: Remove rabbitmq user
+      rabbitmq_user:
+        user: "{{ rabbitmq_username }}"
+        state: absent
+      when:
+        - rabbitmq_vhost != ""
+        - rabbitmq_username != ""
+        - rabbitmq_password != ""
+
+    - name: Remove rabbitmq vhost
+      rabbitmq_vhost:
+        name: "{{ rabbitmq_vhost }}"
+        state: absent
+      when:
+        - rabbitmq_vhost != ""
+        - rabbitmq_username != ""
+        - rabbitmq_password != ""
+
 - hosts: objectstore0
   remote_user: admin
   become: yes
@@ -85,5 +115,3 @@
       become_user: postgres
       when:
         - postgres_database_username != ""
-
-
