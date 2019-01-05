@@ -129,7 +129,6 @@
         - minio_access_key != ""
         - minio_secret_key != ""
 
----
 - hosts: queue0
   remote_user: admin
   become: yes
@@ -195,6 +194,7 @@
         CI_PROJECT_REGISTRY: "{{ lookup('env', 'CI_PROJECT_REGISTRY') }}"
         DATABASE_IP: "{{ hostvars['database0'].ansible_host }}"
         OBJECTSTORE_IP: "{{ hostvars['objectstore0'].ansible_host }}"
+        QUEUE_IP: "{{ hostvars['queue0'].ansible_host }}"
         MINIO_BUCKET_NAME: "{{ resource_prefix }}-bucket"
         MINIO_ACCESS_KEY: "{{ resource_prefix }}-user"
         MINIO_SECRET_KEY: "{{ lookup('env', 'MINIO_SECRET_KEY') }}"
