@@ -3,11 +3,6 @@
 # Exit on any failures
 set -e
 
-# Install required packages and ansible.
-apt-get -yy update
-apt-get install -y openssh-client gettext-base
-pip install ansible
-
 # Set working dir perms to avoud ansible.cfg security error, see
 # https://docs.ansible.com/ansible/devel/reference_appendices/config.html#cfg-in-world-writable-dir
 chmod 700 .

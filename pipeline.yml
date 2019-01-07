@@ -17,7 +17,6 @@ variables:
 
 build_master:
   stage: build
-  #image: docker:latest
   image: gitlab.unomena.net:5005/unomena/worker-images/build:master
   services:
     - docker:dind
@@ -33,7 +32,6 @@ build_master:
 
 build_qa:
   stage: build
-  #image: docker:latest
   image: gitlab.unomena.net:5005/unomena/worker-images/build:master
   services:
     - docker:dind
@@ -51,7 +49,6 @@ build_qa:
 
 deploy_qa:
   stage: deploy
-  #image: python:3.7-slim
   image: gitlab.unomena.net:5005/unomena/worker-images/deploy:master
   variables:
     COMPOSE_FILE: $QA_COMPOSE_FILE
@@ -70,6 +67,10 @@ deploy_qa:
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh
     - chmod +x deploy.sh
     - ./deploy.sh
+  artifacts:
+    paths:
+    - deploy.yml
+    expire_in: 1 week
   only:
     - web
   except:
@@ -80,7 +81,6 @@ deploy_qa:
 
 stop_qa:
   stage: deploy
-  #image: python:3.7-slim
   image: gitlab.unomena.net:5005/unomena/worker-images/deploy:master
   variables:
     STAGE: qa
@@ -108,7 +108,6 @@ stop_qa:
 
 build:
   stage: build
-  #image: docker:latest
   image: gitlab.unomena.net:5005/unomena/worker-images/build:master
   services:
     - docker:dind
@@ -124,7 +123,6 @@ build:
 
 staging:
   stage: deploy
-  #image: python:3.7-slim
   image: gitlab.unomena.net:5005/unomena/worker-images/deploy:master
   variables:
     COMPOSE_FILE: $STAGING_COMPOSE_FILE
@@ -150,7 +148,6 @@ staging:
 
 stop_staging:
   stage: deploy
-  #image: python:3.7-slim
   image: gitlab.unomena.net:5005/unomena/worker-images/deploy:master
   variables:
     STAGE: staging
@@ -176,7 +173,6 @@ stop_staging:
 
 production:
   stage: deploy
-  #image: python:3.7-slim
   image: gitlab.unomena.net:5005/unomena/worker-images/deploy:master
   variables:
     COMPOSE_FILE: $PRODUCTION_COMPOSE_FILE
