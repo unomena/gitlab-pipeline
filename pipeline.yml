@@ -64,12 +64,13 @@ deploy_qa:
     url: https://$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.cluster.unomena.net
     on_stop: stop_qa
   script:
-    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh
-    - chmod +x deploy.sh
-    - ./deploy.sh
+    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh | bash
+    #- wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh
+    #- chmod +x deploy.sh
+    #- ./deploy.sh
   artifacts:
     paths:
-    - deploy.yml
+      - deploy.yml
     expire_in: 1 week
   only:
     - web
