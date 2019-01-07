@@ -129,7 +129,7 @@
         - minio_access_key != ""
         - minio_secret_key != ""
 
-- hosts: $QUEUE_HOST
+- hosts: $RABBITMQ_HOST
   remote_user: admin
   become: yes
   vars:
