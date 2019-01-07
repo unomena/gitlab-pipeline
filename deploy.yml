@@ -143,7 +143,7 @@
   tasks:
     - name: Create rabbitmq vhost
       rabbitmq_vhost:
-        name: "{{ rabbitmq_vhost }}"
+        name: "/{{ rabbitmq_vhost }}"
         state: present
       when:
         - rabbitmq_vhost != ""
@@ -155,7 +155,7 @@
         user: "{{ rabbitmq_username }}"
         password: "{{ rabbitmq_password }}"
         permissions:
-          - vhost: "{{ rabbitmq_vhost }}"
+          - vhost: "/{{ rabbitmq_vhost }}"
             configure_priv: .*
             read_priv: .*
             write_priv: .*
@@ -182,28 +182,13 @@
         src: "{{ compose_file }}"
         dest: "/{{ compose_file }}"
 
+    - name: Add environments file
+      template:
+        src: templates/env
+        dest: /.env
+
     - name: Deploy docker stack
       shell: docker stack deploy --with-registry-auth -c /{{ compose_file }} {{ resource_prefix }}
-      environment:
-        AWS_ACCESS_KEY: "{{ aws_access_key }}"
-        AWS_SECRET_KEY: "{{ aws_secret_key }}"
-        STAGE: "{{ stage }}"
-        RESOURCE_PREFIX: "{{ resource_prefix }}"
-        STACK_HOSTNAME: "{{ stack_hostname }}"
-        CI_COMMIT_REF_SLUG: "{{ lookup('env', 'CI_COMMIT_REF_SLUG') }}"
-        CI_PROJECT_REGISTRY: "{{ lookup('env', 'CI_PROJECT_REGISTRY') }}"
-        DATABASE_IP: "{{ hostvars['database0'].ansible_host }}"
-        OBJECTSTORE_IP: "{{ hostvars['objectstore0'].ansible_host }}"
-        QUEUE_IP: "{{ hostvars['queue0'].ansible_host }}"
-        MINIO_BUCKET_NAME: "{{ resource_prefix }}-bucket"
-        MINIO_ACCESS_KEY: "{{ resource_prefix }}-user"
-        MINIO_SECRET_KEY: "{{ lookup('env', 'MINIO_SECRET_KEY') }}"
-        RABBITMQ_VHOST: "/{{ resource_prefix }}-vhost"
-        RABBITMQ_USERNAME: "{{ resource_prefix }}-user"
-        RABBITMQ_PASSWORD: "{{ lookup('env', 'RABBITMQ_PASSWORD') }}"
-        POSTGRES_NAME: "{{ resource_prefix }}-database"
-        POSTGRES_USERNAME: "{{ resource_prefix }}-user"
-        POSTGRES_PASSWORD: "{{ lookup('env', 'POSTGRES_PASSWORD') }}"
 
     - name: Wait for all stack services to have replicated tasks
       command: "docker stack services {{ resource_prefix }} --format '{{ services_format_string }}'"
