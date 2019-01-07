@@ -96,7 +96,7 @@
     ansible_ssh_private_key_file: keys/id_rsa
     postgres_database_name: "{{ resource_prefix }}-database"
     postgres_database_username: "{{ resource_prefix }}-user"
-    postgres_database_password: "{{ lookup('env', 'POSTGRES_DATABASE_PASSWORD') }}"
+    postgres_database_password: "{{ lookup('env', 'POSTGRES_PASSWORD') }}"
 
   tasks:
     - name: Remove database

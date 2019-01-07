@@ -1,5 +1,5 @@
 ---
-- hosts: database0
+- hosts: $POSTGRES_HOST
   remote_user: admin
   become: yes
   vars:
@@ -8,7 +8,7 @@
     ansible_ssh_private_key_file: keys/id_rsa
     postgres_database_name: "{{ resource_prefix }}-database"
     postgres_database_username: "{{ resource_prefix }}-user"
-    postgres_database_password: "{{ lookup('env', 'POSTGRES_DATABASE_PASSWORD') }}"
+    postgres_database_password: "{{ lookup('env', 'POSTGRES_PASSWORD') }}"
 
   tasks:
     - name: Create database
@@ -33,7 +33,7 @@
         - postgres_database_username != ""
         - postgres_database_password != ""
 
-- hosts: objectstore0
+- hosts: $MINIO_HOST
   remote_user: admin
   become: yes
   vars:
@@ -129,7 +129,7 @@
         - minio_access_key != ""
         - minio_secret_key != ""
 
-- hosts: queue0
+- hosts: $QUEUE_HOST
   remote_user: admin
   become: yes
   vars:
@@ -201,9 +201,9 @@
         RABBITMQ_VHOST: "/{{ resource_prefix }}-vhost"
         RABBITMQ_USERNAME: "{{ resource_prefix }}-user"
         RABBITMQ_PASSWORD: "{{ lookup('env', 'RABBITMQ_PASSWORD') }}"
-        POSTGRES_DATABASE_NAME: "{{ resource_prefix }}-database"
-        POSTGRES_DATABASE_USERNAME: "{{ resource_prefix }}-user"
-        POSTGRES_DATABASE_PASSWORD: "{{ lookup('env', 'POSTGRES_DATABASE_PASSWORD') }}"
+        POSTGRES_NAME: "{{ resource_prefix }}-database"
+        POSTGRES_USERNAME: "{{ resource_prefix }}-user"
+        POSTGRES_PASSWORD: "{{ lookup('env', 'POSTGRES_PASSWORD') }}"
 
     - name: Wait for all stack services to have replicated tasks
       command: "docker stack services {{ resource_prefix }} --format '{{ services_format_string }}'"
@@ -221,9 +221,9 @@
         --env MINIO_BUCKET_NAME
         --env MINIO_ACCESS_KEY
         --env MINIO_SECRET_KEY
-        --env POSTGRES_DATABASE_NAME
-        --env POSTGRES_DATABASE_USERNAME
-        --env POSTGRES_DATABASE_PASSWORD
+        --env POSTGRES_NAME
+        --env POSTGRES_USERNAME
+        --env POSTGRES_PASSWORD
         --env RABBITMQ_VHOST
         --env RABBITMQ_USERNAME
         --env RABBITMQ_PASSWORD
@@ -246,9 +246,9 @@
         MINIO_BUCKET_NAME: "{{ resource_prefix }}-bucket"
         MINIO_ACCESS_KEY: "{{ resource_prefix }}-user"
         MINIO_SECRET_KEY: "{{ lookup('env', 'MINIO_SECRET_KEY') }}"
-        POSTGRES_DATABASE_NAME: "{{ resource_prefix }}-database"
-        POSTGRES_DATABASE_USERNAME: "{{ resource_prefix }}-user"
-        POSTGRES_DATABASE_PASSWORD: "{{ lookup('env', 'POSTGRES_DATABASE_PASSWORD') }}"
+        POSTGRES_NAME: "{{ resource_prefix }}-database"
+        POSTGRES_USERNAME: "{{ resource_prefix }}-user"
+        POSTGRES_PASSWORD: "{{ lookup('env', 'POSTGRES_PASSWORD') }}"
         RABBITMQ_VHOST: "/{{ resource_prefix }}-vhost"
         RABBITMQ_USERNAME: "{{ resource_prefix }}-user"
         RABBITMQ_PASSWORD: "{{ lookup('env', 'RABBITMQ_PASSWORD') }}"
