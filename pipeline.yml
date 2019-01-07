@@ -61,12 +61,6 @@ deploy_qa:
     on_stop: stop_qa
   script:
     - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh | bash
-  artifacts:
-    paths:
-      - deploy.yml
-      - playbook.yml
-    when: always
-    expire_in: 1 week
   only:
     - web
   except:
