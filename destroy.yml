@@ -30,7 +30,7 @@
     - name: Remove stack
       command: "docker stack rm {{ resource_prefix }}"
 
-- hosts: queue0
+- hosts: $RABBITMQ_HOST
   remote_user: admin
   become: yes
   vars:
@@ -53,14 +53,14 @@
 
     - name: Remove rabbitmq vhost
       rabbitmq_vhost:
-        name: "{{ rabbitmq_vhost }}"
+        name: "/{{ rabbitmq_vhost }}"
         state: absent
       when:
         - rabbitmq_vhost != ""
         - rabbitmq_username != ""
         - rabbitmq_password != ""
 
-- hosts: objectstore0
+- hosts: $MINIO_HOST
   remote_user: admin
   become: yes
   vars:
@@ -87,7 +87,7 @@
       when:
         - minio_access_key != ""
 
-- hosts: database0
+- hosts: $POSTGRES_HOST
   remote_user: admin
   become: yes
   vars:

@@ -21,9 +21,7 @@ build_master:
   services:
     - docker:dind
   script:
-    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/build.sh
-    - chmod +x build.sh
-    - ./build.sh
+    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/build.sh | sh
   only:
     - master
   except:
@@ -89,9 +87,7 @@ stop_qa:
     CLUSTER_ADMIN_USER_PASSWORD: $INTERNAL_CLUSTER_ADMIN_USER_PASSWORD
     CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/INTERNAL_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
   script:
-    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/destroy.sh
-    - chmod +x destroy.sh
-    - ./destroy.sh
+    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/destroy.sh | bash
   environment:
     name: qa/$CI_COMMIT_REF_SLUG
     action: stop
@@ -110,9 +106,7 @@ build:
   services:
     - docker:dind
   script:
-    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/build.sh
-    - chmod +x build.sh
-    - ./build.sh
+    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/build.sh | sh
   only:
     - tags
   except:
@@ -136,9 +130,7 @@ staging:
     url: https://$CI_PROJECT_NAME.staging.cluster.unomena.net
     on_stop: stop_staging
   script:
-    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh
-    - chmod +x deploy.sh
-    - ./deploy.sh
+    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh | bash
   only:
     - tags
   except:
@@ -156,9 +148,7 @@ stop_staging:
     CLUSTER_ADMIN_USER_PASSWORD: $INTERNAL_CLUSTER_ADMIN_USER_PASSWORD
     CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/INTERNAL_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
   script:
-    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/destroy.sh
-    - chmod +x destroy.sh
-    - ./destroy.sh
+    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/destroy.sh | bash
   environment:
     name: staging
     action: stop
@@ -185,9 +175,7 @@ production:
     name: production
     url: https://$PRODUCTION_STACK_HOSTNAME
   script:
-    - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh
-    - chmod +x deploy.sh
-    - ./deploy.sh
+    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh | bash
   only:
     - tags
   except:
