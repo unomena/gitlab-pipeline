@@ -24,6 +24,8 @@ wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/ansible
 # Fetch inventory from cluster
 scp -i keys/id_rsa -o StrictHostKeyChecking=No admin@$CLUSTER_IP:/etc/ansible_inventory .
 
+printenv
+
 envsubst < deploy.yml > deploy.yml
 
 # Execute playbook.
