@@ -10,14 +10,17 @@ STACK_HOSTNAME={{ stack_hostname }}
 CI_COMMIT_REF_SLUG={{ lookup('env', 'CI_COMMIT_REF_SLUG') }}
 CI_PROJECT_REGISTRY={{ lookup('env', 'CI_PROJECT_REGISTRY') }}
 
+MINIO_HOST={{ lookup('env', 'MINIO_HOST') }}
 MINIO_BUCKET_NAME={{ resource_prefix }}-bucket
 MINIO_ACCESS_KEY={{ resource_prefix }}-user
 MINIO_SECRET_KEY={{ lookup('env', 'MINIO_SECRET_KEY') }}
 
+POSTGRES_HOST={{ lookup('env', 'POSTGRES_HOST') }}
 POSTGRES_NAME={{ resource_prefix }}-database
 POSTGRES_USERNAME={{ resource_prefix }}-user
 POSTGRES_PASSWORD={{ lookup('env', 'POSTGRES_PASSWORD') }}
 
+RABBITMQ_HOST={{ lookup('env', 'RABBITMQ_HOST') }}
 RABBITMQ_VHOST={{ resource_prefix }}-vhost
 RABBITMQ_USERNAME={{ resource_prefix }}-user
 RABBITMQ_PASSWORD={{ lookup('env', 'RABBITMQ_PASSWORD') }}
