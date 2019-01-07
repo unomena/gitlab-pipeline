@@ -53,7 +53,7 @@
 
     - name: Remove rabbitmq vhost
       rabbitmq_vhost:
-        name: "/{{ rabbitmq_vhost }}"
+        name: "{{ rabbitmq_vhost }}"
         state: absent
       when:
         - rabbitmq_vhost != ""

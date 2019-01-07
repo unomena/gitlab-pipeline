@@ -143,7 +143,7 @@
   tasks:
     - name: Create rabbitmq vhost
       rabbitmq_vhost:
-        name: "/{{ rabbitmq_vhost }}"
+        name: "{{ rabbitmq_vhost }}"
         state: present
       when:
         - rabbitmq_vhost != ""
@@ -155,7 +155,7 @@
         user: "{{ rabbitmq_username }}"
         password: "{{ rabbitmq_password }}"
         permissions:
-          - vhost: "/{{ rabbitmq_vhost }}"
+          - vhost: "{{ rabbitmq_vhost }}"
             configure_priv: .*
             read_priv: .*
             write_priv: .*
