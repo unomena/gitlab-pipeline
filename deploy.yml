@@ -210,22 +210,11 @@
     - name: Execute post deploy
       shell: >
         docker pull {{ postdeploy_image }};
-        docker run
-        --env AWS_ACCESS_KEY
-        --env AWS_SECRET_KEY
-        --env MINIO_BUCKET_NAME
-        --env MINIO_ACCESS_KEY
-        --env MINIO_SECRET_KEY
-        --env POSTGRES_NAME
-        --env POSTGRES_USERNAME
-        --env POSTGRES_PASSWORD
-        --env RABBITMQ_VHOST
-        --env RABBITMQ_USERNAME
-        --env RABBITMQ_PASSWORD
+        docker run --env-file .env
         --network={{ resource_prefix }}_default
-        --add-host=database:{{ hostvars['database0'].ansible_host }}
-        --add-host=objectstore:{{ hostvars['objectstore0'].ansible_host }}
-        --add-host=queue:{{ hostvars['queue0'].ansible_host }}
+        --add-host=database0:{{ hostvars['database0'].ansible_host }}
+        --add-host=objectstore0:{{ hostvars['objectstore0'].ansible_host }}
+        --add-host=queue0:{{ hostvars['queue0'].ansible_host }}
         --rm
         -ti
         {{ postdeploy_image }}
