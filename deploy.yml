@@ -187,6 +187,14 @@
         src: templates/env
         dest: /.env
 
+    - name: Output env content
+      slurp:
+        src: /.env
+      register: env
+
+    - debug:
+        msg: "{{ env['content'] | b64decode }}"
+
     - name: Deploy docker stack
       shell: docker stack deploy --with-registry-auth -c /{{ compose_file }} {{ resource_prefix }}
 
