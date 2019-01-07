@@ -17,7 +17,8 @@ variables:
 
 build_master:
   stage: build
-  image: docker:latest
+  #image: docker:latest
+  image: gitlab.unomena.net:5005/unomena/worker-images/build:master
   services:
     - docker:dind
   script:
@@ -109,7 +110,8 @@ stop_qa:
 
 build:
   stage: build
-  image: docker:latest
+  #image: docker:latest
+  image: gitlab.unomena.net:5005/unomena/worker-images/build:master
   services:
     - docker:dind
   script:
