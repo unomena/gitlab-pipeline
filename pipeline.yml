@@ -51,7 +51,8 @@ build_qa:
 
 deploy_qa:
   stage: deploy
-  image: python:3.7-slim
+  #image: python:3.7-slim
+  image: gitlab.unomena.net:5005/unomena/worker-images/deploy:master
   variables:
     COMPOSE_FILE: $QA_COMPOSE_FILE
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_QA
@@ -66,8 +67,6 @@ deploy_qa:
     url: https://$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.cluster.unomena.net
     on_stop: stop_qa
   script:
-    - apt-get -yy update
-    - apt-get install -y wget
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh
     - chmod +x deploy.sh
     - ./deploy.sh
@@ -81,7 +80,8 @@ deploy_qa:
 
 stop_qa:
   stage: deploy
-  image: python:3.7-slim
+  #image: python:3.7-slim
+  image: gitlab.unomena.net:5005/unomena/worker-images/deploy:master
   variables:
     STAGE: qa
     GIT_STRATEGY: none
@@ -91,8 +91,6 @@ stop_qa:
     CLUSTER_ADMIN_USER_PASSWORD: $INTERNAL_CLUSTER_ADMIN_USER_PASSWORD
     CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/INTERNAL_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
   script:
-    - apt-get -yy update
-    - apt-get install -y wget
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/destroy.sh
     - chmod +x destroy.sh
     - ./destroy.sh
@@ -126,7 +124,8 @@ build:
 
 staging:
   stage: deploy
-  image: python:3.7-slim
+  #image: python:3.7-slim
+  image: gitlab.unomena.net:5005/unomena/worker-images/deploy:master
   variables:
     COMPOSE_FILE: $STAGING_COMPOSE_FILE
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_STAGING
@@ -141,8 +140,6 @@ staging:
     url: https://$CI_PROJECT_NAME.staging.cluster.unomena.net
     on_stop: stop_staging
   script:
-    - apt-get -yy update
-    - apt-get install -y wget
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh
     - chmod +x deploy.sh
     - ./deploy.sh
@@ -153,7 +150,8 @@ staging:
 
 stop_staging:
   stage: deploy
-  image: python:3.7-slim
+  #image: python:3.7-slim
+  image: gitlab.unomena.net:5005/unomena/worker-images/deploy:master
   variables:
     STAGE: staging
     GIT_STRATEGY: none
@@ -163,8 +161,6 @@ stop_staging:
     CLUSTER_ADMIN_USER_PASSWORD: $INTERNAL_CLUSTER_ADMIN_USER_PASSWORD
     CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/INTERNAL_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
   script:
-    - apt-get -yy update
-    - apt-get install -y wget
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/destroy.sh
     - chmod +x destroy.sh
     - ./destroy.sh
@@ -180,7 +176,8 @@ stop_staging:
 
 production:
   stage: deploy
-  image: python:3.7-slim
+  #image: python:3.7-slim
+  image: gitlab.unomena.net:5005/unomena/worker-images/deploy:master
   variables:
     COMPOSE_FILE: $PRODUCTION_COMPOSE_FILE
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_PRODUCTION
@@ -194,8 +191,6 @@ production:
     name: production
     url: https://$PRODUCTION_STACK_HOSTNAME
   script:
-    - apt-get -yy update
-    - apt-get install -y wget
     - wget https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh
     - chmod +x deploy.sh
     - ./deploy.sh
