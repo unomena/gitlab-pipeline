@@ -196,7 +196,7 @@
         msg: "{{ env['content'] | b64decode }}"
 
     - name: Deploy docker stack
-      shell: docker stack deploy --with-registry-auth -c /{{ compose_file }} {{ resource_prefix }}
+      shell: docker stack deploy --with-registry-auth -c <(docker-compose -f {{ compose_file }} config) {{ resource_prefix }}
 
     - name: Wait for all stack services to have replicated tasks
       command: "docker stack services {{ resource_prefix }} --format '{{ services_format_string }}'"
