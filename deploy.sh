@@ -5,7 +5,7 @@ set -e
 
 # Install required packages and ansible.
 apt-get -yy update
-apt-get install -y openssh-client envsubst
+apt-get install -y openssh-client gettext-base
 pip install ansible
 
 # Set working dir perms to avoud ansible.cfg security error, see
