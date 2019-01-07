@@ -36,7 +36,7 @@ build_qa:
   services:
     - docker:dind
   script:
-    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/build.sh | bash
+    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/build.sh | sh
   only:
     - web
   except:
