@@ -180,16 +180,16 @@
     - name: Add docker compose file
       copy:
         src: "{{ compose_file }}"
-        dest: "/{{ compose_file }}"
+        dest: "{{ compose_file }}"
 
     - name: Add environments file
       template:
         src: templates/env
-        dest: /.env
+        dest: .env
 
     - name: Output env content
       slurp:
-        src: /.env
+        src: .env
       register: env
 
     - debug:
@@ -258,4 +258,9 @@
     - name: Remove docker compose file
       file:
         state: absent
-        path: "/{{ compose_file }}"
+        path: "{{ compose_file }}"
+
+    - name: Remove docker env file
+      file:
+        state: absent
+        path: ".env"
