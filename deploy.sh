@@ -23,7 +23,7 @@ curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/temp
 envsubst < deploy.yml > playbook.yml
 
 # Sync deploy artifacts to bastion host
-rsync -avzhe "ssh -i ../keys/id_rsa" . $BASTION_HOST_CONNECTION_STRING:~/$DEPLOY_PATH
+rsync -avzhe "ssh -i ../keys/id_rsa -o StrictHostKeyChecking=No" . $BASTION_HOST_CONNECTION_STRING:~/$DEPLOY_PATH
 
 # Set working dir perms to avoid ansible.cfg security error, see
 # https://docs.ansible.com/ansible/devel/reference_appendices/config.html#cfg-in-world-writable-dir
