@@ -25,6 +25,9 @@ envsubst < deploy.yml > playbook.yml
 # Sync deploy artifacts to bastion host
 rsync -avzhe "ssh -i ../keys/id_rsa -o StrictHostKeyChecking=No" . $BASTION_HOST_CONNECTION_STRING:~/$DEPLOY_PATH
 
+# Fetch Ansible inventory from cluster
+ssh -i keys/id_rsa -o StrictHostKeyChecking=No $BASTION_HOST_CONNECTION_STRING "scp -o StrictHostKeyChecking=No admin@$CLUSTER_IP:/etc/ansible_inventory ~/$DEPLOY_PATH"
+
 # Set working dir perms to avoid ansible.cfg security error, see
 # https://docs.ansible.com/ansible/devel/reference_appendices/config.html#cfg-in-world-writable-dir
 #chmod 700 .
@@ -35,8 +38,6 @@ rsync -avzhe "ssh -i ../keys/id_rsa -o StrictHostKeyChecking=No" . $BASTION_HOST
 #rsync -avzhe ssh . $BASTION_HOST_CONNECTION_STRING:~/ 2>&1 >/dev/null; \
 
 
-# Fetch Ansible inventory from cluster
-#ssh -i keys/id_rsa -o StrictHostKeyChecking=No $BASTION_HOST_CONNECTION_STRING "scp -o StrictHostKeyChecking=No admin@$CLUSTER_IP:/etc/ansible_inventory ."
 
 # Fetch inventory from cluster
 #scp -i keys/id_rsa -o StrictHostKeyChecking=No admin@$CLUSTER_IP:/etc/ansible_inventory .
