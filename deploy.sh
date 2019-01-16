@@ -26,7 +26,7 @@ envsubst < deploy.yml > playbook.yml
 rsync -avzhe "ssh -i ../keys/id_rsa -o StrictHostKeyChecking=No" . $BASTION_HOST_CONNECTION_STRING:~/$DEPLOY_PATH
 
 # Fetch Ansible inventory from cluster
-ssh -i keys/id_rsa -o StrictHostKeyChecking=No $BASTION_HOST_CONNECTION_STRING "scp -o StrictHostKeyChecking=No admin@$CLUSTER_IP:/etc/ansible_inventory ~/$DEPLOY_PATH"
+ssh -i ../keys/id_rsa -o StrictHostKeyChecking=No $BASTION_HOST_CONNECTION_STRING "scp -o StrictHostKeyChecking=No admin@$CLUSTER_IP:/etc/ansible_inventory ~/$DEPLOY_PATH"
 
 # Set working dir perms to avoid ansible.cfg security error, see
 # https://docs.ansible.com/ansible/devel/reference_appendices/config.html#cfg-in-world-writable-dir
