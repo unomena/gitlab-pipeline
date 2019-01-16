@@ -183,8 +183,8 @@
         dest: "{{ compose_file }}"
 
     - name: Add environments file
-      copy:
-        src: .env
+      template:
+        src: templates/env
         dest: .env
 
     - name: Deploy docker stack

@@ -9,15 +9,16 @@ cp /tmp/keys/GITLAB_USER_BASTION_HOST_SSH_PRIVATE_KEY keys/id_rsa
 chmod 700 keys/id_rsa
 
 # Fetch ansible playbook, templates and config.
+mkdir -p templates
 curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/ansible.cfg -o ansible.cfg
 curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.yml -o deploy.yml
-curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/env -o env
+curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/templates/env -o templates/env_unsub
 
 # Set environment variables in playbook.
 envsubst < deploy.yml > playbook.yml
 
-# Set environment variables in compose .env file.
-envsubst < env > .env
+# Set environment variables in env template file.
+envsubst < templates/env_unsub > templates/env
 
 # Sync deploy artifacts to unique deploy path on bastion host.
 DEPLOY_PATH=deploy-$RANDOM
