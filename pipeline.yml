@@ -54,7 +54,6 @@ deploy_qa:
     STACK_HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.cluster.unomena.net
     CLUSTER_IP: $INTERNAL_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $INTERNAL_CLUSTER_ADMIN_USER_PASSWORD
-    CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/INTERNAL_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
   environment:
     name: qa/$CI_COMMIT_REF_SLUG
     url: https://$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.cluster.unomena.net
@@ -79,7 +78,6 @@ stop_qa:
     STACK_HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.cluster.unomena.net
     CLUSTER_IP: $INTERNAL_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $INTERNAL_CLUSTER_ADMIN_USER_PASSWORD
-    CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/INTERNAL_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
   script:
     - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/destroy.sh | bash
   environment:
@@ -118,7 +116,6 @@ staging:
     STACK_HOSTNAME: $CI_PROJECT_NAME.staging.cluster.unomena.net
     CLUSTER_IP: $INTERNAL_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $INTERNAL_CLUSTER_ADMIN_USER_PASSWORD
-    CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/INTERNAL_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
   environment:
     name: staging
     url: https://$CI_PROJECT_NAME.staging.cluster.unomena.net
@@ -140,7 +137,6 @@ stop_staging:
     STACK_HOSTNAME: $CI_PROJECT_NAME.staging.cluster.unomena.net
     CLUSTER_IP: $INTERNAL_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $INTERNAL_CLUSTER_ADMIN_USER_PASSWORD
-    CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/INTERNAL_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
   script:
     - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/destroy.sh | bash
   environment:
@@ -164,7 +160,6 @@ production:
     STACK_HOSTNAME: $PRODUCTION_STACK_HOSTNAME
     CLUSTER_IP: $PRODUCTION_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $PRODUCTION_CLUSTER_ADMIN_USER_PASSWORD
-    CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE: /tmp/keys/PRODUCTION_CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY
   environment:
     name: production
     url: https://$PRODUCTION_STACK_HOSTNAME

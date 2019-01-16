@@ -9,7 +9,7 @@ chmod 700 .
 
 # Add ssh key with which to execute ansible playbook.
 mkdir keys
-cp $CLUSTER_ADMIN_USER_SSH_PRIVATE_KEY_FILE keys/id_rsa
+cp /tmp/keys/GITLAB_USER_BASTION_HOST_SSH_PRIVATE_KEY keys/id_rsa
 chmod 700 keys/id_rsa
 
 # Fetch ansible playbook and config.
