@@ -25,6 +25,6 @@ RABBITMQ_VHOST={{ resource_prefix }}-vhost
 RABBITMQ_USERNAME={{ resource_prefix }}-user
 RABBITMQ_PASSWORD={{ lookup('env', 'RABBITMQ_PASSWORD') }}
 
-DATABASE0_IP={{ hostvars['database0'].ansible_host }}
-OBJECTSTORE0_IP={{ hostvars['objectstore0'].ansible_host }}
-QUEUE0_IP={{ hostvars['queue0'].ansible_host }}
+POSTGRES0_IP={{ hostvars['postgres0'].ansible_host }}
+MINIO0_IP={{ hostvars['minio0'].ansible_host }}
+RABBITMQ0_IP={{ hostvars['rabbitmq0'].ansible_host }}
