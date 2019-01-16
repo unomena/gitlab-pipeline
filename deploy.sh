@@ -12,6 +12,9 @@ mkdir keys
 cp /tmp/keys/GITLAB_USER_BASTION_HOST_SSH_PRIVATE_KEY keys/id_rsa
 chmod 700 keys/id_rsa
 
+
+ssh -i keys/id_rsa -o StrictHostKeyChecking=no $BASTION_HOST_CONNECTION_STRING uptime
+
 # Fetch ansible playbook, templates and config.
 ssh -i keys/id_rsa $BASTION_HOST_CONNECTION_STRING "curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/ansible.cfg -o ansible.cfg"
 ssh -i keys/id_rsa $BASTION_HOST_CONNECTION_STRING "curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.yml -o deploy.yml"
