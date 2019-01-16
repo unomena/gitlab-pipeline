@@ -5,7 +5,7 @@
   vars:
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
-    ansible_ssh_private_key_file: keys/id_rsa
+    #ansible_ssh_private_key_file: keys/id_rsa
     postgres_database_name: "{{ resource_prefix }}-database"
     postgres_database_username: "{{ resource_prefix }}-user"
     postgres_database_password: "{{ lookup('env', 'POSTGRES_PASSWORD') }}"
@@ -39,7 +39,7 @@
   vars:
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
-    ansible_ssh_private_key_file: keys/id_rsa
+    #ansible_ssh_private_key_file: keys/id_rsa
     minio_bucket_name: "{{ resource_prefix }}-bucket"
     minio_access_key: "{{ resource_prefix }}-user"
     minio_secret_key: "{{ lookup('env', 'MINIO_SECRET_KEY') }}"
@@ -135,7 +135,7 @@
   vars:
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
-    ansible_ssh_private_key_file: keys/id_rsa
+    #ansible_ssh_private_key_file: keys/id_rsa
     rabbitmq_vhost: "/{{ resource_prefix }}-vhost"
     rabbitmq_username: "{{ resource_prefix }}-user"
     rabbitmq_password: "{{ lookup('env', 'RABBITMQ_PASSWORD') }}"
@@ -171,7 +171,7 @@
   vars:
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
-    ansible_ssh_private_key_file: keys/id_rsa
+    #ansible_ssh_private_key_file: keys/id_rsa
     postdeploy_image: "{{ lookup('env', 'POSTDEPLOY_IMAGE') }}"
     postdeploy_command: "{{ lookup('env', 'POSTDEPLOY_COMMAND') }}"
     services_format_string: !unsafe "{{.Replicas}}"
