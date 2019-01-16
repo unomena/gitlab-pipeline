@@ -8,11 +8,6 @@ mkdir keys
 cp /tmp/keys/GITLAB_USER_BASTION_HOST_SSH_PRIVATE_KEY keys/id_rsa
 chmod 700 keys/id_rsa
 
-# Create isolated deploy artifacts path.
-DEPLOY_PATH=deploy-$RANDOM
-mkdir -p $DEPLOY_PATH
-cd $DEPLOY_PATH
-
 # Fetch ansible playbook, templates and config.
 mkdir -p templates
 curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/ansible.cfg -o ansible.cfg
@@ -22,8 +17,9 @@ curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/temp
 # Set environment variables in playbook.
 envsubst < deploy.yml > playbook.yml
 
-# Sync deploy artifacts to bastion host
-rsync -avzhe "ssh -i ../keys/id_rsa -o StrictHostKeyChecking=No" . $BASTION_HOST_CONNECTION_STRING:~/$DEPLOY_PATH
+# Sync deploy artifacts to unique deploy path on bastion host.
+DEPLOY_PATH=deploy-$RANDOM
+rsync -avzhe "ssh -i ../keys/id_rsa -o StrictHostKeyChecking=No" --exclude='.git' . $BASTION_HOST_CONNECTION_STRING:~/$DEPLOY_PATH
 
 # Fetch Ansible inventory from cluster
 ssh -i ../keys/id_rsa -o StrictHostKeyChecking=No $BASTION_HOST_CONNECTION_STRING << EOF
