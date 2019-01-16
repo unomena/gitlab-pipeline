@@ -25,6 +25,6 @@ RABBITMQ_VHOST=$RESOURCE_PREFIX-vhost
 RABBITMQ_USERNAME=$RESOURCE_PREFIX-user
 RABBITMQ_PASSWORD=$RABBITMQ_PASSWORD
 
-POSTGRES0_IP={{ hostvars['postgres0'].ansible_host }}
-MINIO0_IP={{ hostvars['minio0'].ansible_host }}
-RABBITMQ0_IP={{ hostvars['rabbitmq0'].ansible_host }}
+POSTGRES0_IP={{ hostvars['postgres0'].private_network_ip }}
+MINIO0_IP={{ hostvars['minio0'].private_network_ip }}
+RABBITMQ0_IP={{ hostvars['rabbitmq0'].private_network_ip }}
