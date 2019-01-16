@@ -13,7 +13,7 @@ cp /tmp/keys/GITLAB_USER_BASTION_HOST_SSH_PRIVATE_KEY keys/id_rsa
 chmod 700 keys/id_rsa
 
 # Fetch Ansible inventory from cluster
-ssh -t $BASTION_HOST_CONNECTION_STRING "scp -o StrictHostKeyChecking=No admin@$CLUSTER_IP:/etc/ansible_inventory ."
+ssh -o StrictHostKeyChecking=No $BASTION_HOST_CONNECTION_STRING "scp -o StrictHostKeyChecking=No admin@$CLUSTER_IP:/etc/ansible_inventory ."
 
 # Fetch ansible playbook and config.
 #mkdir -p templates
