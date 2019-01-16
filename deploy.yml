@@ -201,7 +201,7 @@
 
     - name: Execute post deploy
       shell: >
-        docker pull {{ postdeploy_image }};
+        docker pull $POSTDEPLOY_IMAGE;
         docker run --env-file .env
         --network={{ resource_prefix }}_default
         --add-host=postgres0:{{ hostvars['postgres0'].ansible_host }}
