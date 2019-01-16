@@ -12,7 +12,7 @@ function cleanup {
     rm -rf $WORKSPACE_NAME
 EOF
 }
-trap finish EXIT
+trap cleanup EXIT
 
 # Add bastion host ssh key.
 mkdir keys
