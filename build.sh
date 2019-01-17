@@ -11,7 +11,7 @@ then
     docker-compose --file docker-compose-build.yml build
     if [ -e docker/commands/post_build.sh ]
     then
-        docker/commands/post_build.sh
+        ./docker/commands/post_build.sh
     fi
     docker-compose --file docker-compose-build.yml push
 else
