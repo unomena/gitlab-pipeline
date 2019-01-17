@@ -1,5 +1,8 @@
 #! /bin/sh -
 
+# Exit on any failures
+set -e
+
 if [ -e docker-compose-build.yml ]
 then
     rm -f .env docker-compose.override.yml
