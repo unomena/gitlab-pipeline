@@ -170,9 +170,9 @@
     ansible_python_interpreter: /usr/bin/python3
 
   tasks:
-    - name: Display CI_JOB_TOKEN
-      debug:
-        msg: "CI_BUILD_TOKEN $CI_BUILD_TOKEN"
+    #- name: Display CI_JOB_TOKEN
+    #  debug:
+    #    msg: "CI_BUILD_TOKEN $CI_BUILD_TOKEN"
 
 
     - name: Log in to private gitlab docker container registry
@@ -181,6 +181,21 @@
         password: "$CI_BUILD_TOKEN"
         registry: $CI_REGISTRY
         reauthorize: yes
+
+    - name: Add docker compose file
+      copy:
+        src: "{{ compose_file }}"
+        dest: "{{ compose_file }}"
+
+    - name: Add environments file
+      template:
+        src: templates/env
+        dest: .env
+
+    - name: Pull images Deploy docker stack
+      shell: docker-compose -f {{ compose_file }} pull
+      args:
+        executable: /bin/bash
 
 - hosts: manager0
   remote_user: admin
