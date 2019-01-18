@@ -170,6 +170,11 @@
     ansible_python_interpreter: /usr/bin/python3
 
   tasks:
+    - name: Display CI_JOB_TOKEN
+      debug:
+        msg: "CI_JOB_TOKEN $CI_JOB_TOKEN"
+
+
     - name: Log in to private gitlab docker container registry
       docker_login:
         username: gitlab-token-user
