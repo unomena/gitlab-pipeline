@@ -162,7 +162,7 @@
         - rabbitmq_username != ""
         - rabbitmq_password != ""
 
-- hosts: workers
+- hosts: worker*
   remote_user: admin
   become: yes
   vars:
