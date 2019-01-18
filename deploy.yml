@@ -215,12 +215,12 @@
     - debug:
         var: post_deploy.stderr_lines
 
-    - name: Remove docker compose file
-      file:
-        state: absent
-        path: "{{ compose_file }}"
+    #- name: Remove docker compose file
+    #  file:
+    #    state: absent
+    #    path: "{{ compose_file }}"
 
-    - name: Remove docker env file
-      file:
-        state: absent
-        path: ".env"
+    #- name: Remove docker env file
+    #  file:
+    #    state: absent
+    #    path: ".env"
