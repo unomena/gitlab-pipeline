@@ -177,7 +177,7 @@
 
     - name: Log in to private gitlab docker container registry
       docker_login:
-        username: gitlab-token-user
+        username: gitlab-ci-token
         password: "$CI_JOB_TOKEN"
         registry: gitlab.unomena.net:5005
         reauthorize: yes
