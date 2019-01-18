@@ -224,7 +224,7 @@
         dest: .env
 
     - name: Deploy docker stack
-      shell: docker stack deploy --with-registry-auth -c <(docker-compose -f {{ compose_file }} config) {{ resource_prefix }}
+      shell: docker stack deploy -c <(docker-compose -f {{ compose_file }} config) {{ resource_prefix }}
       args:
         executable: /bin/bash
 
