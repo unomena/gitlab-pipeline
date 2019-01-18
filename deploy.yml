@@ -170,11 +170,6 @@
     ansible_python_interpreter: /usr/bin/python3
 
   tasks:
-    #- name: Display CI_JOB_TOKEN
-    #  debug:
-    #    msg: "CI_BUILD_TOKEN $CI_BUILD_TOKEN"
-
-
     - name: Log in to private gitlab docker container registry
       docker_login:
         username: gitlab-ci-token
@@ -192,10 +187,20 @@
         src: templates/env
         dest: .env
 
-    - name: Pull images Deploy docker stack
+    - name: Pull all images
       shell: docker-compose -f {{ compose_file }} pull
       args:
         executable: /bin/bash
+
+    - name: Remove docker compose file
+      file:
+        state: absent
+        path: "{{ compose_file }}"
+
+    - name: Remove docker env file
+      file:
+        state: absent
+        path: ".env"
 
 - hosts: manager0
   remote_user: admin
@@ -250,12 +255,12 @@
     - debug:
         var: post_deploy.stderr_lines
 
-    #- name: Remove docker compose file
-    #  file:
-    #    state: absent
-    #    path: "{{ compose_file }}"
+    - name: Remove docker compose file
+      file:
+        state: absent
+        path: "{{ compose_file }}"
 
-    #- name: Remove docker env file
-    #  file:
-    #    state: absent
-    #    path: ".env"
+    - name: Remove docker env file
+      file:
+        state: absent
+        path: ".env"
