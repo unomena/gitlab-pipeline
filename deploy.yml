@@ -179,7 +179,7 @@
       docker_login:
         username: gitlab-ci-token
         password: "$CI_JOB_TOKEN"
-        registry: gitlab.unomena.net:5005
+        registry: $CI_REGISTRY
         reauthorize: yes
 
 - hosts: manager0
