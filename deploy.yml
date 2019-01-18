@@ -162,6 +162,21 @@
         - rabbitmq_username != ""
         - rabbitmq_password != ""
 
+- hosts: workers
+  remote_user: admin
+  become: yes
+  vars:
+    ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
+    ansible_python_interpreter: /usr/bin/python3
+
+  tasks:
+    - name: Log in to private gitlab docker container registry
+      docker_login:
+        username: gitlab-token-user
+        password: "$CI_JOB_TOKEN"
+        registry: gitlab.unomena.net:5005
+        reauthorize: yes
+
 - hosts: manager0
   remote_user: admin
   become: yes
