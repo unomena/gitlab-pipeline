@@ -172,13 +172,13 @@
   tasks:
     - name: Display CI_JOB_TOKEN
       debug:
-        msg: "CI_JOB_TOKEN $CI_JOB_TOKEN"
+        msg: "CI_BUILD_TOKEN $CI_BUILD_TOKEN"
 
 
     - name: Log in to private gitlab docker container registry
       docker_login:
         username: gitlab-ci-token
-        password: "$CI_JOB_TOKEN"
+        password: "$CI_BUILD_TOKEN"
         registry: $CI_REGISTRY
         reauthorize: yes
 
@@ -204,7 +204,7 @@
         dest: .env
 
     - name: Deploy docker stack
-      shell: docker stack deploy -c <(docker-compose -f {{ compose_file }} config) {{ resource_prefix }}
+      shell: docker stack deploy --with-registry-auth -c <(docker-compose -f {{ compose_file }} config) {{ resource_prefix }}
       args:
         executable: /bin/bash
 
