@@ -36,7 +36,7 @@ envsubst < templates/env > payload/templates/env
 cp $COMPOSE_FILE payload/
 
 # Sync deploy artifacts to unique workspace on bastion host.
-rsync -avzhe "ssh -i keys/id_rsa -o StrictHostKeyChecking=No" payload $BASTION_HOST_CONNECTION_STRING:~/$WORKSPACE_NAME
+rsync -avzhe "ssh -i keys/id_rsa -o StrictHostKeyChecking=No" payload/ $BASTION_HOST_CONNECTION_STRING:~/$WORKSPACE_NAME
 #ssh -i keys/id_rsa -o StrictHostKeyChecking=No $BASTION_HOST_CONNECTION_STRING "mkdir $WORKSPACE_NAME"
 #scp -i keys/id_rsa -o StrictHostKeyChecking=No playbook.yml $BASTION_HOST_CONNECTION_STRING:~/$WORKSPACE_NAME
 
