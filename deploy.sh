@@ -32,9 +32,9 @@ envsubst < deploy.yml > playbook.yml
 envsubst < templates/env_unsub > templates/env
 
 # Sync deploy artifacts to unique workspace on bastion host.
-#rsync -avzhe "ssh -i keys/id_rsa -o StrictHostKeyChecking=No" --exclude='.git' --exclude='keys' . $BASTION_HOST_CONNECTION_STRING:~/$WORKSPACE_NAME
-ssh -i keys/id_rsa -o StrictHostKeyChecking=No $BASTION_HOST_CONNECTION_STRING "mkdir $WORKSPACE_NAME"
-scp -i keys/id_rsa -o StrictHostKeyChecking=No playbook.yml $BASTION_HOST_CONNECTION_STRING:~/$WORKSPACE_NAME
+rsync -avzhe "ssh -i keys/id_rsa -o StrictHostKeyChecking=No" --include='playbook.yml' --include='templates/env' --exclude='*' . $BASTION_HOST_CONNECTION_STRING:~/$WORKSPACE_NAME
+#ssh -i keys/id_rsa -o StrictHostKeyChecking=No $BASTION_HOST_CONNECTION_STRING "mkdir $WORKSPACE_NAME"
+#scp -i keys/id_rsa -o StrictHostKeyChecking=No playbook.yml $BASTION_HOST_CONNECTION_STRING:~/$WORKSPACE_NAME
 
 # Fetch Ansible inventory from cluster and execute playbook on bastion host.
 ssh -i keys/id_rsa -o StrictHostKeyChecking=No $BASTION_HOST_CONNECTION_STRING << EOF
