@@ -220,7 +220,7 @@
 
     - name: Add environments file
       template:
-        src: env
+        src: templates/env
         dest: .env
 
     - name: Deploy docker stack

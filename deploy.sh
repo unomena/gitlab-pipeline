@@ -20,19 +20,22 @@ cp /tmp/keys/GITLAB_USER_BASTION_HOST_SSH_PRIVATE_KEY keys/id_rsa
 chmod 700 keys/id_rsa
 
 # Fetch ansible playbook, templates and config.
-mkdir -p templates
+mkdir -p payload/templates
 curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.yml -o deploy.yml
-curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/templates/env -o templates/env_unsub
+curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/templates/env -o templates/env
 curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/ansible.cfg -o ansible.cfg
 
 # Replace environment variables in playbook.
-envsubst < deploy.yml > playbook.yml
+envsubst < deploy.yml > payload/deploy.yml
 
 # Replace environment variables in env template file.
-envsubst < templates/env_unsub > env
+envsubst < templates/env > payload/templates/env
+
+# Add indicated compose file to payload.
+cp $COMPOSE_FILE payload/
 
 # Sync deploy artifacts to unique workspace on bastion host.
-rsync -avzhe "ssh -i keys/id_rsa -o StrictHostKeyChecking=No" --include='playbook.yml' --include="$COMPOSE_FILE" --include='env' --exclude='*' . $BASTION_HOST_CONNECTION_STRING:~/$WORKSPACE_NAME
+rsync -avzhe "ssh -i keys/id_rsa -o StrictHostKeyChecking=No" payload $BASTION_HOST_CONNECTION_STRING:~/$WORKSPACE_NAME
 #ssh -i keys/id_rsa -o StrictHostKeyChecking=No $BASTION_HOST_CONNECTION_STRING "mkdir $WORKSPACE_NAME"
 #scp -i keys/id_rsa -o StrictHostKeyChecking=No playbook.yml $BASTION_HOST_CONNECTION_STRING:~/$WORKSPACE_NAME
 
