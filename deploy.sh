@@ -29,7 +29,7 @@ curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/ansi
 envsubst < deploy.yml > playbook.yml
 
 # Replace environment variables in env template file.
-envsubst < templates/env_unsub > templates/env
+envsubst < templates/env_unsub > env
 
 # Sync deploy artifacts to unique workspace on bastion host.
 rsync -avzhe "ssh -i keys/id_rsa -o StrictHostKeyChecking=No" --include='playbook.yml' --include="$COMPOSE_FILE" --include='env' --exclude='*' . $BASTION_HOST_CONNECTION_STRING:~/$WORKSPACE_NAME
