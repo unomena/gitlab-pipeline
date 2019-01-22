@@ -20,6 +20,7 @@ cp /tmp/keys/GITLAB_USER_BASTION_HOST_SSH_PRIVATE_KEY keys/id_rsa
 chmod 700 keys/id_rsa
 
 # Fetch ansible playbook, templates and config.
+mkdir -p templates
 mkdir -p payload/templates
 curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.yml -o deploy.yml
 curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/templates/env -o templates/env
