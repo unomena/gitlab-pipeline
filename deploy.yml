@@ -10,9 +10,11 @@
     postgres_database_password: "$POSTGRES_PASSWORD"
 
   tasks:
-    - name: Create database
-      postgresql_db:
-        name: "{{ postgres_database_name }}"
+    - name: Create database user
+      postgresql_user:
+        #db: "{{ postgres_database_name }}"
+        name: "{{ postgres_database_username }}"
+        password: "{{ postgres_database_password }}"
       become: true
       become_user: postgres
       when:
@@ -20,11 +22,10 @@
         - postgres_database_username != ""
         - postgres_database_password != ""
 
-    - name: Create database user
-      postgresql_user:
-        db: "{{ postgres_database_name }}"
-        name: "{{ postgres_database_username }}"
-        password: "{{ postgres_database_password }}"
+    - name: Create database
+      postgresql_db:
+        name: "{{ postgres_database_name }}"
+        owner: "{{ postgres_database_username }}"
       become: true
       become_user: postgres
       when:
