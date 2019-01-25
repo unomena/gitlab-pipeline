@@ -37,9 +37,9 @@
       environment:
         POSTGRES_RESTORE_SOURCE: "$POSTGRES_RESTORE_SOURCE"
         POSTGRES_HOST: "$POSTGRES_HOST"
-        POSTGRES_NAME: "$POSTGRES_NAME"
-        POSTGRES_USER: "$POSTGRES_USER"
-        POSTGRES_PASSWORD: "$POSTGRES_PASSWORD"
+        POSTGRES_NAME: "{{ postgres_database_name }}"
+        POSTGRES_USER: "{{ postgres_database_username }}"
+        POSTGRES_PASSWORD: "{{ postgres_database_password }}"
       become_user: postgres_restore
 
 - hosts: $MINIO_HOST
