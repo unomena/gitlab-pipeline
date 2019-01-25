@@ -12,7 +12,6 @@
   tasks:
     - name: Create database user
       postgresql_user:
-        #db: "{{ postgres_database_name }}"
         name: "{{ postgres_database_username }}"
         password: "{{ postgres_database_password }}"
       become: true
@@ -33,6 +32,7 @@
         - postgres_database_username != ""
         - postgres_database_password != ""
 
+    # Required to avoid 'must be owner of schema public' errors on restore.
     - name: Set database public schema owner to created user
       postgresql_schema:
         database: "{{ postgres_database_name }}"
@@ -40,6 +40,7 @@
         owner: "{{ postgres_database_username }}"
       become_user: postgres
 
+    # Required to avoid 'must be owner of extension plpgsql' errors on restore.
     - name: Remove plpgsql extension from database
       postgresql_ext:
         db: "{{ postgres_database_name }}"
@@ -56,7 +57,6 @@
         POSTGRES_USER: "{{ postgres_database_username }}"
         POSTGRES_PASSWORD: "{{ postgres_database_password }}"
       become_user: postgres_restore
-
 
 - hosts: $MINIO_HOST
   remote_user: admin
