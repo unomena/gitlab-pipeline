@@ -32,6 +32,12 @@
         - postgres_database_username != ""
         - postgres_database_password != ""
 
+    - name: Set database public schema owner to created user
+      postgresql_schema:
+       database: "{{ postgres_database_name }}"
+       name: public
+       owner: "{{ postgres_database_username }}"
+
     - name: Restore database
       shell: /home/postgres_restore/bin/postgres_restore.sh
       environment:
