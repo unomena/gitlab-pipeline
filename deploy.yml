@@ -32,6 +32,10 @@
         - postgres_database_username != ""
         - postgres_database_password != ""
 
+    - name: Restore database
+      command: /home/postgres_restore/bin/postgres_restore.sh
+      become_user: postgres_restore
+
 - hosts: $MINIO_HOST
   remote_user: admin
   become: yes
