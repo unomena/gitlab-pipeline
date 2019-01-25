@@ -33,7 +33,9 @@
         - postgres_database_password != ""
 
     - name: Restore database
-      command: /home/postgres_restore/bin/postgres_restore.sh
+      shell: /home/postgres_restore/bin/postgres_restore.sh
+      environment:
+        POSTGRES_RESTORE_SOURCE: $POSTGRES_RESTORE_SOURCE
       become_user: postgres_restore
 
 - hosts: $MINIO_HOST
