@@ -39,6 +39,13 @@
         owner: "{{ postgres_database_username }}"
       become_user: postgres
 
+    - name: Remove plpgsql extension from database
+      postgresql_ext:
+        db: "{{ postgres_database_name }}"
+        name: plpgsql
+        state: absent
+      become_user: postgres
+
     - name: Restore database
       shell: /home/postgres_restore/bin/postgres_restore.sh
       environment:
