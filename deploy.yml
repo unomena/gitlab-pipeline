@@ -35,7 +35,11 @@
     - name: Restore database
       shell: /home/postgres_restore/bin/postgres_restore.sh
       environment:
-        POSTGRES_RESTORE_SOURCE: $POSTGRES_RESTORE_SOURCE
+        POSTGRES_RESTORE_SOURCE: "$POSTGRES_RESTORE_SOURCE"
+        POSTGRES_HOST: "$POSTGRES_HOST"
+        POSTGRES_NAME: "$POSTGRES_NAME"
+        POSTGRES_USER: "$POSTGRES_USER"
+        POSTGRES_PASSWORD: "$POSTGRES_PASSWORD"
       become_user: postgres_restore
 
 - hosts: $MINIO_HOST
