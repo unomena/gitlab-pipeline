@@ -20,16 +20,6 @@
         - postgres_database_username != ""
         - postgres_database_password != ""
 
-    - name: Restore database
-      shell: /home/postgres_restore/bin/postgres_restore.sh
-      environment:
-        POSTGRES_RESTORE_SOURCE: "$POSTGRES_RESTORE_SOURCE"
-        POSTGRES_HOST: "$POSTGRES_HOST"
-        POSTGRES_NAME: "{{ postgres_database_name }}"
-        POSTGRES_USER: "{{ postgres_database_username }}"
-        POSTGRES_PASSWORD: "{{ postgres_database_password }}"
-      become_user: postgres_restore
-
     - name: Create database user
       postgresql_user:
         db: "{{ postgres_database_name }}"
@@ -41,6 +31,17 @@
         - postgres_database_name != ""
         - postgres_database_username != ""
         - postgres_database_password != ""
+
+    - name: Restore database
+      shell: /home/postgres_restore/bin/postgres_restore.sh
+      environment:
+        POSTGRES_RESTORE_SOURCE: "$POSTGRES_RESTORE_SOURCE"
+        POSTGRES_HOST: "$POSTGRES_HOST"
+        POSTGRES_NAME: "{{ postgres_database_name }}"
+        POSTGRES_USER: "{{ postgres_database_username }}"
+        POSTGRES_PASSWORD: "{{ postgres_database_password }}"
+      become_user: postgres_restore
+
 
 - hosts: $MINIO_HOST
   remote_user: admin
