@@ -17,7 +17,7 @@ variables:
 
 build_master:
   stage: build
-  image: gitlab.unomena.net:5005/unomena/worker-images/build:master
+  image: $CI_REGISTRY/unomena/worker-images/build:master
   services:
     - docker:dind
   script:
@@ -30,7 +30,7 @@ build_master:
 
 build_qa:
   stage: build
-  image: gitlab.unomena.net:5005/unomena/worker-images/build:master
+  image: $CI_REGISTRY/unomena/worker-images/build:master
   services:
     - docker:dind
   script:
@@ -45,7 +45,7 @@ build_qa:
 
 deploy_qa:
   stage: deploy
-  image: gitlab.unomena.net:5005/unomena/worker-images/deploy:master
+  image: $CI_REGISTRY/unomena/worker-images/deploy:master
   variables:
     COMPOSE_FILE: $QA_COMPOSE_FILE
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_QA
@@ -70,7 +70,7 @@ deploy_qa:
 
 stop_qa:
   stage: deploy
-  image: gitlab.unomena.net:5005/unomena/worker-images/deploy:master
+  image: $CI_REGISTRY/unomena/worker-images/deploy:master
   variables:
     STAGE: qa
     GIT_STRATEGY: none
@@ -94,7 +94,7 @@ stop_qa:
 
 build:
   stage: build
-  image: gitlab.unomena.net:5005/unomena/worker-images/build:master
+  image: $CI_REGISTRY/unomena/worker-images/build:master
   services:
     - docker:dind
   script:
@@ -107,7 +107,7 @@ build:
 
 staging:
   stage: deploy
-  image: gitlab.unomena.net:5005/unomena/worker-images/deploy:master
+  image: $CI_REGISTRY/unomena/worker-images/deploy:master
   variables:
     COMPOSE_FILE: $STAGING_COMPOSE_FILE
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_STAGING
@@ -129,7 +129,7 @@ staging:
 
 stop_staging:
   stage: deploy
-  image: gitlab.unomena.net:5005/unomena/worker-images/deploy:master
+  image: $CI_REGISTRY/unomena/worker-images/deploy:master
   variables:
     STAGE: staging
     GIT_STRATEGY: none
@@ -151,7 +151,7 @@ stop_staging:
 
 production:
   stage: deploy
-  image: gitlab.unomena.net:5005/unomena/worker-images/deploy:master
+  image: $CI_REGISTRY/unomena/worker-images/deploy:master
   variables:
     COMPOSE_FILE: $PRODUCTION_COMPOSE_FILE
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_PRODUCTION
