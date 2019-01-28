@@ -5,9 +5,11 @@
   vars:
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
+    postgres_database_host: "$POSTGRES_HOST"
     postgres_database_name: "{{ resource_prefix }}-database"
     postgres_database_username: "{{ resource_prefix }}-user"
     postgres_database_password: "$POSTGRES_PASSWORD"
+    postgres_database_restore_source: "$POSTGRES_RESTORE_SOURCE"
 
   tasks:
     - name: Create database user
@@ -51,12 +53,13 @@
     - name: Restore database
       shell: /home/postgres_restore/bin/postgres_restore.sh
       environment:
-        POSTGRES_RESTORE_SOURCE: "$POSTGRES_RESTORE_SOURCE"
-        POSTGRES_HOST: "$POSTGRES_HOST"
+        POSTGRES_RESTORE_SOURCE: "{{ postgres_database_restore_source }}"
+        POSTGRES_HOST: "{{ postgres_database_host }}"
         POSTGRES_NAME: "{{ postgres_database_name }}"
         POSTGRES_USER: "{{ postgres_database_username }}"
         POSTGRES_PASSWORD: "{{ postgres_database_password }}"
       become_user: postgres_restore
+      when: postgres_database_restore_source != ""
 
 - hosts: $MINIO_HOST
   remote_user: admin
