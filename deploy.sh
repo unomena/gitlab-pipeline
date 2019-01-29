@@ -14,20 +14,17 @@ EOF
 }
 trap cleanup EXIT
 
-# Add bastion host ssh key.
+# Run ssh-agent (inside the build environment)
 eval $(ssh-agent -s)
 
+# Add bastion host ssh key to ssh agent.
 mkdir keys
 cp /tmp/keys/GITLAB_USER_BASTION_HOST_SSH_PRIVATE_KEY keys/id_rsa
 chmod 700 keys/id_rsa
 ssh-add keys/id_rsa
-#echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
 
-
-
-apt install openssh-client -y
+# Jump to bastion host and add expiring CA signed ssh key on it to local ssh agent.
 ssh -i keys/id_rsa -n -o 'ForwardAgent yes' -o 'StrictHostKeyChecking=No' $BASTION_HOST_CONNECTION_STRING 'ssh-add'
-echo "DEBUG"
 
 # Fetch ansible playbook, templates and config.
 mkdir -p templates
