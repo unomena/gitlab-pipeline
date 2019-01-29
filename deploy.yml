@@ -59,7 +59,9 @@
         POSTGRES_USER: "{{ postgres_database_username }}"
         POSTGRES_PASSWORD: "{{ postgres_database_password }}"
       become_user: postgres_restore
-      when: postgres_database_restore_source != ""
+      when:
+        - postgres_database_restore_source != ""
+        - stage != "production"
 
 - hosts: $MINIO_HOST
   remote_user: admin
