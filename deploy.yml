@@ -33,6 +33,7 @@
         - postgres_database_name != ""
         - postgres_database_username != ""
         - postgres_database_password != ""
+      register: database_created
 
     # Required to avoid 'must be owner of schema public' errors on restore.
     - name: Set database public schema owner to created user
@@ -41,6 +42,7 @@
         name: public
         owner: "{{ postgres_database_username }}"
       become_user: postgres
+      when: database_created.changed
 
     # Required to avoid 'must be owner of extension plpgsql' errors on restore.
     - name: Remove plpgsql extension from database
@@ -49,6 +51,7 @@
         name: plpgsql
         state: absent
       become_user: postgres
+      when: database_created.changed
 
     - name: Restore database
       shell: /home/postgres_restore/bin/postgres_restore.sh
@@ -62,6 +65,7 @@
       when:
         - postgres_database_restore_source != ""
         - stage != "production"
+        - database_created.changed
 
 - hosts: $MINIO_HOST
   remote_user: admin
@@ -69,9 +73,11 @@
   vars:
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
+    minio_host: "$MINIO_HOST"
     minio_bucket_name: "{{ resource_prefix }}-bucket"
     minio_access_key: "{{ resource_prefix }}-user"
     minio_secret_key: "$MINIO_SECRET_KEY"
+    minio_restore_source: "$MINIO_RESTORE_SOURCE"
 
   tasks:
     - name: Add objectstore user policy definition
@@ -157,6 +163,19 @@
         - minio_bucket_name != ""
         - minio_access_key != ""
         - minio_secret_key != ""
+
+    - name: Restore objectstore bucket
+      shell: /home/minio_restore/bin/minio_restore.sh
+      become_user: minio_restore
+      environment:
+        MINIO_RESTORE_SOURCE: "{{ minio_restore_source }}"
+        MINIO_BUCKET_NAME: "{{ minio_bucket_name }}"
+        MINIO_HOST: "{{ minio_host }}"
+        MINIO_ACCESS_KEY: "{{ minio_access_key }}"
+        MINIO_SECRET_KEY: "{{ minio_secret_key }}"
+      when:
+        - minio_restore_source != ""
+        - stage != "production"
 
 - hosts: $RABBITMQ_HOST
   remote_user: admin
