@@ -21,11 +21,11 @@ eval $(ssh-agent -s)
 echo "$GITLAB_USER_BASTION_HOST_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
 
 
-mkdir keys
-cp /tmp/keys/GITLAB_USER_BASTION_HOST_SSH_PRIVATE_KEY keys/id_rsa
-chmod 700 keys/id_rsa
+#mkdir keys
+#cp /tmp/keys/GITLAB_USER_BASTION_HOST_SSH_PRIVATE_KEY keys/id_rsa
+#chmod 700 keys/id_rsa
 
-ssh -i keys/id_rsa -n -o 'ForwardAgent yes' -o 'StrictHostKeyChecking=No' $BASTION_HOST_CONNECTION_STRING 'ssh-add'
+ssh -n -o 'ForwardAgent yes' -o 'StrictHostKeyChecking=No' $BASTION_HOST_CONNECTION_STRING 'ssh-add'
 echo "DEBUG"
 
 # Fetch ansible playbook, templates and config.
