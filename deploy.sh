@@ -15,6 +15,10 @@ EOF
 trap cleanup EXIT
 
 # Add bastion host ssh key.
+
+echo "$GITLAB_USER_BASTION_HOST_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+
+
 mkdir keys
 cp /tmp/keys/GITLAB_USER_BASTION_HOST_SSH_PRIVATE_KEY keys/id_rsa
 chmod 700 keys/id_rsa
