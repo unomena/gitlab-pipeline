@@ -21,7 +21,7 @@ chmod 700 keys/id_rsa
 
 apt install openssh-client -y
 eval $(ssh-agent -s)
-ssh -i keys/id_rsa -o 'ForwardAgent yes' -o 'StrictHostKeyChecking=No' $BASTION_HOST_CONNECTION_STRING 'ssh-add'
+eval $(ssh -i keys/id_rsa -o 'ForwardAgent yes' -o 'StrictHostKeyChecking=No' $BASTION_HOST_CONNECTION_STRING 'ssh-add')
 echo "DEBUG"
 
 # Fetch ansible playbook, templates and config.
