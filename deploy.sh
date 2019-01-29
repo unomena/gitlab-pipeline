@@ -24,7 +24,8 @@ chmod 700 keys/id_rsa
 ssh-add keys/id_rsa
 
 # Jump to bastion host and add expiring CA signed ssh key on it to local ssh agent.
-ssh -i keys/id_rsa -n -o 'ForwardAgent yes' -o 'StrictHostKeyChecking=No' $BASTION_HOST_CONNECTION_STRING 'ssh-add'
+# (Argument -n is required to avoid ssh eating the remainder of this script.)
+ssh -n -o 'ForwardAgent yes' -o 'StrictHostKeyChecking=No' $BASTION_HOST_CONNECTION_STRING 'ssh-add'
 
 # Fetch ansible playbook, templates and config.
 mkdir -p templates
@@ -42,16 +43,20 @@ envsubst < templates/env > payload/templates/env
 # Add indicated compose file to payload.
 cp $COMPOSE_FILE payload/
 
-# Sync deploy artifacts to unique workspace on bastion host.
-rsync -avzhe "ssh -i keys/id_rsa -o StrictHostKeyChecking=No" payload/ $BASTION_HOST_CONNECTION_STRING:~/$WORKSPACE_NAME
-#ssh -i keys/id_rsa -o StrictHostKeyChecking=No $BASTION_HOST_CONNECTION_STRING "mkdir $WORKSPACE_NAME"
-#scp -i keys/id_rsa -o StrictHostKeyChecking=No playbook.yml $BASTION_HOST_CONNECTION_STRING:~/$WORKSPACE_NAME
+cd payload
+scp -o StrictHostKeyChecking=No admin@$CLUSTER_IP:/etc/ansible_inventory .
+ansible-playbook -i ansible_inventory --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_KEY compose_file=$COMPOSE_FILE" deploy.yml
 
-# Fetch Ansible inventory from cluster and execute playbook on bastion host.
-ssh -i keys/id_rsa -o StrictHostKeyChecking=No $BASTION_HOST_CONNECTION_STRING << EOF
-    cd $WORKSPACE_NAME
-    scp -o StrictHostKeyChecking=No admin@$CLUSTER_IP:/etc/ansible_inventory .
-    ansible-playbook -i ansible_inventory --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_KEY compose_file=$COMPOSE_FILE" deploy.yml
-EOF
+## Sync deploy artifacts to unique workspace on bastion host.
+#rsync -avzhe "ssh -i keys/id_rsa -o StrictHostKeyChecking=No" payload/ $BASTION_HOST_CONNECTION_STRING:~/$WORKSPACE_NAME
+##ssh -i keys/id_rsa -o StrictHostKeyChecking=No $BASTION_HOST_CONNECTION_STRING "mkdir $WORKSPACE_NAME"
+##scp -i keys/id_rsa -o StrictHostKeyChecking=No playbook.yml $BASTION_HOST_CONNECTION_STRING:~/$WORKSPACE_NAME
+
+## Fetch Ansible inventory from cluster and execute playbook on bastion host.
+#ssh -i keys/id_rsa -o StrictHostKeyChecking=No $BASTION_HOST_CONNECTION_STRING << EOF
+#    cd $WORKSPACE_NAME
+#    scp -o StrictHostKeyChecking=No admin@$CLUSTER_IP:/etc/ansible_inventory .
+#    ansible-playbook -i ansible_inventory --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_KEY compose_file=$COMPOSE_FILE" deploy.yml
+#EOF
 
 echo Deployed stack to https://$STACK_HOSTNAME
