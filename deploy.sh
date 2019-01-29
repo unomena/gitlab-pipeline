@@ -19,6 +19,9 @@ mkdir keys
 cp /tmp/keys/GITLAB_USER_BASTION_HOST_SSH_PRIVATE_KEY keys/id_rsa
 chmod 700 keys/id_rsa
 
+ssh -o 'ForwardAgent yes' $BASTION_HOST_CONNECTION_STRING 'ssh-add'
+ssh -l
+
 # Fetch ansible playbook, templates and config.
 mkdir -p templates
 mkdir -p payload/templates
