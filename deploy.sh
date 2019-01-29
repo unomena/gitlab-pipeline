@@ -18,7 +18,7 @@ trap cleanup EXIT
 
 #apt install openssh-client -y
 eval $(ssh-agent -s)
-echo "$GITLAB_USER_BASTION_HOST_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+echo "$GITLAB_USER_BASTION_HOST_SSH_PRIVATE_KEY" | ssh-add - > /dev/null
 mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 
