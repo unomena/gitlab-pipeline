@@ -3,16 +3,16 @@
 # Exit on any failures
 set -e
 
-# Generate random workspace path name
-WORKSPACE_NAME=workspace-$RANDOM-$RANDOM
+## Generate random workspace path name
+#WORKSPACE_NAME=workspace-$RANDOM-$RANDOM
 
-# Always cleanup bastion host workspace
-function cleanup {
-    ssh -i keys/id_rsa -o StrictHostKeyChecking=No $BASTION_HOST_CONNECTION_STRING << EOF
-    rm -rf $WORKSPACE_NAME
-EOF
-}
-trap cleanup EXIT
+## Always cleanup bastion host workspace
+#function cleanup {
+#    ssh -i keys/id_rsa -o StrictHostKeyChecking=No $BASTION_HOST_CONNECTION_STRING << EOF
+#    rm -rf $WORKSPACE_NAME
+#EOF
+#}
+#trap cleanup EXIT
 
 # Run ssh-agent (inside the build environment)
 eval $(ssh-agent -s)
@@ -44,7 +44,10 @@ envsubst < templates/env > payload/templates/env
 cp $COMPOSE_FILE payload/
 
 cd payload
+# Fetch Ansible inventory from cluster
 scp -o StrictHostKeyChecking=No admin@$CLUSTER_IP:/etc/ansible_inventory .
+
+# Execute playbook
 ansible-playbook -i ansible_inventory --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_KEY compose_file=$COMPOSE_FILE" deploy.yml
 
 ## Sync deploy artifacts to unique workspace on bastion host.
