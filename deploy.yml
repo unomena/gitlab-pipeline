@@ -154,6 +154,7 @@
         - minio_access_key != ""
         - minio_secret_key != ""
         - "' ' ~ minio_bucket_name ~ '/' not in minio_buckets.stdout"
+      register: bucket_created
 
     # This is set to enable unauthenticated download of all content contained in the bucket
     # via nginx proxy_pass directive.
@@ -176,6 +177,7 @@
       when:
         - minio_restore_source != ""
         - stage != "production"
+        - bucket_created.changed
 
 - hosts: $RABBITMQ_HOST
   remote_user: admin
