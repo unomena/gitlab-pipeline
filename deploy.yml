@@ -318,9 +318,6 @@
     - debug:
         var: post_deploy.stderr_lines
 
-    - debug:
-        var: deploy_directory.path
-
     - name: Remove temporary deploy directory
       file:
         state: absent
