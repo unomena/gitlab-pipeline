@@ -222,15 +222,21 @@
     ansible_python_interpreter: /usr/bin/python3
 
   tasks:
+    - name: Create temporary deploy directory
+      tempfile:
+        state: directory
+        suffix: deploy
+      register: deploy_directory
+
     - name: Add docker compose file
       copy:
         src: "{{ compose_file }}"
-        dest: "{{ compose_file }}"
+        dest: "{{ deploy_directory.path }}/{{ compose_file }}"
 
     - name: Add environments file
       template:
         src: templates/env
-        dest: .env
+        dest: "{{ deploy_directory.path }}/.env"
 
     - name: Log in to private gitlab docker container registry
       docker_login:
@@ -243,16 +249,12 @@
       shell: docker-compose -f {{ compose_file }} pull
       args:
         executable: /bin/bash
+        chdir: "{{ deploy_directory.path }}"
 
-    - name: Remove docker compose file
+    - name: Remove temporary deploy directory
       file:
         state: absent
-        path: "{{ compose_file }}"
-
-    - name: Remove docker env file
-      file:
-        state: absent
-        path: ".env"
+        path: "{{ deploy_directory.path }}"
 
 - hosts: manager0
   remote_user: admin
@@ -265,20 +267,27 @@
     services_format_string: !unsafe "{{.Replicas}}"
 
   tasks:
+    - name: Create temporary deploy directory
+      tempfile:
+        state: directory
+        suffix: deploy
+      register: deploy_directory
+
     - name: Add docker compose file
       copy:
         src: "{{ compose_file }}"
-        dest: "{{ compose_file }}"
+        dest: "{{ deploy_directory.path }}/{{ compose_file }}"
 
     - name: Add environments file
       template:
         src: templates/env
-        dest: .env
+        dest: "{{ deploy_directory.path }}/.env"
 
     - name: Deploy docker stack
       shell: docker stack deploy -c <(docker-compose -f {{ compose_file }} config) {{ resource_prefix }}
       args:
         executable: /bin/bash
+        chdir: "{{ deploy_directory.path }}"
 
     - name: Wait for all stack services to have replicated tasks
       command: "docker stack services {{ resource_prefix }} --format '{{ services_format_string }}'"
@@ -299,6 +308,8 @@
         -ti
         {{ postdeploy_image }}
         {{ postdeploy_command }}
+      args:
+        chdir: "{{ deploy_directory.path }}"
       register: post_deploy
 
     - debug:
@@ -307,12 +318,10 @@
     - debug:
         var: post_deploy.stderr_lines
 
-    - name: Remove docker compose file
-      file:
-        state: absent
-        path: "{{ compose_file }}"
+    - debug:
+        var: deploy_directory.path
 
-    - name: Remove docker env file
+    - name: Remove temporary deploy directory
       file:
         state: absent
-        path: ".env"
+        path: "{{ deploy_directory.path }}"
