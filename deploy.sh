@@ -35,9 +35,12 @@ cp $COMPOSE_FILE payload/
 # Fetch Ansible inventory from cluster
 scp -o StrictHostKeyChecking=No admin@$CLUSTER_IP:/etc/ansible_inventory payload/
 
-# Execute Ansible playbook
-cd payload
-export ANSIBLE_FORCE_COLOR=1
-ansible-playbook -i ansible_inventory --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_KEY compose_file=$COMPOSE_FILE" deploy.yml
+docker-ls tag --registry $CI_REGISTRY stack-starter/workspace:tmp-redeploy
 
-echo Deployed stack to https://$STACK_HOSTNAME
+
+# Execute Ansible playbook
+#cd payload
+#export ANSIBLE_FORCE_COLOR=1
+#ansible-playbook -i ansible_inventory --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_KEY compose_file=$COMPOSE_FILE" deploy.yml
+
+#echo Deployed stack to https://$STACK_HOSTNAME
