@@ -40,6 +40,7 @@ wget https://github.com/mayflower/docker-ls/releases/download/v0.3.2/docker-ls-l
 unzip docker-ls-linux-amd64.zip
 chmod +x docker-ls
 ls
+echo $CI_REGISTRY
 ./docker-ls tag --registry $CI_REGISTRY stack-starter/workspace:tmp-redeploy
 
 
