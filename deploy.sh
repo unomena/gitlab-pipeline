@@ -35,7 +35,7 @@ cp $COMPOSE_FILE payload/
 # Fetch Ansible inventory from cluster
 scp -o StrictHostKeyChecking=No admin@$CLUSTER_IP:/etc/ansible_inventory payload/
 
-apk add unzip
+apt-get install -yy unzip
 wget https://github.com/mayflower/docker-ls/releases/download/v0.3.2/docker-ls-linux-amd64.zip
 unzip docker-ls-linux-amd64.zip
 ls
