@@ -18,6 +18,8 @@ variables:
 build_master:
   stage: build
   image: $CI_REGISTRY/unomena/worker-images/build:master
+  variables:
+    CI_COMMIT_SHORT_SHA: latest
   services:
     - name: docker:dind
       # Override entrypoint to allow for insecure(non https) local vagrant registry.
