@@ -38,8 +38,9 @@ scp -o StrictHostKeyChecking=No admin@$CLUSTER_IP:/etc/ansible_inventory payload
 apt-get install -yy unzip
 wget https://github.com/mayflower/docker-ls/releases/download/v0.3.2/docker-ls-linux-amd64.zip
 unzip docker-ls-linux-amd64.zip
+chmod +x docker-ls
 ls
-docker-ls tag --registry $CI_REGISTRY stack-starter/workspace:tmp-redeploy
+./docker-ls tag --registry $CI_REGISTRY stack-starter/workspace:tmp-redeploy
 
 
 # Execute Ansible playbook
