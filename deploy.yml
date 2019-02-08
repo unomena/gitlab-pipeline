@@ -262,7 +262,7 @@
   vars:
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
-    postdeploy_image: "$POSTDEPLOY_IMAGE"
+    postdeploy_image: "$POSTDEPLOY_IMAGE-$CI_COMMIT_SHORT_SHA"
     postdeploy_command: "$POSTDEPLOY_COMMAND"
     services_format_string: !unsafe "{{.Replicas}}"
 
