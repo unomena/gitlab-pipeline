@@ -284,7 +284,7 @@
         dest: "{{ deploy_directory.path }}/.env"
 
     - name: Deploy docker stack
-      shell: docker stack deploy -c <(docker-compose -f {{ compose_file }} config) {{ resource_prefix }}
+      shell: docker stack deploy --prune --compose-file <(docker-compose -f {{ compose_file }} config) {{ resource_prefix }}
       args:
         executable: /bin/bash
         chdir: "{{ deploy_directory.path }}"
