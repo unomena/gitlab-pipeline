@@ -4,7 +4,7 @@ services:
 {% for service in service_names.stdout_lines %}
   {{ service }}
       placement:
-        constraints: [node.role == worker]
         constraints:
+          - node.role == worker
           - node.type == worker
 {% endfor %}
