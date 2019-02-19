@@ -284,7 +284,7 @@
         dest: "{{ deploy_directory.path }}/{{ compose_file }}"
 
     - name: Resolve service names
-      shell: docker-compose -f {{ deploy_directory.path }}/{{ compose_file }} --services config
+      shell: docker-compose --file {{ deploy_directory.path }}/{{ compose_file }} config --services
       register: service_names
 
     # Constrain services by generating a docker-compose.override.yml file.
