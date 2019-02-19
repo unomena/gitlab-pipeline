@@ -1,0 +1,8 @@
+version: "3.4"
+
+services:
+{% for service in {{ service_names.stdout_lines }} %}
+  {{ service }}
+      placement:
+        constraints: [node.role == worker]
+{% endfor %}
