@@ -293,6 +293,13 @@
         src: templates/docker-compose.override.yml
         dest: "{{ deploy_directory.path }}/docker-compose.override.yml"
 
+    - name: Print override
+      shell: "cat {{ deploy_directory.path }}/docker-compose.override.yml"
+      register: override_content
+
+    - name: Print override
+    - debug: msg="{{ override_content.stdout_lines | quote }}"
+
     - name: Deploy docker stack
       shell: docker stack deploy --prune --compose-file <(docker-compose -f {{ compose_file }} config) {{ resource_prefix }}
       args:
