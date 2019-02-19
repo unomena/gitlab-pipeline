@@ -7,5 +7,5 @@ services:
       placement:
         constraints:
           - node.role == worker
-          - node.type == worker
+          - node.labels.type == worker
 {% endfor %}
