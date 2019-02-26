@@ -44,6 +44,6 @@ ansible-playbook -i ansible_inventory --extra-vars "ansible_sudo_pass=$CLUSTER_A
 
 echo Deployed stack to https://$STACK_HOSTNAME
 
-if [ $STAGE = "staging" ]  || [ $STAGE = "production" ]; then
-	curl -X POST -H 'Content-type: application/json' --data '{"text":"'$PRODUCTION_STACK_HOSTNAME' `'$CI_COMMIT_REF_SLUG'` is on '$STAGE' `'$STACK_HOSTNAME'` "}' https://hooks.slack.com/services/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
+if [ $STAGE = "staging" ] || [ $STAGE = "production" ]; then
+	curl -X POST -H 'Content-type: application/json' --data '{"text":"'$CI_PROJECT_NAME' `'$CI_COMMIT_TAG'` is on '$STAGE' `'$STACK_HOSTNAME'` "}' https://hooks.slack.com/services/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
 fi
