@@ -43,3 +43,7 @@ export ANSIBLE_FORCE_COLOR=1
 ansible-playbook -i ansible_inventory --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_KEY compose_file=$COMPOSE_FILE" deploy.yml
 
 echo Deployed stack to https://$STACK_HOSTNAME
+
+if [ $STAGE = "staging" ]  || [ $STAGE = "production" ]; then
+	curl -X POST -H 'Content-type: application/json' --data '{"text":"'$PRODUCTION_STACK_HOSTNAME' `'$CI_COMMIT_REF_SLUG'` is on '$STAGE' `'$STACK_HOSTNAME'` "}' https://hooks.slack.com/services/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
+fi
