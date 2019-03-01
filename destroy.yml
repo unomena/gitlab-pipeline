@@ -70,7 +70,7 @@
 
   tasks:
     - name: Remove objectstore bucket
-      command: "mc rm minio/{{ minio_bucket_name }} --recursive --force"
+      command: "mc rb minio/{{ minio_bucket_name }} --force"
       when:
         - minio_bucket_name != ""
 
