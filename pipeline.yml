@@ -53,8 +53,9 @@ build_qa:
     - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/build.sh | sh
   only:
     refs:
-      - qa
       - web
+    variables:
+      - $CI_COMMIT_REF_SLUG == "qa"
   except:
     - tags
 
@@ -78,8 +79,9 @@ deploy_qa:
     - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh | bash
   only:
     refs:
-      - qa
       - web
+    variables:
+      - $CI_COMMIT_REF_SLUG == "qa"
   except:
     - tags
 
@@ -102,8 +104,9 @@ stop_qa:
   when: manual
   only:
     refs:
-      - qa
       - web
+    variables:
+      - $CI_COMMIT_REF_SLUG == "qa"
   except:
     - tags
 
