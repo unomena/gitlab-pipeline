@@ -67,12 +67,12 @@ deploy_qa:
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_QA
     STAGE: qa
     RESOURCE_PREFIX: unomena-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
-    STACK_HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.cluster.unomena.net
+    STACK_HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.internal.unomena.net
     CLUSTER_IP: $INTERNAL_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $INTERNAL_CLUSTER_ADMIN_USER_PASSWORD
   environment:
     name: qa/$CI_COMMIT_REF_SLUG
-    url: https://$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.cluster.unomena.net
+    url: https://$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.internal.unomena.net
     on_stop: stop_qa
   script:
     - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh | bash
@@ -91,7 +91,7 @@ stop_qa:
     STAGE: qa
     GIT_STRATEGY: none
     RESOURCE_PREFIX: unomena-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
-    STACK_HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.cluster.unomena.net
+    STACK_HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.internal.unomena.net
     CLUSTER_IP: $INTERNAL_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $INTERNAL_CLUSTER_ADMIN_USER_PASSWORD
   script:
@@ -136,12 +136,12 @@ staging:
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_STAGING
     STAGE: staging
     RESOURCE_PREFIX: unomena-staging-$CI_PROJECT_NAME
-    STACK_HOSTNAME: $CI_PROJECT_NAME.staging.cluster.unomena.net
+    STACK_HOSTNAME: $CI_PROJECT_NAME.staging.internal.unomena.net
     CLUSTER_IP: $INTERNAL_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $INTERNAL_CLUSTER_ADMIN_USER_PASSWORD
   environment:
     name: staging
-    url: https://$CI_PROJECT_NAME.staging.cluster.unomena.net
+    url: https://$CI_PROJECT_NAME.staging.internal.unomena.net
     on_stop: stop_staging
   script:
     - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh | bash
@@ -157,7 +157,7 @@ stop_staging:
     STAGE: staging
     GIT_STRATEGY: none
     RESOURCE_PREFIX: unomena-staging-$CI_PROJECT_NAME
-    STACK_HOSTNAME: $CI_PROJECT_NAME.staging.cluster.unomena.net
+    STACK_HOSTNAME: $CI_PROJECT_NAME.staging.internal.unomena.net
     CLUSTER_IP: $INTERNAL_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $INTERNAL_CLUSTER_ADMIN_USER_PASSWORD
   script:
