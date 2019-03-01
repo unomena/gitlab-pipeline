@@ -52,8 +52,9 @@ build_qa:
   script:
     - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/build.sh | sh
   only:
-    - web
-    - qa
+    refs:
+      - qa
+      - web
   except:
     - tags
 
@@ -76,8 +77,9 @@ deploy_qa:
   script:
     - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh | bash
   only:
-    - web
-    - qa
+    refs:
+      - qa
+      - web
   except:
     - tags
 
@@ -99,8 +101,9 @@ stop_qa:
     action: stop
   when: manual
   only:
-    - web
-    - qa
+    refs:
+      - qa
+      - web
   except:
     - tags
 
