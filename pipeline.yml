@@ -54,12 +54,10 @@ build_branch:
   script:
     - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/build.sh | sh
   only:
-    refs:
-      - web
-    variables:
-      - $CI_COMMIT_REF_SLUG != "qa"
+    - web
   except:
     - master
+    - qa
     - tags
 
 
@@ -81,12 +79,10 @@ deploy_branch:
   script:
     - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh | bash
   only:
-    refs:
-      - web
-    variables:
-      - $CI_COMMIT_REF_SLUG != "qa"
+    - web
   except:
     - master
+    - qa
     - tags
 
 
@@ -107,12 +103,10 @@ stop_branch:
     action: stop
   when: manual
   only:
-    refs:
-      - web
-    variables:
-      - $CI_COMMIT_REF_SLUG != "qa"
+    - web
   except:
     - master
+    - qa
     - tags
 
 
