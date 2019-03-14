@@ -311,6 +311,10 @@
       command: "docker service ps {{ resource_prefix }}_{{ postdeploy_service }} --filter "desired-state=running" | grep {{ postdeploy_image }} | awk '{ print $4 }''"
       register: cmd_res
 
+    - name: Display host
+      debug:
+        msg: "{{ cmd_res }}"
+
     - name: Execute post deploy
       shell: >
         docker pull {{ postdeploy_image }};

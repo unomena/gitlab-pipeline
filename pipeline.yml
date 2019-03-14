@@ -150,7 +150,7 @@ deploy_qa:
     url: https://$CI_PROJECT_NAME.qa.unomena.net
     on_stop: stop_qa
   script:
-    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh | bash
+    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/feature/in-container-post-deploy/deploy.sh | bash
   only:
     refs:
       - web
