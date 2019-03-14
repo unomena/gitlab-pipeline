@@ -319,20 +319,25 @@
       debug:
         msg: "{{ cmd_res }}"
 
+    #- name: Execute post deploy
+    #  shell: >
+    #    docker pull {{ postdeploy_image }};
+    #    docker run --env-file .env
+    #    --network={{ resource_prefix }}_default
+    #    --add-host=postgres0:{{ hostvars['postgres0'].private_network_ip }}
+    #    --add-host=minio0:{{ hostvars['minio0'].private_network_ip }}
+    #    --add-host=rabbitmq0:{{ hostvars['rabbitmq0'].private_network_ip }}
+    #    --rm
+    #    -ti
+    #    {{ postdeploy_image }}
+    #    {{ postdeploy_command }}
+    #  args:
+    #    chdir: "{{ deploy_directory.path }}"
+    #  register: post_deploy
+
     - name: Execute post deploy
-      shell: >
-        docker pull {{ postdeploy_image }};
-        docker run --env-file .env
-        --network={{ resource_prefix }}_default
-        --add-host=postgres0:{{ hostvars['postgres0'].private_network_ip }}
-        --add-host=minio0:{{ hostvars['minio0'].private_network_ip }}
-        --add-host=rabbitmq0:{{ hostvars['rabbitmq0'].private_network_ip }}
-        --rm
-        -ti
-        {{ postdeploy_image }}
-        {{ postdeploy_command }}
-      args:
-        chdir: "{{ deploy_directory.path }}"
+      shell: docker exec -it $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{.Names}}) {{ postdeploy_command }}
+      delegate_to: "{{ cmd_res.stdout_lines }}"
       register: post_deploy
 
     - debug:
