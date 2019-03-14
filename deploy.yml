@@ -307,8 +307,12 @@
       delay: 2
       until: cmd_res.stdout_lines | reject('search','^(?!0)') | list | count == 0
 
+    - name: Display command
+      debug:
+        msg: 'docker service ps {{ resource_prefix }}_{{ postdeploy_service }} --filter "desired-state=running" | grep {{ postdeploy_image }} | awk "{ print $4 }"'
+
     - name: Resolve post deploy container execution node
-      command: "docker service ps {{ resource_prefix }}_{{ postdeploy_service }} --filter "desired-state=running" | grep {{ postdeploy_image }} | awk '{ print $4 }''"
+      command: 'docker service ps {{ resource_prefix }}_{{ postdeploy_service }} --filter "desired-state=running" | grep {{ postdeploy_image }} | awk "{ print $4 }"'
       register: cmd_res
 
     - name: Display host
