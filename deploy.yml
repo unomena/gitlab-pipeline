@@ -309,10 +309,10 @@
 
     - name: Display command
       debug:
-        msg: "docker service ps {{ resource_prefix }}_{{ postdeploy_service }} --filter 'desired-state=running' | grep {{ postdeploy_image }} | awk '{ print $4 }'"
+        msg: "docker service ps {{ resource_prefix }}_{{ postdeploy_service }} --filter 'desired-state=running' | grep {{ postdeploy_image }} | awk '{ n=split($4,a,\"-\"); print a[n] }'"
 
     - name: Resolve post deploy container execution node
-      shell: "docker service ps {{ resource_prefix }}_{{ postdeploy_service }} --filter 'desired-state=running' | grep {{ postdeploy_image }} | awk '{ print $4 }'"
+      shell: "docker service ps {{ resource_prefix }}_{{ postdeploy_service }} --filter 'desired-state=running' | grep {{ postdeploy_image }} | awk '{ n=split($4,a,\"-\"); print a[n] }'"
       register: cmd_res
 
     - name: Display host
