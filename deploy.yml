@@ -262,6 +262,7 @@
   vars:
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
+    postdeploy_service: "$POSTDEPLOY_SERVICE"
     postdeploy_image: "$POSTDEPLOY_IMAGE-$CI_COMMIT_SHORT_SHA"
     postdeploy_command: "$POSTDEPLOY_COMMAND"
     services_format_string: !unsafe "{{.Replicas}}"
@@ -305,6 +306,10 @@
       retries: 30
       delay: 2
       until: cmd_res.stdout_lines | reject('search','^(?!0)') | list | count == 0
+
+    - name: Resolve post deploy container execution node
+      command: "docker service ps {{ resource_prefix }}_{{ postdeploy_service }} --filter "desired-state=running" | grep {{ postdeploy_image }} | awk '{ print $4 }''"
+      register: cmd_res
 
     - name: Execute post deploy
       shell: >

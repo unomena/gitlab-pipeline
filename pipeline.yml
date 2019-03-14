@@ -10,6 +10,7 @@ variables:
   STAGING_COMPOSE_FILE: docker-compose.yml
   PRODUCTION_COMPOSE_FILE: docker-compose.yml
 
+  POSTDEPLOY_SERVICE: django
   POSTDEPLOY_IMAGE: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/workspace:$CI_COMMIT_REF_SLUG
 
   POSTDEPLOY_COMMAND_QA: ../docker/commands/post_deploy_qa.sh
