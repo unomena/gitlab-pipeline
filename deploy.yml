@@ -310,6 +310,9 @@
     - name: Resolve swarm node on which container is running for service in which post deploy command should be run
       shell: "docker service ps {{ resource_prefix }}_{{ postdeploy_service }} --filter 'desired-state=running' | grep {{ postdeploy_image }} | awk '{ n=split($4,a,\"-\"); print a[n] }'"
       register: node_res
+      retries: 10
+      delay: 2
+      until: node_res.rc == 0
 
     - name: Execute post deploy command in service container from relevant swarm node
       shell: "docker exec -it $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.Names{{ '}}' }}) {{ postdeploy_command }}"
