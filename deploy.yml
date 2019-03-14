@@ -311,7 +311,7 @@
       shell: "docker service ps {{ resource_prefix }}_{{ postdeploy_service }} --filter 'desired-state=running' | grep {{ postdeploy_image }} | awk '{ n=split($4,a,\"-\"); print a[n] }'"
       register: node_res
 
-    - name: Execute post deploy
+    - name: Execute post deploy command in service container from relevant swarm node
       shell: "docker exec -it $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.Names{{ '}}' }}) {{ postdeploy_command }}"
       delegate_to: "{{ node_res.stdout_lines[0] }}"
       register: post_deploy

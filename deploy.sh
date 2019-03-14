@@ -20,7 +20,7 @@ ssh -n -o 'ForwardAgent yes' -o 'StrictHostKeyChecking=No' $BASTION_HOST_CONNECT
 mkdir -p templates
 mkdir -p payload/templates
 #curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.yml -o deploy.yml
-curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/feature/in-container-post-deploy/deploy.yml -o deploy.yml
+curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.yml -o deploy.yml
 curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/templates/env -o templates/env
 curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/templates/docker-compose.override.yml -o payload/templates/docker-compose.override.yml
 curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/ansible.cfg -o ansible.cfg
