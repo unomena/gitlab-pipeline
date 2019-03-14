@@ -307,37 +307,13 @@
       delay: 2
       until: cmd_res.stdout_lines | reject('search','^(?!0)') | list | count == 0
 
-    - name: Display command
-      debug:
-        msg: "docker service ps {{ resource_prefix }}_{{ postdeploy_service }} --filter 'desired-state=running' | grep {{ postdeploy_image }} | awk '{ n=split($4,a,\"-\"); print a[n] }'"
-
-    - name: Resolve post deploy container execution node
+    - name: Resolve swarm node on which container is running for service in which post deploy command should be run
       shell: "docker service ps {{ resource_prefix }}_{{ postdeploy_service }} --filter 'desired-state=running' | grep {{ postdeploy_image }} | awk '{ n=split($4,a,\"-\"); print a[n] }'"
-      register: cmd_res
-
-    - name: Display host
-      debug:
-        msg: "{{ cmd_res }}"
-
-    #- name: Execute post deploy
-    #  shell: >
-    #    docker pull {{ postdeploy_image }};
-    #    docker run --env-file .env
-    #    --network={{ resource_prefix }}_default
-    #    --add-host=postgres0:{{ hostvars['postgres0'].private_network_ip }}
-    #    --add-host=minio0:{{ hostvars['minio0'].private_network_ip }}
-    #    --add-host=rabbitmq0:{{ hostvars['rabbitmq0'].private_network_ip }}
-    #    --rm
-    #    -ti
-    #    {{ postdeploy_image }}
-    #    {{ postdeploy_command }}
-    #  args:
-    #    chdir: "{{ deploy_directory.path }}"
-    #  register: post_deploy
+      register: node_res
 
     - name: Execute post deploy
       shell: "docker exec -it $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.Names{{ '}}' }}) {{ postdeploy_command }}"
-      delegate_to: "{{ cmd_res.stdout_lines[0] }}"
+      delegate_to: "{{ node_res.stdout_lines[0] }}"
       register: post_deploy
 
     - debug:
