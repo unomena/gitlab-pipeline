@@ -70,12 +70,12 @@ deploy_branch:
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_QA
     STAGE: qa
     RESOURCE_PREFIX: unomena-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
-    STACK_HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.unomena.net
+    STACK_HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.$ROOT_DOMAIN_INTERNAL
     CLUSTER_IP: $INTERNAL_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $INTERNAL_CLUSTER_ADMIN_USER_PASSWORD
   environment:
     name: qa/$CI_COMMIT_REF_SLUG
-    url: https://$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.unomena.net
+    url: https://$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.$ROOT_DOMAIN_INTERNAL
     on_stop: stop_branch
   script:
     - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh | bash
@@ -94,7 +94,7 @@ stop_branch:
     STAGE: qa
     GIT_STRATEGY: none
     RESOURCE_PREFIX: unomena-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
-    STACK_HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.qa.unomena.net
+    STACK_HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.$ROOT_DOMAIN_INTERNAL
     CLUSTER_IP: $INTERNAL_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $INTERNAL_CLUSTER_ADMIN_USER_PASSWORD
   script:
@@ -142,12 +142,12 @@ deploy_qa:
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_QA
     STAGE: qa
     RESOURCE_PREFIX: unomena-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
-    STACK_HOSTNAME: $CI_PROJECT_NAME.qa.unomena.net
+    STACK_HOSTNAME: $CI_PROJECT_NAME.$ROOT_DOMAIN_QA
     CLUSTER_IP: $INTERNAL_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $INTERNAL_CLUSTER_ADMIN_USER_PASSWORD
   environment:
     name: qa/$CI_COMMIT_REF_SLUG
-    url: https://$CI_PROJECT_NAME.qa.unomena.net
+    url: https://$CI_PROJECT_NAME.$ROOT_DOMAIN_QA
     on_stop: stop_qa
   script:
     - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh | bash
@@ -167,7 +167,7 @@ stop_qa:
     STAGE: qa
     GIT_STRATEGY: none
     RESOURCE_PREFIX: unomena-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
-    STACK_HOSTNAME: $CI_PROJECT_NAME.qa.unomena.net
+    STACK_HOSTNAME: $CI_PROJECT_NAME.$ROOT_DOMAIN_QA
     CLUSTER_IP: $INTERNAL_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $INTERNAL_CLUSTER_ADMIN_USER_PASSWORD
   script:
@@ -213,12 +213,12 @@ staging:
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_STAGING
     STAGE: staging
     RESOURCE_PREFIX: unomena-staging-$CI_PROJECT_NAME
-    STACK_HOSTNAME: $CI_PROJECT_NAME.staging.unomena.net
+    STACK_HOSTNAME: $CI_PROJECT_NAME.$ROOT_DOMAIN_STAGING
     CLUSTER_IP: $INTERNAL_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $INTERNAL_CLUSTER_ADMIN_USER_PASSWORD
   environment:
     name: staging
-    url: https://$CI_PROJECT_NAME.staging.unomena.net
+    url: https://$CI_PROJECT_NAME.$ROOT_DOMAIN_STAGING
     on_stop: stop_staging
   script:
     - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh | bash
@@ -235,7 +235,7 @@ stop_staging:
     STAGE: staging
     GIT_STRATEGY: none
     RESOURCE_PREFIX: unomena-staging-$CI_PROJECT_NAME
-    STACK_HOSTNAME: $CI_PROJECT_NAME.staging.unomena.net
+    STACK_HOSTNAME: $CI_PROJECT_NAME.$ROOT_DOMAIN_STAGING
     CLUSTER_IP: $INTERNAL_CLUSTER_IP
     CLUSTER_ADMIN_USER_PASSWORD: $INTERNAL_CLUSTER_ADMIN_USER_PASSWORD
   script:
