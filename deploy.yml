@@ -312,7 +312,7 @@
       register: node_res
       retries: 10
       delay: 2
-      until: node_res.rc == 0
+      until: node_res.stdout_lines | list | count == 1
 
     - name: Display node resolution result
       debug:
