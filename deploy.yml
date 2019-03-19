@@ -314,6 +314,10 @@
       delay: 2
       until: node_res.rc == 0
 
+    - name: Display node resolution result
+      debug:
+        msg: "{{ node_res }}"
+
     - name: Execute post deploy command in service container from relevant swarm node
       shell: "docker exec -it $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.Names{{ '}}' }}) {{ postdeploy_command }}"
       delegate_to: "{{ node_res.stdout_lines[0] }}"
