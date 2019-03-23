@@ -295,7 +295,7 @@
         dest: "{{ deploy_directory.path }}/docker-compose.override.yml"
 
     - name: Deploy docker stack
-      shell: docker stack deploy --prune --compose-file <(docker-compose --file {{ compose_file }} --file docker-compose.override.yml config) {{ resource_prefix }}
+      shell: docker stack deploy --with-registry-auth --prune --compose-file <(docker-compose --file {{ compose_file }} --file docker-compose.override.yml config) {{ resource_prefix }}
       args:
         executable: /bin/bash
         chdir: "{{ deploy_directory.path }}"
