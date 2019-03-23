@@ -214,7 +214,7 @@
         - rabbitmq_username != ""
         - rabbitmq_password != ""
 
-- hosts: manager*:worker*
+- hosts: worker*
   remote_user: admin
   become: yes
   vars:
@@ -238,12 +238,12 @@
         src: templates/env
         dest: "{{ deploy_directory.path }}/.env"
 
-    - name: Log in to private gitlab docker container registry
-      docker_login:
-        username: gitlab-ci-token
-        password: "$CI_BUILD_TOKEN"
-        registry: $CI_REGISTRY
-        reauthorize: yes
+    #- name: Log in to private gitlab docker container registry
+    #  docker_login:
+    #    username: gitlab-ci-token
+    #    password: "$CI_BUILD_TOKEN"
+    #    registry: $CI_REGISTRY
+    #    reauthorize: yes
 
     - name: Pull all images
       shell: docker-compose -f {{ compose_file }} pull
