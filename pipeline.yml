@@ -1,8 +1,3 @@
-.common:
-  tags:
-    - &RUNNER_TAG $RUNNER_TAG
-
-
 stages:
   - build
   - deploy
@@ -28,7 +23,6 @@ build_master:
   image: $CI_REGISTRY/unomena/worker-images/build:master
   tags:
     - internal
-    - *RUNNER_TAG
   variables:
     CI_COMMIT_SHORT_SHA: latest
   services:
@@ -53,7 +47,6 @@ build_branch:
   image: $CI_REGISTRY/unomena/worker-images/build:master
   tags:
     - internal
-    - *RUNNER_TAG
   services:
     - name: docker:dind
       # Override entrypoint to allow for insecure(non https) local vagrant registry.
@@ -78,7 +71,6 @@ deploy_branch:
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
     - internal
-    - *RUNNER_TAG
   variables:
     COMPOSE_FILE: $QA_COMPOSE_FILE
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_QA
@@ -106,7 +98,6 @@ stop_branch:
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
     - internal
-    - *RUNNER_TAG
   variables:
     STAGE: qa
     GIT_STRATEGY: none
@@ -133,7 +124,6 @@ build_qa:
   image: $CI_REGISTRY/unomena/worker-images/build:master
   tags:
     - internal
-    - *RUNNER_TAG
   services:
     - name: docker:dind
       # Override entrypoint to allow for insecure(non https) local vagrant registry.
@@ -159,7 +149,6 @@ deploy_qa:
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
     - internal
-    - *RUNNER_TAG
   variables:
     COMPOSE_FILE: $QA_COMPOSE_FILE
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_QA
@@ -188,7 +177,6 @@ stop_qa:
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
     - internal
-    - *RUNNER_TAG
   variables:
     STAGE: qa
     GIT_STRATEGY: none
@@ -216,7 +204,6 @@ build:
   image: $CI_REGISTRY/unomena/worker-images/build:master
   tags:
     - internal
-    - *RUNNER_TAG
   services:
     - name: docker:dind
       # Override entrypoint to allow for insecure(non https) local vagrant registry.
@@ -239,7 +226,6 @@ staging:
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
     - internal
-    - *RUNNER_TAG
   variables:
     COMPOSE_FILE: $STAGING_COMPOSE_FILE
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_STAGING
@@ -265,7 +251,6 @@ stop_staging:
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
     - internal
-    - *RUNNER_TAG
   variables:
     STAGE: staging
     GIT_STRATEGY: none
@@ -290,7 +275,6 @@ production:
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
     - production
-    - *RUNNER_TAG
   variables:
     COMPOSE_FILE: $PRODUCTION_COMPOSE_FILE
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_PRODUCTION
