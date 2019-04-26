@@ -7,7 +7,7 @@ services:
       {% if service == 'celery-beat' and 'secondary' in inventory_hostname %}
 replicas: 0
       {% endif %}
-      placement:
+placement:
         constraints:
           - node.role == worker
           - node.labels.type == worker
