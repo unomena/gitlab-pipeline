@@ -295,7 +295,7 @@
       register: cmd_res
       retries: 30
       delay: 2
-      until: cmd_res.stdout_lines | reject('search','^(?!0)') | list | count == 0
+      until: cmd_res.stdout_lines | reject('search','^(?!0/1)') | list | count == 0
 
     - name: Remove temporary deploy directory
       file:
