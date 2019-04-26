@@ -4,6 +4,9 @@ services:
 {% for service in service_names.stdout_lines %}
   {{ service }}:
     deploy:
+      {% if service == 'celery-beat' and 'secondary' in inventory_hostname %}
+replicas: 0
+      {% endif %}
       placement:
         constraints:
           - node.role == worker
