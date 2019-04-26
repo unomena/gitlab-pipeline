@@ -214,7 +214,7 @@
         - rabbitmq_username != ""
         - rabbitmq_password != ""
 
-- hosts: worker*
+- hosts: worker*:workersecondary*
   remote_user: admin
   become: yes
   vars:
@@ -249,15 +249,12 @@
         state: absent
         path: "{{ deploy_directory.path }}"
 
-- hosts: manager0
+- hosts: manager0:managersecondary0
   remote_user: admin
   become: yes
   vars:
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
-    postdeploy_service: "$POSTDEPLOY_SERVICE"
-    postdeploy_image: "$POSTDEPLOY_IMAGE-$CI_COMMIT_SHORT_SHA"
-    postdeploy_command: "$POSTDEPLOY_COMMAND"
     services_format_string: !unsafe "{{.Replicas}}"
 
   tasks:
@@ -300,16 +297,28 @@
       delay: 2
       until: cmd_res.stdout_lines | reject('search','^(?!0)') | list | count == 0
 
+    - name: Remove temporary deploy directory
+      file:
+        state: absent
+        path: "{{ deploy_directory.path }}"
+
+- hosts: manager0
+  remote_user: admin
+  become: yes
+  vars:
+    ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
+    ansible_python_interpreter: /usr/bin/python3
+    postdeploy_service: "$POSTDEPLOY_SERVICE"
+    postdeploy_image: "$POSTDEPLOY_IMAGE-$CI_COMMIT_SHORT_SHA"
+    postdeploy_command: "$POSTDEPLOY_COMMAND"
+
+  tasks:
     - name: Resolve swarm node on which container is running for service in which post deploy command should be run
       shell: "docker service ps {{ resource_prefix }}_{{ postdeploy_service }} --filter 'desired-state=running' | grep {{ postdeploy_image }} | awk '{ n=split($4,a,\"-\"); print a[n] }'"
       register: node_res
       retries: 10
       delay: 2
       until: node_res.stdout_lines | list | count == 1
-
-    - name: Display node resolution result
-      debug:
-        msg: "{{ node_res }}"
 
     - name: Execute post deploy command in service container from relevant swarm node
       shell: "docker exec -it $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.Names{{ '}}' }}) {{ postdeploy_command }}"
@@ -321,8 +330,3 @@
 
     - debug:
         var: post_deploy.stderr_lines
-
-    - name: Remove temporary deploy directory
-      file:
-        state: absent
-        path: "{{ deploy_directory.path }}"
