@@ -1,5 +1,5 @@
 ---
-- hosts: manager0
+- hosts: manager0:managersecondary0
   remote_user: admin
   become: yes
   vars:
