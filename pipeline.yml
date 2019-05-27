@@ -143,10 +143,10 @@ staging:
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_STAGING
     STAGE: staging
     RESOURCE_PREFIX: unomena-staging-$CI_PROJECT_NAME
-    STACK_HOSTNAME: $CI_PROJECT_NAME.$ROOT_DOMAIN_STAGING
+    STACK_HOSTNAME: staging.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
   environment:
     name: staging
-    url: https://$CI_PROJECT_NAME.$ROOT_DOMAIN_STAGING
+    url: https://staging.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
     on_stop: stop_staging
   script:
     - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh | bash
@@ -165,7 +165,7 @@ stop_staging:
     STAGE: staging
     GIT_STRATEGY: none
     RESOURCE_PREFIX: unomena-staging-$CI_PROJECT_NAME
-    STACK_HOSTNAME: $CI_PROJECT_NAME.$ROOT_DOMAIN_STAGING
+    STACK_HOSTNAME: staging.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
   script:
     - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/destroy.sh | bash
   environment:
