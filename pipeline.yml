@@ -75,10 +75,10 @@ deploy_branch:
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_QA
     STAGE: qa
     RESOURCE_PREFIX: unomena-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
-    STACK_HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.$ROOT_DOMAIN_INTERNAL
+    STACK_HOSTNAME: $CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
   environment:
     name: qa/$CI_COMMIT_REF_SLUG
-    url: https://$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.$ROOT_DOMAIN_INTERNAL
+    url: https://$CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
     on_stop: stop_branch
   script:
     - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh | bash
@@ -98,7 +98,7 @@ stop_branch:
     STAGE: qa
     GIT_STRATEGY: none
     RESOURCE_PREFIX: unomena-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
-    STACK_HOSTNAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG.$ROOT_DOMAIN_INTERNAL
+    STACK_HOSTNAME: $CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
   script:
     - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/destroy.sh | bash
   environment:
