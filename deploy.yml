@@ -2,6 +2,7 @@
 - hosts: $POSTGRES_HOST
   remote_user: admin
   become: yes
+  gather_facts: no
   vars:
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
@@ -70,6 +71,7 @@
 - hosts: $MINIO_HOST
   remote_user: admin
   become: yes
+  gather_facts: no
   vars:
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
@@ -182,6 +184,7 @@
 - hosts: $RABBITMQ_HOST
   remote_user: admin
   become: yes
+  gather_facts: no
   vars:
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
@@ -217,6 +220,7 @@
 - hosts: worker*:workersecondary*
   remote_user: admin
   become: yes
+  gather_facts: no
   vars:
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
@@ -252,6 +256,7 @@
 - hosts: manager0:managersecondary0
   remote_user: admin
   become: yes
+  gather_facts: no
   vars:
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
@@ -305,6 +310,7 @@
 - hosts: manager0
   remote_user: admin
   become: yes
+  gather_facts: no
   vars:
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
