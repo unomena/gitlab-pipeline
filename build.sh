@@ -5,8 +5,7 @@ set -e
 
 if [ -e docker-compose-build.yml ]
 then
-    transcrypt --flush-credentials
-    transcrypt --force --yes --cipher=aes-256-cbc --password='$TRANSCRYPT_PASSWORD'
+    transcrypt --yes --cipher=aes-256-cbc --password="$TRANSCRYPT_PASSWORD"
     cat src/project/settings.py
     rm -f .env docker-compose.override.yml
     docker login --username gitlab-ci-token --password $CI_JOB_TOKEN $CI_REGISTRY
