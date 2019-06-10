@@ -5,7 +5,7 @@ set -e
 
 if [ -e docker-compose-build.yml ]
 then
-    gpg --import <(echo "$GPG_PRIVATE_KEY")
+    echo $GPG_PRIVATE_KEY
     blackbox_postdeploy
     rm -f .env docker-compose.override.yml
     docker login --username gitlab-ci-token --password $CI_JOB_TOKEN $CI_REGISTRY
