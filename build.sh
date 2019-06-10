@@ -6,6 +6,7 @@ set -e
 if [ -e docker-compose-build.yml ]
 then
     echo $GPG_PRIVATE_KEY > private-key.asc
+    cat private-key.asc
     gpg --import private-key.asc
     rm private-key.asc
     blackbox_postdeploy
