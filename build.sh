@@ -4,7 +4,8 @@
 set -e
 
 # Apply transcrypt credentials on repo to decrypt encrypted files.
-if [[ -z "${TRANSCRYPT_PASSWORDA}" ]]; then
+if [ -z "$TRANSCRYPT_PASSWORDA" ]
+then
     transcrypt --yes --cipher=aes-256-cbc --password="$TRANSCRYPT_PASSWORD"
 fi
 
