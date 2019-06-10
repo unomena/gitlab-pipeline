@@ -6,7 +6,7 @@ set -e
 if [ -e .blackbox ]
 then
     gpg --batch --import /tmp/keys/GITLAB_BLACKBOX_GPG_KEY
-    gpg --list-keys
+    #gpg --list-keys
     blackbox_postdeploy
 fi
 
