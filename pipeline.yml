@@ -65,6 +65,29 @@ build_branch:
     - tags
 
 
+test_branch:
+  stage: test
+  image: $CI_REGISTRY/unomena/worker-images/build:master
+  tags:
+    - internal
+  services:
+    - name: docker:dind
+      # Override entrypoint to allow for insecure(non https) local vagrant registry.
+      # This is required purely to test build and registry behaviour on local vagrant
+      # based environments. Since the IP is a local private IP which would only be
+      # reachable from in a local vagrant environment this will not have any effect on
+      # production environments.
+      entrypoint: ["dockerd-entrypoint.sh"]
+      command: ["--insecure-registry", "192.168.30.30:5005"]
+  script:
+    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/test.sh | sh
+  only:
+    - web
+  except:
+    - master
+    - tags
+
+
 deploy_branch:
   stage: deploy
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
@@ -110,6 +133,7 @@ stop_branch:
   except:
     - master
     - tags
+
 
 build:
   stage: build
