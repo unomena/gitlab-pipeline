@@ -4,8 +4,6 @@ stages:
 
 
 variables:
-  GIT_STRATEGY: clone
-
   CI_PROJECT_REGISTRY: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
 
   QA_COMPOSE_FILE: docker-compose.yml
