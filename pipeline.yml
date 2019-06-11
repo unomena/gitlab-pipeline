@@ -99,7 +99,7 @@ deploy_branch:
     COMPOSE_FILE: $QA_COMPOSE_FILE
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_QA
     STAGE: qa
-    RESOURCE_PREFIX: unomena-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    RESOURCE_PREFIX: $RESOURCE_PREFIX_ENVIRONMENT-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     STACK_HOSTNAME: $CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
   environment:
     name: qa/$CI_COMMIT_REF_SLUG
@@ -122,7 +122,7 @@ stop_branch:
   variables:
     STAGE: qa
     GIT_STRATEGY: none
-    RESOURCE_PREFIX: unomena-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    RESOURCE_PREFIX: $RESOURCE_PREFIX_ENVIRONMENT-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     STACK_HOSTNAME: $CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
   script:
     - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/destroy.sh | bash
@@ -168,7 +168,7 @@ staging:
     COMPOSE_FILE: $STAGING_COMPOSE_FILE
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_STAGING
     STAGE: staging
-    RESOURCE_PREFIX: unomena-staging-$CI_PROJECT_NAME
+    RESOURCE_PREFIX: $RESOURCE_PREFIX_ENVIRONMENT-staging-$CI_PROJECT_NAME
     STACK_HOSTNAME: staging.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
   environment:
     name: staging
@@ -190,7 +190,7 @@ stop_staging:
   variables:
     STAGE: staging
     GIT_STRATEGY: none
-    RESOURCE_PREFIX: unomena-staging-$CI_PROJECT_NAME
+    RESOURCE_PREFIX: $RESOURCE_PREFIX_ENVIRONMENT-staging-$CI_PROJECT_NAME
     STACK_HOSTNAME: staging.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
   script:
     - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/destroy.sh | bash
@@ -213,7 +213,7 @@ production:
     COMPOSE_FILE: $PRODUCTION_COMPOSE_FILE
     POSTDEPLOY_COMMAND: $POSTDEPLOY_COMMAND_PRODUCTION
     STAGE: production
-    RESOURCE_PREFIX: unomena-production-$CI_PROJECT_NAME
+    RESOURCE_PREFIX: $RESOURCE_PREFIX_ENVIRONMENT-production-$CI_PROJECT_NAME
     STACK_HOSTNAME: $PRODUCTION_STACK_HOSTNAME
   environment:
     name: production
