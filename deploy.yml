@@ -327,7 +327,7 @@
       until: node_res.stdout_lines | list | count == 1
 
     - name: Execute post deploy command in service container from relevant swarm node
-      shell: "docker exec -it $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.Names{{ '}}' }}) {{ postdeploy_command }}"
+      shell: "docker exec $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.Names{{ '}}' }}) {{ postdeploy_command }}"
       delegate_to: "{{ node_res.stdout_lines[0] }}"
       register: post_deploy
 
