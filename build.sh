@@ -4,7 +4,7 @@
 set -e
 
 
-LATEST_TAG=`git ls-remote --tags --quiet | tail -1 | awk '{split($0,a,"/"); print a[3]'`
+LATEST_TAG=`git ls-remote --tags --quiet | tail -1 | awk '{split($0,a,"/"); print a[3]}'`
 
 
 echo $LATEST_TAG
