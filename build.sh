@@ -3,16 +3,11 @@
 # Exit on any failures
 set -e
 
-
-LATEST_TAG="$(git ls-remote --tags --quiet | tail -1 | awk '{split($0,a,"/"); print a[3]}')"
-
-
-echo $LATEST_TAG
-echo $CI_JOB_TRIGGERED
-echo $CI_COMMIT_TAG
-
 if [ "$CI_JOB_TRIGGERED" == "true" ]
 then
+    LATEST_TAG="$(git ls-remote --tags --quiet | tail -1 | awk '{split($0,a,"/"); print a[3]}')"
+    echo $LATEST_TAG
+    echo $CI_COMMIT_TAG
     if [ "$CI_COMMIT_TAG" != "$LATEST_TAG" ]
     then
         exit 1
