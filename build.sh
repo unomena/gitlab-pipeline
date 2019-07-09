@@ -3,7 +3,7 @@
 # Exit on any failures
 set -e
 
-if [ "$CI_JOB_TRIGGERED" == "true" ]
+if [ "$CI_JOB_MANUAL" != "true" ]
 then
     LATEST_TAG="$(git ls-remote --tags --quiet | tail -1 | awk '{split($0,a,"/"); print a[3]}')"
     echo $LATEST_TAG
