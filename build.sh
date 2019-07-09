@@ -3,17 +3,6 @@
 # Exit on any failures
 set -e
 
-if [ "$CI_JOB_MANUAL" != "true" ]
-then
-    LATEST_TAG="$(git ls-remote --tags --quiet | tail -1 | awk '{split($0,a,"/"); print a[3]}')"
-    echo $LATEST_TAG
-    echo $CI_COMMIT_TAG
-    if [ "$CI_COMMIT_TAG" != "$LATEST_TAG" ]
-    then
-        exit 1
-    fi
-fi
-
 # Apply transcrypt credentials on repo to decrypt encrypted files.
 if [ -z "$TRANSCRYPT_PASSWORD" ]
 then

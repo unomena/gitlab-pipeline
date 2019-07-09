@@ -152,7 +152,7 @@ build:
       entrypoint: ["dockerd-entrypoint.sh"]
       command: ["--insecure-registry", "192.168.30.30:5005"]
   script:
-    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/latest_tag_test.sh | sh
+    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/enforce_latest_tag.sh | sh
     - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/build.sh | sh
   only:
     - tags
