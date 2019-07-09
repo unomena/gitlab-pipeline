@@ -8,7 +8,7 @@ set -e
 # with its pipeline.
 if [ "$CI_JOB_MANUAL" != "true" ]
 then
-    LATEST_TAG="$(git ls-remote --tags --quiet | tail -1 | awk '{split($0,a,"/"); print a[3]}')"
+    LATEST_TAG="$(git ls-remote --tags --quiet | awk '{split($0,a,"tags/"); print a[2]}' | sort --version-sort | grep -e "^[0-9]" | tail -1)"
     if [ "$CI_COMMIT_TAG" != "$LATEST_TAG" ]
     then
         echo "Exiting job triggered for old tag $CI_COMMIT_TAG, latest tag is $LATEST_TAG."
