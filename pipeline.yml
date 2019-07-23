@@ -2,8 +2,6 @@ stages:
   - build
   - deploy
 
-before_script:
-  - docker login --username $REGISTRY_USERNAME --password $REGISTRY_PASSWORD $CI_REGISTRY
 
 variables:
   GIT_STRATEGY: clone
