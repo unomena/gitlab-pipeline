@@ -6,25 +6,25 @@
   vars:
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
-    postdeploy_service: "$POSTDEPLOY_SERVICE"
-    postdeploy_image: "$POSTDEPLOY_IMAGE-$CI_COMMIT_SHORT_SHA"
-    postdeploy_command: "$POSTDEPLOY_COMMAND"
+    test_service: "$POSTDEPLOY_SERVICE"
+    test_image: "$POSTDEPLOY_IMAGE-$CI_COMMIT_SHORT_SHA"
+    test_command: "$TEST_COMMAND"
 
   tasks:
-    - name: Resolve swarm node on which container is running for service in which post deploy command should be run
-      shell: "sleep 10 && docker service ps {{ resource_prefix }}_{{ postdeploy_service }} --filter 'desired-state=running' | grep {{ postdeploy_image }} | awk '{ n=split($4,a,\"-\"); print a[n] }'"
+    - name: Resolve swarm node on which container is running for service in which test command should be run
+      shell: "sleep 10 && docker service ps {{ resource_prefix }}_{{ test_service }} --filter 'desired-state=running' | grep {{ test_image }} | awk '{ n=split($4,a,\"-\"); print a[n] }'"
       register: node_res
       retries: 5
       delay: 1
       until: node_res.stdout_lines | list | count == 1
 
-    - name: Execute post deploy command in service container from relevant swarm node
-      shell: "docker exec $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.Names{{ '}}' }}) {{ postdeploy_command }}"
+    - name: Execute test command in service container from relevant swarm node
+      shell: "docker exec $(docker ps --filter name={{ resource_prefix }}_{{ test_service }} --format {{ '{{' }}.Names{{ '}}' }}) {{ test_command }}"
       delegate_to: "{{ node_res.stdout_lines[0] }}"
-      register: post_deploy
+      register: test_command_result
 
     - debug:
-        var: post_deploy.stdout_lines
+        var: test_command_result.stdout_lines
 
     - debug:
-        var: post_deploy.stderr_lines
+        var: test_command_result.stderr_lines

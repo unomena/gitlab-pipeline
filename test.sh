@@ -20,18 +20,10 @@ ssh -n -o 'ForwardAgent yes' -o 'StrictHostKeyChecking=No' $BASTION_HOST_CONNECT
 mkdir -p templates
 mkdir -p payload/templates
 curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/test.yml -o test.yml
-curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/templates/env -o templates/env
-curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/templates/docker-compose.override.yml -o payload/templates/docker-compose.override.yml
 curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/ansible.cfg -o ansible.cfg
 
 # Replace environment variables in playbook.
 envsubst < test.yml > payload/test.yml
-
-# Replace environment variables in env template file.
-envsubst < templates/env > payload/templates/env
-
-# Add indicated compose file to payload.
-cp $COMPOSE_FILE payload/
 
 # Fetch Ansible inventory from cluster
 scp -o StrictHostKeyChecking=No admin@$CLUSTER_IP:/etc/ansible_inventory payload/
