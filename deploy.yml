@@ -1,5 +1,6 @@
 ---
 - hosts: $POSTGRES_HOST
+  any_errors_fatal: true
   remote_user: admin
   become: yes
   gather_facts: no
@@ -13,7 +14,6 @@
     postgres_database_restore_source: "$POSTGRES_RESTORE_SOURCE"
 
   tasks:
-    - meta: end_play
     - name: Create database user
       postgresql_user:
         name: "{{ postgres_database_username }}"
@@ -70,6 +70,7 @@
         - database_created.changed
 
 - hosts: $MINIO_HOST
+  any_errors_fatal: true
   remote_user: admin
   become: yes
   gather_facts: no
@@ -83,7 +84,6 @@
     minio_restore_source: "$MINIO_RESTORE_SOURCE"
 
   tasks:
-    - meta: end_play
     - name: Add objectstore user policy definition
       copy:
         content: |
@@ -184,6 +184,7 @@
         - bucket_created.changed
 
 - hosts: $RABBITMQ_HOST
+  any_errors_fatal: true
   remote_user: admin
   become: yes
   gather_facts: no
@@ -195,7 +196,6 @@
     rabbitmq_password: "$RABBITMQ_PASSWORD"
 
   tasks:
-    - meta: end_play
     - name: Create rabbitmq vhost
       rabbitmq_vhost:
         name: "{{ rabbitmq_vhost }}"
@@ -221,6 +221,7 @@
         - rabbitmq_password != ""
 
 - hosts: worker*:workersecondary*
+  any_errors_fatal: true
   remote_user: admin
   become: yes
   gather_facts: no
@@ -229,7 +230,6 @@
     ansible_python_interpreter: /usr/bin/python3
 
   tasks:
-    - meta: end_play
     - name: Create temporary deploy directory
       tempfile:
         state: directory
@@ -258,6 +258,7 @@
         path: "{{ deploy_directory.path }}"
 
 - hosts: manager0:managersecondary0
+  any_errors_fatal: true
   remote_user: admin
   become: yes
   gather_facts: no
@@ -267,7 +268,6 @@
     services_format_string: !unsafe "{{.Replicas}}"
 
   tasks:
-    - meta: end_play
     - name: Create temporary deploy directory
       tempfile:
         state: directory
@@ -313,6 +313,7 @@
         path: "{{ deploy_directory.path }}"
 
 - hosts: manager0
+  any_errors_fatal: true
   remote_user: admin
   become: yes
   gather_facts: no
@@ -324,7 +325,6 @@
     postdeploy_command: "$POSTDEPLOY_COMMAND"
 
   tasks:
-    - meta: end_play
     - name: Resolve swarm node on which container is running for service in which post deploy command should be run
       shell: "sleep 10 && docker service ps {{ resource_prefix }}_{{ postdeploy_service }} --filter 'desired-state=running' | grep {{ postdeploy_image }} | awk '{ n=split($4,a,\"-\"); print a[n] }'"
       register: node_res
