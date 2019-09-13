@@ -100,7 +100,6 @@ test_branch:
   tags:
     - internal
   variables:
-    COMPOSE_FILE: docker-compose-test.yml
     STAGE: qa
     RESOURCE_PREFIX: $RESOURCE_PREFIX_ENVIRONMENT-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     STACK_HOSTNAME: $CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
@@ -109,8 +108,7 @@ test_branch:
     url: https://$CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
     on_stop: stop_branch
   script:
-    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh | bash
-    #- curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/test.sh | bash
+    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/test.sh | bash
   only:
     - web
   except:
