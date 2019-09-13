@@ -25,7 +25,7 @@ curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/temp
 curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/ansible.cfg -o ansible.cfg
 
 # Replace environment variables in playbook.
-envsubst < deploy.yml > payload/test.yml
+envsubst < test.yml > payload/test.yml
 
 # Replace environment variables in env template file.
 envsubst < templates/env > payload/templates/env
