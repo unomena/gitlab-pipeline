@@ -33,6 +33,10 @@ envsubst < templates/env > payload/templates/env
 # Add indicated compose file to payload.
 cp $COMPOSE_FILE payload/
 
+if [ $STAGE = "qa" ]; then
+    docker-compose --file $COMPOSE_FILE --file docker-compose-test.yml config
+fi
+
 # Fetch Ansible inventory from cluster
 scp -o StrictHostKeyChecking=No admin@$CLUSTER_IP:/etc/ansible_inventory payload/
 
