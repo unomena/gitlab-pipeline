@@ -1,7 +1,7 @@
 stages:
   - build
   - deploy
-#  - test
+  - test
 
 variables:
   GIT_STRATEGY: clone
@@ -94,27 +94,27 @@ deploy_branch:
     - master
     - tags
 
-#test_branch:
-#  stage: test
-#  image: $CI_REGISTRY/unomena/worker-images/deploy:master
-#  tags:
-#    - internal
-#  variables:
-#    COMPOSE_FILE: $QA_COMPOSE_FILE
-#    STAGE: qa
-#    RESOURCE_PREFIX: $RESOURCE_PREFIX_ENVIRONMENT-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
-#    STACK_HOSTNAME: $CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
-#  environment:
-#    name: qa/$CI_COMMIT_REF_SLUG
-#    url: https://$CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
-#    on_stop: stop_branch
-#  script:
-#    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/test.sh | bash
-#  only:
-#    - web
-#  except:
-#    - master
-#    - tags
+test_branch:
+  stage: test
+  image: $CI_REGISTRY/unomena/worker-images/deploy:master
+  tags:
+    - internal
+  variables:
+    COMPOSE_FILE: $QA_COMPOSE_FILE
+    STAGE: qa
+    RESOURCE_PREFIX: $RESOURCE_PREFIX_ENVIRONMENT-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    STACK_HOSTNAME: $CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
+  environment:
+    name: qa/$CI_COMMIT_REF_SLUG
+    url: https://$CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
+    on_stop: stop_branch
+  script:
+    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/test.sh | bash
+  only:
+    - web
+  except:
+    - master
+    - tags
 
 stop_branch:
   stage: deploy
