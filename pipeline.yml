@@ -2,6 +2,7 @@ stages:
   - build
   - deploy
   - test
+  - cleanup
 
 variables:
   GIT_STRATEGY: clone
@@ -117,7 +118,7 @@ test_branch:
     - tags
 
 stop_branch:
-  stage: deploy
+  stage: cleanup
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
     - internal
@@ -185,7 +186,7 @@ staging:
 
 
 stop_staging:
-  stage: deploy
+  stage: cleanup
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
     - internal
