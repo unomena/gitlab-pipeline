@@ -5,6 +5,8 @@ stages:
   - cleanup
 
 variables:
+  PIPELINE_ASSETS_ROOT_URL: https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/feature/tests
+
   GIT_STRATEGY: clone
 
   CI_PROJECT_REGISTRY: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
@@ -110,7 +112,7 @@ test_branch:
   #  on_stop: stop_branch
   script:
     - ls
-  #  - curl $PIPELINE_ASSETS_ROOT_URL/test.sh | bash
+    #- curl $PIPELINE_ASSETS_ROOT_URL/test.sh | bash
   only:
     - web
   except:
