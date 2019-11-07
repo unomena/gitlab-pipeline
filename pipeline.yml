@@ -111,8 +111,7 @@ test_branch:
   #  url: https://$CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
   #  on_stop: stop_branch
   script:
-    - ls
-    #- curl $PIPELINE_ASSETS_ROOT_URL/test.sh | bash
+    - curl $PIPELINE_ASSETS_ROOT_URL/test.sh | bash
   only:
     - web
   except:

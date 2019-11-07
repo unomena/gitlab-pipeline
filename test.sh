@@ -19,25 +19,27 @@ ssh -n -o 'ForwardAgent yes' -o 'StrictHostKeyChecking=No' $BASTION_HOST_CONNECT
 # Fetch ansible playbook, templates and config.
 mkdir -p templates
 mkdir -p payload/templates
-curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/test.yml -o test.yml
-curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/templates/env -o templates/env
-curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/templates/docker-compose.override.yml -o payload/templates/docker-compose.override.yml
-curl -s https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/ansible.cfg -o ansible.cfg
+curl -s $PIPELINE_ASSETS_ROOT_URL/test.yml -o test.yml
+#curl -s $PIPELINE_ASSETS_ROOT_URL/templates/env -o templates/env
+#curl -s $PIPELINE_ASSETS_ROOT_URL/templates/docker-compose.override.yml -o payload/templates/docker-compose.override.yml
+curl -s $PIPELINE_ASSETS_ROOT_URL/ansible.cfg -o ansible.cfg
 
 # Replace environment variables in playbook.
 envsubst < test.yml > payload/test.yml
 
+cat payload/test.yml
+
 # Replace environment variables in env template file.
-envsubst < templates/env > payload/templates/env
+#envsubst < templates/env > payload/templates/env
 
 # Add test compose file to payload.
-cp docker-compose-test.yml payload/
+#cp docker-compose-test.yml payload/
 
 # Fetch Ansible inventory from cluster
-scp -o StrictHostKeyChecking=No admin@$CLUSTER_IP:/etc/ansible_inventory payload/
+#scp -o StrictHostKeyChecking=No admin@$CLUSTER_IP:/etc/ansible_inventory payload/
 
 # Execute Ansible playbook
-cd payload
-export ANSIBLE_FORCE_COLOR=1
-export ANSIBLE_PIPELINING=1
-ansible-playbook -i ansible_inventory --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_KEY compose_file=docker-compose-test.yml" test.yml
+#cd payload
+#export ANSIBLE_FORCE_COLOR=1
+#export ANSIBLE_PIPELINING=1
+#ansible-playbook -i ansible_inventory --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_KEY compose_file=docker-compose-test.yml" test.yml
