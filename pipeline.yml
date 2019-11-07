@@ -41,7 +41,7 @@ build_master:
       entrypoint: ["dockerd-entrypoint.sh"]
       command: ["--insecure-registry", "192.168.30.30:5005"]
   script:
-    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/build.sh | sh
+    - curl $PIPELINE_ASSETS_ROOT_URL/build.sh | sh
   only:
     - master
   except:
@@ -63,7 +63,7 @@ build_branch:
       entrypoint: ["dockerd-entrypoint.sh"]
       command: ["--insecure-registry", "192.168.30.30:5005"]
   script:
-    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/build.sh | sh
+    - curl $PIPELINE_ASSETS_ROOT_URL/build.sh | sh
   only:
     - web
   except:
@@ -87,7 +87,7 @@ deploy_branch:
     url: https://$CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
     on_stop: stop_branch
   script:
-    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh | bash
+    - curl $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
   only:
     - web
   except:
@@ -108,7 +108,7 @@ deploy_branch:
 #    url: https://$CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
 #    on_stop: stop_branch
 #  script:
-#    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/test.sh | bash
+#    - curl $PIPELINE_ASSETS_ROOT_URL/test.sh | bash
 #  only:
 #    - web
 #  except:
@@ -126,7 +126,7 @@ stop_branch:
     RESOURCE_PREFIX: $RESOURCE_PREFIX_ENVIRONMENT-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     STACK_HOSTNAME: $CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
   script:
-    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/destroy.sh | bash
+    - curl $PIPELINE_ASSETS_ROOT_URL/destroy.sh | bash
   environment:
     name: qa/$CI_COMMIT_REF_SLUG
     action: stop
@@ -153,8 +153,8 @@ build:
       entrypoint: ["dockerd-entrypoint.sh"]
       command: ["--insecure-registry", "192.168.30.30:5005"]
   script:
-    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/enforce_latest_tag.sh | sh
-    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/build.sh | sh
+    - curl $PIPELINE_ASSETS_ROOT_URL/enforce_latest_tag.sh | sh
+    - curl $PIPELINE_ASSETS_ROOT_URL/build.sh | sh
   only:
     - tags
   except:
@@ -177,7 +177,7 @@ staging:
     url: https://staging.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
     on_stop: stop_staging
   script:
-    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh | bash
+    - curl $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
   only:
     - tags
   except:
@@ -195,7 +195,7 @@ stop_staging:
     RESOURCE_PREFIX: $RESOURCE_PREFIX_ENVIRONMENT-staging-$CI_PROJECT_NAME
     STACK_HOSTNAME: staging.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
   script:
-    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/destroy.sh | bash
+    - curl $PIPELINE_ASSETS_ROOT_URL/destroy.sh | bash
   environment:
     name: staging
     action: stop
@@ -221,7 +221,7 @@ production:
     name: production
     url: https://$PRODUCTION_STACK_HOSTNAME
   script:
-    - curl https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/deploy.sh | bash
+    - curl $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
   only:
     - tags
   except:
