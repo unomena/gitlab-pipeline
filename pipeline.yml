@@ -23,6 +23,7 @@ variables:
   POSTDEPLOY_IMAGE: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/workspace:$CI_COMMIT_REF_SLUG
   POSTDEPLOY_SERVICE: django
 
+
 build_master:
   stage: build
   image: $CI_REGISTRY/unomena/worker-images/build:master
@@ -111,8 +112,24 @@ test_branch:
   #  on_stop: stop_branch
   script:
     - curl $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
+  only:
+    - web
+  except:
+    - master
+    - tags
+
+stop_test_branch:
+  stage: test
+  image: $CI_REGISTRY/unomena/worker-images/deploy:master
+  tags:
+    - internal
+  variables:
+    STAGE: test
+    GIT_STRATEGY: none
+    RESOURCE_PREFIX: $RESOURCE_PREFIX_ENVIRONMENT-test-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+    STACK_HOSTNAME: $CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
+  script:
     - curl $PIPELINE_ASSETS_ROOT_URL/destroy.sh | bash
-    #- curl $PIPELINE_ASSETS_ROOT_URL/test.sh | bash
   only:
     - web
   except:
