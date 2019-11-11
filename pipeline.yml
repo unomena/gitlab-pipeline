@@ -19,7 +19,7 @@ variables:
   POSTDEPLOY_COMMAND_QA: ../docker/commands/post_deploy_qa.sh
   POSTDEPLOY_COMMAND_STAGING: ../docker/commands/post_deploy_staging.sh
   POSTDEPLOY_COMMAND_PRODUCTION: ../docker/commands/post_deploy_production.sh
-  POSTDEPLOY_COMMAND_TEST: ../docker/commands/test.sh
+  POSTDEPLOY_COMMAND_TEST: ../docker/commands/test1.sh
   POSTDEPLOY_IMAGE: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/workspace:$CI_COMMIT_REF_SLUG
   POSTDEPLOY_SERVICE: django
 
@@ -113,9 +113,6 @@ deploy and test:
   except:
     - master
     - tags
-  rules:
-    - exists:
-      - docker/commands/test1.sh
 
 
 stop test deploy:
@@ -136,9 +133,6 @@ stop test deploy:
   except:
     - master
     - tags
-  rules:
-    - exists:
-      - docker/commands/test1.sh
 
 
 stop branch:
