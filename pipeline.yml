@@ -85,7 +85,7 @@ deploy_branch:
   environment:
     name: qa/$CI_COMMIT_REF_SLUG
     url: https://$CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
-    on_stop: stop
+    on_stop: stop_branch
   script:
     - curl $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
   only:
@@ -95,7 +95,7 @@ deploy_branch:
     - tags
 
 
-test_branch:
+deploy and test:
   stage: test
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
@@ -118,7 +118,7 @@ test_branch:
     - master
     - tags
 
-deploy and test:
+stop:
   stage: test
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
@@ -136,7 +136,7 @@ deploy and test:
     - master
     - tags
 
-stop:
+stop_branch:
   stage: cleanup
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
