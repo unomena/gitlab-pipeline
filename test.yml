@@ -1,5 +1,5 @@
 ---
-- hosts: manager0
+- hosts: worker*
   any_errors_fatal: true
   remote_user: admin
   become: yes
@@ -7,25 +7,36 @@
   vars:
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     ansible_python_interpreter: /usr/bin/python3
-    test_service: "$TEST_SERVICE"
-    test_image: "$TEST_IMAGE-$CI_COMMIT_SHORT_SHA"
-    test_command: "$TEST_COMMAND"
 
   tasks:
-    - name: Resolve swarm node on which container is running for service in which test command should be run
-      shell: "sleep 10 && docker service ps {{ resource_prefix }}_{{ test_service }} --filter 'desired-state=running' | grep {{ test_image }} | awk '{ n=split($4,a,\"-\"); print a[n] }'"
-      register: node_res
-      retries: 5
-      delay: 1
-      until: node_res.stdout_lines | list | count == 1
+    - name: Create temporary deploy directory
+      tempfile:
+        state: directory
+        suffix: deploy
+      register: deploy_directory
 
-    - name: Execute test command in service container from relevant swarm node
-      shell: "docker exec $(docker ps --filter name={{ resource_prefix }}_{{ test_service }} --format {{ '{{' }}.Names{{ '}}' }}) {{ test_command }}"
-      delegate_to: "{{ node_res.stdout_lines[0] }}"
-      register: test_command_result
+    - name: Add docker compose file
+      copy:
+        src: "docker-compose.yml"
+        dest: "{{ deploy_directory.path }}/docker-compose.yml"
 
-    - debug:
-        var: test_command_result.stdout_lines
+    - name: Add docker compose override file
+      copy:
+        src: "docker-compose.override.yml"
+        dest: "{{ deploy_directory.path }}/docker-compose.override.yml"
 
-    - debug:
-        var: test_command_result.stderr_lines
+    - name: Add environments file
+      template:
+        src: templates/env
+        dest: "{{ deploy_directory.path }}/.env"
+
+    - name: Pull all images
+      shell: docker-compose -f docker-compose.yml -f docker-compose.override.yml pull
+      args:
+        executable: /bin/bash
+        chdir: "{{ deploy_directory.path }}"
+
+    - name: Remove temporary deploy directory
+      file:
+        state: absent
+        path: "{{ deploy_directory.path }}"
