@@ -1,6 +1,7 @@
 stages:
   - build
   - test
+  - test cleanup
   - deploy
   - cleanup
 
@@ -95,7 +96,7 @@ deploy_branch:
     - tags
 
 
-deploy and test:
+deploy stack and test:
   stage: test
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
@@ -118,8 +119,8 @@ deploy and test:
     - master
     - tags
 
-stop:
-  stage: test
+stop stack:
+  stage: test cleanup
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
     - internal
