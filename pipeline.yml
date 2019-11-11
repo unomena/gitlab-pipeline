@@ -96,7 +96,7 @@ deploy_branch:
     - tags
 
 
-test deploy and run:
+deploy and run:
   stage: test
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
