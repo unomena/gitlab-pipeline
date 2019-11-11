@@ -71,7 +71,7 @@ build_branch:
     - tags
 
 
-branch:
+branch stack:
   stage: deploy
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
@@ -115,7 +115,7 @@ deploy and test:
     - tags
 
 
-stop test deploy:
+stop test stack:
   stage: deploy
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
