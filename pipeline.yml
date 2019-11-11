@@ -118,7 +118,7 @@ test_branch:
     - master
     - tags
 
-stop_test_branch:
+deploy and test:
   stage: test
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
@@ -136,7 +136,7 @@ stop_test_branch:
     - master
     - tags
 
-stop_branch:
+stop:
   stage: cleanup
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
