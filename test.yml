@@ -1,5 +1,5 @@
 ---
-- hosts: worker*
+- hosts: worker*:!workersecondary*
   any_errors_fatal: true
   remote_user: admin
   become: yes
@@ -27,7 +27,7 @@
 
     - name: Add environments file
       template:
-        src: templates/env
+        src: .env
         dest: "{{ deploy_directory.path }}/.env"
 
     - name: Pull all images

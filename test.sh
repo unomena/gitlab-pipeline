@@ -33,6 +33,7 @@ envsubst < test.yml > payload/test.yml
 # Add test compose file to payload.
 #cp docker-compose-test.yml payload/
 # Add indicated compose file to payload.
+cp .env payload/.env
 cp docker-compose.yml payload/
 cp docker-compose.override.yml payload/
 
