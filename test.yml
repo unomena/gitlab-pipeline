@@ -17,13 +17,8 @@
 
     - name: Add docker compose file
       copy:
-        src: "docker-compose.yml"
-        dest: "{{ deploy_directory.path }}/docker-compose.yml"
-
-    - name: Add docker compose override file
-      copy:
-        src: "docker-compose.override.yml"
-        dest: "{{ deploy_directory.path }}/docker-compose.override.yml"
+        src: "{{ compose_file }}"
+        dest: "{{ deploy_directory.path }}/{{ compose_file }}"
 
     - name: Add environments file
       template:
@@ -31,7 +26,7 @@
         dest: "{{ deploy_directory.path }}/.env"
 
     - name: Pull all images
-      shell: docker-compose -f docker-compose.yml -f docker-compose.override.yml pull
+      shell: docker-compose --file {{ compose_file }} pull
       args:
         executable: /bin/bash
         chdir: "{{ deploy_directory.path }}"
@@ -58,33 +53,28 @@
         suffix: deploy
       register: deploy_directory
 
-    - name: Add docker compose file
-      copy:
-        src: "docker-compose.yml"
-        dest: "{{ deploy_directory.path }}/docker-compose.yml"
-
-    - name: Add docker compose override file
-      copy:
-        src: "docker-compose.override.yml"
-        dest: "{{ deploy_directory.path }}/docker-compose.override.yml"
-
     - name: Add environments file
       template:
         src: templates/env
         dest: "{{ deploy_directory.path }}/.env"
 
+    - name: Add docker compose file
+      copy:
+        src: "{{ compose_file }}"
+        dest: "{{ deploy_directory.path }}/{{ compose_file }}"
+
     - name: Resolve service names
-      shell: docker-compose --file {{ deploy_directory.path }}/docker-compose.yml --file {{ deploy_directory.path }}/docker-compose.override.yml config --services
+      shell: docker-compose --file {{ deploy_directory.path }}/{{ compose_file }} config --services
       register: service_names
 
-    # Constrain services by generating a docker-compose.deploy.yml file.
+    # Constrain services by generating a docker-compose.override.yml file.
     - name: Add docker compose overrides file
       template:
-        src: templates/docker-compose.deploy.yml
-        dest: "{{ deploy_directory.path }}/docker-compose.deploy.yml"
+        src: templates/docker-compose.override.yml
+        dest: "{{ deploy_directory.path }}/docker-compose.override.yml"
 
     - name: Deploy docker stack
-      shell: docker stack deploy --with-registry-auth --prune --compose-file <(docker-compose --file docker-compose.yml --file docker-compose.override.yml --file docker-compose.deploy.yml config) {{ resource_prefix }}
+      shell: docker stack deploy --with-registry-auth --prune --compose-file <(docker-compose --file {{ compose_file }} --file docker-compose.override.yml config) {{ resource_prefix }}
       args:
         executable: /bin/bash
         chdir: "{{ deploy_directory.path }}"
