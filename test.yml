@@ -40,3 +40,63 @@
       file:
         state: absent
         path: "{{ deploy_directory.path }}"
+
+- hosts: manager0
+  any_errors_fatal: true
+  remote_user: admin
+  become: yes
+  gather_facts: no
+  vars:
+    ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
+    ansible_python_interpreter: /usr/bin/python3
+    services_format_string: !unsafe "{{.Replicas}}"
+
+  tasks:
+    - name: Create temporary deploy directory
+      tempfile:
+        state: directory
+        suffix: deploy
+      register: deploy_directory
+
+    - name: Add docker compose file
+      copy:
+        src: "docker-compose.yml"
+        dest: "{{ deploy_directory.path }}/docker-compose.yml"
+
+    - name: Add docker compose override file
+      copy:
+        src: "docker-compose.override.yml"
+        dest: "{{ deploy_directory.path }}/docker-compose.override.yml"
+
+    - name: Add environments file
+      template:
+        src: templates/env
+        dest: "{{ deploy_directory.path }}/.env"
+
+    - name: Resolve service names
+      shell: docker-compose --file {{ deploy_directory.path }}/docker-compose.yml --file {{ deploy_directory.path }}/docker-compose.override.yml config --services
+      register: service_names
+
+    # Constrain services by generating a docker-compose.deploy.yml file.
+    - name: Add docker compose overrides file
+      template:
+        src: templates/docker-compose.deploy.yml
+        dest: "{{ deploy_directory.path }}/docker-compose.deploy.yml"
+
+    - name: Deploy docker stack
+      shell: docker stack deploy --with-registry-auth --prune --compose-file <(docker-compose --file docker-compose.yml --file docker-compose.override.yml --file docker-compose.deploy.yml config) {{ resource_prefix }}
+      args:
+        executable: /bin/bash
+        chdir: "{{ deploy_directory.path }}"
+
+    - name: Wait for all stack services to have replicated tasks
+      command: "docker stack services {{ resource_prefix }} --format '{{ services_format_string }}'"
+      register: cmd_res
+      retries: 30
+      delay: 2
+      until: cmd_res.stdout_lines | reject('search','^(?!0/1)') | list | count == 0
+
+    - name: Remove temporary deploy directory
+      file:
+        state: absent
+        path: "{{ deploy_directory.path }}"
