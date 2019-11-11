@@ -20,7 +20,7 @@ ssh -n -o 'ForwardAgent yes' -o 'StrictHostKeyChecking=No' $BASTION_HOST_CONNECT
 mkdir -p templates
 mkdir -p payload/templates
 curl -s $PIPELINE_ASSETS_ROOT_URL/test.yml -o test.yml
-#curl -s $PIPELINE_ASSETS_ROOT_URL/templates/env -o templates/env
+curl -s $PIPELINE_ASSETS_ROOT_URL/templates/env_test -o templates/env
 curl -s $PIPELINE_ASSETS_ROOT_URL/templates/docker-compose.override.yml -o payload/templates/docker-compose.deploy.yml
 curl -s $PIPELINE_ASSETS_ROOT_URL/ansible.cfg -o ansible.cfg
 
@@ -28,12 +28,11 @@ curl -s $PIPELINE_ASSETS_ROOT_URL/ansible.cfg -o ansible.cfg
 envsubst < test.yml > payload/test.yml
 
 # Replace environment variables in env template file.
-#envsubst < templates/env > payload/templates/env
+envsubst < templates/env > payload/templates/env
 
 # Add test compose file to payload.
 #cp docker-compose-test.yml payload/
 # Add indicated compose file to payload.
-cp .env payload/.env
 cp docker-compose.yml payload/
 cp docker-compose.override.yml payload/
 

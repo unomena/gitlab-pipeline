@@ -27,7 +27,7 @@
 
     - name: Add environments file
       template:
-        src: .env
+        src: templates/env
         dest: "{{ deploy_directory.path }}/.env"
 
     - name: Pull all images
