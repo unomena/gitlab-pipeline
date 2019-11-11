@@ -96,7 +96,7 @@ deploy_branch:
     - tags
 
 
-deploy stack and test:
+deploy and run:
   stage: test
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
@@ -131,6 +131,7 @@ stop stack:
     STACK_HOSTNAME: $CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
   script:
     - curl $PIPELINE_ASSETS_ROOT_URL/destroy.sh | bash
+  when: always
   only:
     - web
   except:
