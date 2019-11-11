@@ -113,6 +113,9 @@ deploy and test:
   except:
     - master
     - tags
+  rules:
+    - exists:
+      - docker/commands/test1.sh
 
 
 stop test deploy:
@@ -133,6 +136,9 @@ stop test deploy:
   except:
     - master
     - tags
+  rules:
+    - exists:
+      - docker/commands/test1.sh
 
 
 stop branch:
