@@ -3,6 +3,11 @@
 # Exit on any failures
 set -e
 
+if [ $STAGE = "test" ] && [ ! -f docker/commands/test.sh ]; then
+    echo "File docker/commands/test.sh not found, skipping test deploy."
+    exit 0
+fi
+
 # Run ssh-agent (inside the build environment)
 eval $(ssh-agent -s)
 
