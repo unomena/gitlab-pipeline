@@ -363,7 +363,7 @@
     - name: Copy nose artifacts from swarm node to host
       fetch:
         src: "{{ artifact_directory.path }}/nosetests.xml"
-        dest: artifacts/
+        dest: nosetests.xml
         flat: yes
       delegate_to: "{{ node_res.stdout_lines[0] }}"
       when:

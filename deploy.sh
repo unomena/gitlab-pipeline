@@ -49,9 +49,9 @@ ansible-playbook -i ansible_inventory --extra-vars "ansible_sudo_pass=$CLUSTER_A
 
 # Copy nose artifact to allow GitLab to access it.
 ls -lh
-ls -lh artifacts
+more nosetests.xml
 cd ..
-cp payload/artifacts/nosetests.xml .
+cp payload/nosetests.xml .
 
 echo Deployed stack to https://$STACK_HOSTNAME
 
