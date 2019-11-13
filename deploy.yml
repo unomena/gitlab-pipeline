@@ -364,6 +364,7 @@
       fetch:
         src: "{{ artifact_directory.path }}/nosetests.xml"
         dest: artifacts
+        flat: yes
       delegate_to: "{{ node_res.stdout_lines[0] }}"
       when:
         - stage == "test"
