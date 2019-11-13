@@ -53,7 +53,7 @@ pwd
 ls -lh
 #more nosetests.xml
 #cd ..
-cp payload/nosetests.xml .
+#cp payload/nosetests.xml .
 #ls
 #more nosetests.xml
 
