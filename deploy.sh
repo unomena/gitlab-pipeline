@@ -50,6 +50,7 @@ ansible-playbook -i ansible_inventory --extra-vars "ansible_sudo_pass=$CLUSTER_A
 # Move test report to build path to ensure GitLab can source it as an artifact.
 cd ..
 cp payload/test_report.html .
+more test_report.html
 
 echo Deployed stack to https://$STACK_HOSTNAME
 
