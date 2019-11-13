@@ -5,7 +5,7 @@ stages:
   - cleanup
 
 variables:
-  PIPELINE_ASSETS_ROOT_URL: https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/feature/merge_request_tests
+  PIPELINE_ASSETS_ROOT_URL: https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master
   GIT_STRATEGY: clone
 
   CI_PROJECT_REGISTRY: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
