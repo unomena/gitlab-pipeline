@@ -113,6 +113,7 @@ deploy test env:
     reports:
       junit: payload/nosetests.xml
     expire_in: 4 week
+    when: always
   only:
     - web
   except:
