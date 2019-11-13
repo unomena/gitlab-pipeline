@@ -110,6 +110,8 @@ deploy test env:
   artifacts:
     paths:
     - payload/nosetests.xml
+    reports:
+      junit: payload/nosetests.xml
     expire_in: 4 week
   only:
     - web
