@@ -360,7 +360,7 @@
       when:
         - stage == "test"
 
-    - name: Copy nose artifacts from swarm node to bastion host
+    - name: Copy nose artifacts from swarm node to host
       fetch:
         src: "{{ artifact_directory.path }}/nosetests.xml"
         dest: nosetests.xml
