@@ -333,6 +333,15 @@
       delay: 1
       until: node_res.stdout_lines | list | count == 1
 
+    - name: Create temporary artifact directory on relevant swarm node
+      tempfile:
+        state: directory
+        suffix: artifact
+      delegate_to: "{{ node_res.stdout_lines[0] }}"
+      register: artifact_directory
+      when:
+        - stage == "test"
+
     - name: Execute post deploy command in service container from relevant swarm node
       shell: "docker exec $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.Names{{ '}}' }}) {{ postdeploy_command }}"
       delegate_to: "{{ node_res.stdout_lines[0] }}"
@@ -343,12 +352,6 @@
 
     - debug:
         var: post_deploy.stderr_lines
-
-    - name: Create temporary artifact directory
-      tempfile:
-        state: directory
-        suffix: artifact
-      register: artifact_directory
 
     - name: Copy nose artifacts in service container from relevant swarm node
       shell: "docker cp $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.ID{{ '}}' }}):/opt/workspace/src/nosetests.xml {{ artifact_directory.path }}"
