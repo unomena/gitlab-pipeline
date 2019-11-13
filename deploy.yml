@@ -354,7 +354,7 @@
         var: post_deploy.stderr_lines
 
     - name: Copy nose artifacts in service container from relevant swarm node
-      shell: "docker cp $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.ID{{ '}}' }}):/opt/workspace/src/nosetests.xml {{ artifact_directory.path }}"
+      shell: "docker cp $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.ID{{ '}}' }}):/opt/workspace/src/nosetests.xml {{ artifact_directory.path }}/nosetests.xml"
       delegate_to: "{{ node_res.stdout_lines[0] }}"
       register: artifact_copy
       when:
