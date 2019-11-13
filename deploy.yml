@@ -369,3 +369,8 @@
       delegate_to: "{{ node_res.stdout_lines[0] }}"
       when:
         - stage == "test"
+
+    - name: Raise error if tests failed.
+      fail:
+        msg: "Tests failed."
+      when: "post_deploy.rc != 0 and stage == 'test'"
