@@ -1,7 +1,7 @@
 stages:
   - build
-  - test
   - deploy
+  - test
   - cleanup
 
 variables:
@@ -70,7 +70,7 @@ build_branch:
     - tags
 
 
-branch stack:
+deploy branch env:
   stage: deploy
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
@@ -84,7 +84,7 @@ branch stack:
   environment:
     name: qa/$CI_COMMIT_REF_SLUG
     url: https://$CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
-    on_stop: stop branch
+    on_stop: stop branch env
   script:
     - curl $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
   only:
@@ -94,8 +94,8 @@ branch stack:
     - tags
 
 
-deploy and test:
-  stage: test
+deploy test env:
+  stage: deploy
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
     - internal
@@ -114,8 +114,8 @@ deploy and test:
     - tags
 
 
-stop test stack:
-  stage: deploy
+stop test env:
+  stage: cleanup
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
     - internal
@@ -134,7 +134,7 @@ stop test stack:
     - tags
 
 
-stop branch:
+stop branch env:
   stage: cleanup
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
