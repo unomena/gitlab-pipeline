@@ -42,19 +42,20 @@ cp $COMPOSE_FILE payload/
 scp -o StrictHostKeyChecking=No admin@$CLUSTER_IP:/etc/ansible_inventory payload/
 
 # Execute Ansible playbook
+pwd
 cd payload
 export ANSIBLE_FORCE_COLOR=1
 export ANSIBLE_PIPELINING=1
 ansible-playbook -i ansible_inventory --extra-vars "ansible_sudo_pass=$CLUSTER_ADMIN_USER_PASSWORD ci_job_token=$CI_JOB_TOKEN ci_registry=$CI_REGISTRY resource_prefix=$RESOURCE_PREFIX stack_hostname=$STACK_HOSTNAME stage=$STAGE aws_access_key=$AWS_ACCESS_KEY aws_secret_key=$AWS_SECRET_KEY compose_file=$COMPOSE_FILE" deploy.yml
 
 # Copy nose artifact to allow GitLab to access it.
-ls -lh
-more nosetests.xml
-cd ..
-cp payload/nosetests.xml .
 pwd
-ls
-more nosetests.xml
+ls -lh
+#more nosetests.xml
+#cd ..
+cp payload/nosetests.xml .
+#ls
+#more nosetests.xml
 
 echo Deployed stack to https://$STACK_HOSTNAME
 
