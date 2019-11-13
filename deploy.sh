@@ -52,6 +52,9 @@ ls -lh
 more nosetests.xml
 cd ..
 cp payload/nosetests.xml .
+pwd
+ls
+more nosetests.xml
 
 echo Deployed stack to https://$STACK_HOSTNAME
 
