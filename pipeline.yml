@@ -107,6 +107,10 @@ deploy test env:
     STACK_HOSTNAME: $CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
   script:
     - curl $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
+  artifacts:
+    paths:
+    - nosetests.xml
+    expire_in: 4 week
   only:
     - web
   except:
