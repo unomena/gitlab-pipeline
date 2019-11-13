@@ -109,7 +109,7 @@ deploy test env:
     - curl $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
   artifacts:
     paths:
-    - nosetests.xml
+    - payload/nosetests.xml
     expire_in: 4 week
   only:
     - web
