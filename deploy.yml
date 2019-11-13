@@ -357,7 +357,7 @@
     - name: Copy test report artifact in service container from relevant swarm node
       shell: "docker cp $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.ID{{ '}}' }}):/opt/workspace/src/test_report.html {{ artifact_directory.path }}/test_report.html"
       delegate_to: "{{ node_res.stdout_lines[0] }}"
-      register: artifact_copy
+      ignore_errors: yes
       when:
         - stage == "test"
 
@@ -367,6 +367,7 @@
         dest: test_report.html
         flat: yes
       delegate_to: "{{ node_res.stdout_lines[0] }}"
+      ignore_errors: yes
       when:
         - stage == "test"
 
