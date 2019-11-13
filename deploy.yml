@@ -314,6 +314,7 @@
         path: "{{ deploy_directory.path }}"
 
 - hosts: manager0
+  any_errors_fatal: true
   remote_user: admin
   become: yes
   gather_facts: no
@@ -332,38 +333,6 @@
       delay: 1
       until: node_res.stdout_lines | list | count == 1
 
-    - name: Execute post deploy command in service container from relevant swarm node
-      shell: "docker exec $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.Names{{ '}}' }}) {{ postdeploy_command }}"
-      delegate_to: "{{ node_res.stdout_lines[0] }}"
-      register: post_deploy
-
-    - debug:
-        var: post_deploy.stdout_lines
-
-    - debug:
-        var: post_deploy.stderr_lines
-
-- hosts: manager0
-  remote_user: admin
-  become: yes
-  gather_facts: no
-  vars:
-    ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
-    ansible_python_interpreter: /usr/bin/python3
-    postdeploy_service: "$POSTDEPLOY_SERVICE"
-    postdeploy_image: "$POSTDEPLOY_IMAGE-$CI_COMMIT_SHORT_SHA"
-    postdeploy_command: "$POSTDEPLOY_COMMAND"
-
-  tasks:
-    - name: Resolve swarm node on which container is running for service in which artifacts are located
-      shell: "sleep 10 && docker service ps {{ resource_prefix }}_{{ postdeploy_service }} --filter 'desired-state=running' | grep {{ postdeploy_image }} | awk '{ n=split($4,a,\"-\"); print a[n] }'"
-      register: node_res
-      retries: 5
-      delay: 1
-      until: node_res.stdout_lines | list | count == 1
-      when:
-        - stage == "test"
-
     - name: Create temporary artifact directory on relevant swarm node
       tempfile:
         state: directory
@@ -372,6 +341,18 @@
       register: artifact_directory
       when:
         - stage == "test"
+
+    - name: Execute post deploy command in service container from relevant swarm node
+      shell: "docker exec $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.Names{{ '}}' }}) {{ postdeploy_command }}"
+      delegate_to: "{{ node_res.stdout_lines[0] }}"
+      register: post_deploy
+      failed_when: "post_deploy.rc != 0 and stage != 'test'"
+
+    - debug:
+        var: post_deploy.stdout_lines
+
+    - debug:
+        var: post_deploy.stderr_lines
 
     - name: Copy nose artifacts in service container from relevant swarm node
       shell: "docker cp $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.ID{{ '}}' }}):/opt/workspace/src/nosetests.xml {{ artifact_directory.path }}/nosetests.xml"
