@@ -345,6 +345,6 @@
         var: post_deploy.stderr_lines
 
     - name: Copy artifacts in service container from relevant swarm node
-      shell: "docker cp $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.ID{{ '}}' }}):/opt/workspace/nosetests.xml"
+      shell: "docker cp $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.ID{{ '}}' }}):/opt/workspace/nosetests.xml ."
       delegate_to: "{{ node_res.stdout_lines[0] }}"
       register: artifact_copy
