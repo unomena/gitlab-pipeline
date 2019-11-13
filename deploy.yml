@@ -372,5 +372,5 @@
 
     - name: Raise error if tests failed.
       fail:
-        msg: "Tests failed."
+        msg: "Tests failed, see payload/test_report.html build artifact for details."
       when: "post_deploy.rc != 0 and stage == 'test'"
