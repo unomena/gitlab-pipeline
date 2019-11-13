@@ -344,8 +344,14 @@
     - debug:
         var: post_deploy.stderr_lines
 
+    - name: Create temporary artifact directory
+      tempfile:
+        state: directory
+        suffix: artifact
+      register: artifact_directory
+
     - name: Copy nose artifacts in service container from relevant swarm node
-      shell: "docker cp $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.ID{{ '}}' }}):/opt/workspace/src/nosetests.xml ."
+      shell: "docker cp $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.ID{{ '}}' }}):/opt/workspace/src/nosetests.xml {{ artifact_directory.path }}"
       delegate_to: "{{ node_res.stdout_lines[0] }}"
       register: artifact_copy
       when:
@@ -353,7 +359,8 @@
 
     - name: Copy nose artifacts from swarm node to bastion host
       fetch:
-        src: "{{ deploy_directory.path }}/nosetests.xml"
+        src: "{{ artifact_directory.path }}/nosetests.xml"
         dest: nosetests.xml
+      delegate_to: "{{ node_res.stdout_lines[0] }}"
       when:
         - stage == "test"
