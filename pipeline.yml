@@ -141,7 +141,7 @@ stop test env:
 
 
 stop branch env:
-  stage: cleanup
+  stage: deploy
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
     - internal
