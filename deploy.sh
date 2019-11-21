@@ -3,8 +3,8 @@
 # Exit on any failures
 set -e
 
-if [ $STAGE = "test" ] && [ ! -f docker/commands/test.sh ]; then
-    echo "File docker/commands/test.sh not found, skipping test deploy."
+if [ $STAGE = "test" ] && [ ! -f docker-compose-test.yml ]; then
+    echo "File docker-compose-test.yml not found, skipping test deploy."
     exit 0
 fi
 

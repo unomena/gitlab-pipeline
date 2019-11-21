@@ -13,7 +13,7 @@ variables:
   PRODUCTION_COMPOSE_FILE: docker-compose.yml
   QA_COMPOSE_FILE: docker-compose.yml
   STAGING_COMPOSE_FILE: docker-compose.yml
-  TEST_COMPOSE_FILE: docker-compose.yml
+  TEST_COMPOSE_FILE: docker-compose-test.yml
 
   POSTDEPLOY_COMMAND_QA: ../docker/commands/post_deploy_qa.sh
   POSTDEPLOY_COMMAND_STAGING: ../docker/commands/post_deploy_staging.sh
