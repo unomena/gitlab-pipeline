@@ -354,14 +354,21 @@
     - debug:
         var: post_deploy.stderr_lines
 
-    - name: Copy test report artifact in service container from relevant swarm node
+    - name: Copy test html report artifact in service container from relevant swarm node
       shell: "docker cp $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.ID{{ '}}' }}):/opt/workspace/src/test_report.html {{ artifact_directory.path }}/test_report.html"
       delegate_to: "{{ node_res.stdout_lines[0] }}"
       ignore_errors: yes
       when:
         - stage == "test"
 
-    - name: Copy test report artifact from swarm node to host
+    - name: Copy test junit report artifact in service container from relevant swarm node
+      shell: "docker cp $(docker ps --filter name={{ resource_prefix }}_{{ postdeploy_service }} --format {{ '{{' }}.ID{{ '}}' }}):/opt/workspace/src/junit.xml {{ artifact_directory.path }}/junit.xml"
+      delegate_to: "{{ node_res.stdout_lines[0] }}"
+      ignore_errors: yes
+      when:
+        - stage == "test"
+
+    - name: Copy test html report artifact from swarm node to host
       fetch:
         src: "{{ artifact_directory.path }}/test_report.html"
         dest: test_report.html
@@ -371,7 +378,17 @@
       when:
         - stage == "test"
 
+    - name: Copy test junit report artifact from swarm node to host
+      fetch:
+        src: "{{ artifact_directory.path }}/junit.xml"
+        dest: junit.xml
+        flat: yes
+      delegate_to: "{{ node_res.stdout_lines[0] }}"
+      ignore_errors: yes
+      when:
+        - stage == "test"
+
     - name: Raise error if tests failed.
       fail:
-        msg: "Tests failed, see payload/test_report.html build artifact for details."
+        msg: "Tests failed, see build artifacts for test reports."
       when: "post_deploy.rc != 0 and stage == 'test'"
