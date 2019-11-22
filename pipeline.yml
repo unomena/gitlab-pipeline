@@ -65,6 +65,7 @@ build_branch:
     - curl $PIPELINE_ASSETS_ROOT_URL/build.sh | sh
   only:
     - web
+    - merge_requests
   except:
     - master
     - tags
@@ -116,6 +117,7 @@ deploy test env:
     when: always
   only:
     - web
+    - merge_requests
   except:
     - master
     - tags
@@ -135,6 +137,7 @@ stop test env:
   when: always
   only:
     - web
+    - merge_requests
   except:
     - master
     - tags
