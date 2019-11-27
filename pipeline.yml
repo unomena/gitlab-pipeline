@@ -1,7 +1,7 @@
 stages:
   - build
-  - deploy
   - test
+  - deploy
   - cleanup
 
 variables:
@@ -71,7 +71,7 @@ build_branch:
     - tags
 
 
-deploy branch env:
+deploy branch:
   stage: deploy
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
@@ -95,8 +95,8 @@ deploy branch env:
     - tags
 
 
-deploy test env:
-  stage: deploy
+run tests:
+  stage: test
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
     - internal
@@ -108,6 +108,7 @@ deploy test env:
     STACK_HOSTNAME: test.$CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
   script:
     - curl $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
+    - curl $PIPELINE_ASSETS_ROOT_URL/destroy.sh | bash
   artifacts:
     paths:
     - payload/junit.xml
@@ -123,29 +124,8 @@ deploy test env:
     - master
     - tags
 
-
-stop test env:
-  stage: cleanup
-  image: $CI_REGISTRY/unomena/worker-images/deploy:master
-  tags:
-    - internal
-  variables:
-    STAGE: test
-    RESOURCE_PREFIX: $RESOURCE_PREFIX_ENVIRONMENT-test-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
-    STACK_HOSTNAME: test.$CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
-  script:
-    - curl $PIPELINE_ASSETS_ROOT_URL/destroy.sh | bash
-  when: always
-  only:
-    - web
-    - merge_requests
-  except:
-    - master
-    - tags
-
-
 stop branch env:
-  stage: deploy
+  stage: cleanup
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
     - internal
