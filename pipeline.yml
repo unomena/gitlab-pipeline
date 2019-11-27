@@ -47,7 +47,7 @@ build_master:
     - tags
 
 
-build_branch:
+build branch:
   stage: build
   image: $CI_REGISTRY/unomena/worker-images/build:master
   tags:
@@ -71,7 +71,7 @@ build_branch:
     - tags
 
 
-deploy branch:
+deploy environment:
   stage: deploy
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
@@ -85,7 +85,7 @@ deploy branch:
   environment:
     name: qa/$CI_COMMIT_REF_SLUG
     url: https://$CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
-    on_stop: stop branch env
+    on_stop: stop environment
   script:
     - curl $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
   only:
@@ -108,6 +108,7 @@ run tests:
     STACK_HOSTNAME: test.$CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
   script:
     - curl $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
+  after_script:
     - curl $PIPELINE_ASSETS_ROOT_URL/destroy.sh | bash
   artifacts:
     paths:
@@ -124,7 +125,7 @@ run tests:
     - master
     - tags
 
-stop branch env:
+stop environment:
   stage: cleanup
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
