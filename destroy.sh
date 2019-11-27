@@ -12,7 +12,7 @@ fi
 eval $(ssh-agent -s)
 
 # Add bastion host ssh key to ssh agent.
-mkdir keys
+mkdir -p keys
 cp /tmp/keys/GITLAB_USER_BASTION_HOST_SSH_PRIVATE_KEY keys/id_rsa
 chmod 700 keys/id_rsa
 ssh-add keys/id_rsa
