@@ -88,6 +88,7 @@ deploy environment:
     on_stop: stop environment
   script:
     - curl $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
+  when: always
   only:
     - web
   except:
