@@ -84,7 +84,7 @@ environment deploy:
   environment:
     name: qa/$CI_COMMIT_REF_SLUG
     url: https://$CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
-    on_stop: stop environment
+    on_stop: environment destroy
   script:
     - curl $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
   when: always
