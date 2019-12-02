@@ -1,6 +1,5 @@
 stages:
   - build
-  - test
   - deploy
   - cleanup
 
@@ -23,7 +22,7 @@ variables:
   POSTDEPLOY_SERVICE: django
 
 
-build_master:
+build master:
   stage: build
   image: $CI_REGISTRY/unomena/worker-images/build:master
   tags:
@@ -71,8 +70,8 @@ build branch:
     - tags
 
 
-deploy environment:
-  stage: deploy
+environment deploy:
+  stage: run
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
     - internal
@@ -96,8 +95,8 @@ deploy environment:
     - tags
 
 
-run tests:
-  stage: test
+tests:
+  stage: run
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
     - internal
@@ -126,7 +125,7 @@ run tests:
     - master
     - tags
 
-stop environment:
+environment destroy:
   stage: cleanup
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
@@ -172,8 +171,8 @@ build:
     - branches
 
 
-staging:
-  stage: deploy
+staging deploy:
+  stage: run
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
     - internal
@@ -186,7 +185,7 @@ staging:
   environment:
     name: staging
     url: https://staging.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
-    on_stop: stop_staging
+    on_stop: staging destroy
   script:
     - curl $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
   only:
@@ -195,7 +194,7 @@ staging:
     - branches
 
 
-stop_staging:
+staging destroy:
   stage: cleanup
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
@@ -217,8 +216,8 @@ stop_staging:
     - branches
 
 
-production:
-  stage: deploy
+production deploy:
+  stage: run
   image: $CI_REGISTRY/unomena/worker-images/deploy:master
   tags:
     - production
