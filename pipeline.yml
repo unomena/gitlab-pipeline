@@ -39,7 +39,7 @@ build master:
       entrypoint: ["dockerd-entrypoint.sh"]
       command: ["--insecure-registry", "192.168.30.30:5005"]
   script:
-    - curl $PIPELINE_ASSETS_ROOT_URL/build.sh | sh
+    - curl -sL $PIPELINE_ASSETS_ROOT_URL/build.sh | sh
   only:
     - master
   except:
@@ -61,7 +61,7 @@ build branch:
       entrypoint: ["dockerd-entrypoint.sh"]
       command: ["--insecure-registry", "192.168.30.30:5005"]
   script:
-    - curl $PIPELINE_ASSETS_ROOT_URL/build.sh | sh
+    - curl -sL $PIPELINE_ASSETS_ROOT_URL/build.sh | sh
   only:
     - web
     - merge_requests
@@ -86,7 +86,7 @@ deploy:
     url: https://$CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
     on_stop: destroy
   script:
-    - curl $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
+    - curl -sL $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
   when: always
   only:
     - web
@@ -107,9 +107,9 @@ tests:
     RESOURCE_PREFIX: $RESOURCE_PREFIX_ENVIRONMENT-test-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     STACK_HOSTNAME: test.$CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
   script:
-    - curl $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
+    - curl -sL $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
   after_script:
-    - curl $PIPELINE_ASSETS_ROOT_URL/destroy.sh | bash
+    - curl -sL $PIPELINE_ASSETS_ROOT_URL/destroy.sh | bash
   artifacts:
     paths:
     - payload/junit.xml
@@ -136,7 +136,7 @@ destroy:
     RESOURCE_PREFIX: $RESOURCE_PREFIX_ENVIRONMENT-qa-$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
     STACK_HOSTNAME: $CI_COMMIT_REF_SLUG.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
   script:
-    - curl $PIPELINE_ASSETS_ROOT_URL/destroy.sh | bash
+    - curl -sL $PIPELINE_ASSETS_ROOT_URL/destroy.sh | bash
   environment:
     name: qa/$CI_COMMIT_REF_SLUG
     action: stop
@@ -163,8 +163,8 @@ build:
       entrypoint: ["dockerd-entrypoint.sh"]
       command: ["--insecure-registry", "192.168.30.30:5005"]
   script:
-    - curl $PIPELINE_ASSETS_ROOT_URL/enforce_latest_tag.sh | sh
-    - curl $PIPELINE_ASSETS_ROOT_URL/build.sh | sh
+    - curl -sL $PIPELINE_ASSETS_ROOT_URL/enforce_latest_tag.sh | sh
+    - curl -sL $PIPELINE_ASSETS_ROOT_URL/build.sh | sh
   only:
     - tags
   except:
@@ -187,7 +187,7 @@ staging deploy:
     url: https://staging.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
     on_stop: staging destroy
   script:
-    - curl $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
+    - curl -sL $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
   only:
     - tags
   except:
@@ -205,7 +205,7 @@ staging destroy:
     RESOURCE_PREFIX: $RESOURCE_PREFIX_ENVIRONMENT-staging-$CI_PROJECT_NAME
     STACK_HOSTNAME: staging.$CI_PROJECT_NAME.$ROOT_DOMAIN_INTERNAL
   script:
-    - curl $PIPELINE_ASSETS_ROOT_URL/destroy.sh | bash
+    - curl -sL $PIPELINE_ASSETS_ROOT_URL/destroy.sh | bash
   environment:
     name: staging
     action: stop
@@ -231,7 +231,7 @@ production deploy:
     name: production
     url: https://$PRODUCTION_STACK_HOSTNAME
   script:
-    - curl $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
+    - curl -sL $PIPELINE_ASSETS_ROOT_URL/deploy.sh | bash
   only:
     - tags
   except:
