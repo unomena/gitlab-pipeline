@@ -10,4 +10,4 @@ deploy QA, Branch, Staging and Production environments to Docker Swarm clusters.
 
 To use this pipeline include it as part of any repo's `.gitlab-ci.yml` as follows:
 
-    include: 'https://gitlab.unomena.net/unomenapublic/gitlab-pipeline/raw/master/pipeline.yml'
+    include: 'https://github.com/unomena/gitlab-pipeline/raw/master/pipeline.yml'
