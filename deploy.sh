@@ -24,10 +24,10 @@ ssh -n -o 'ForwardAgent yes' -o 'StrictHostKeyChecking=No' $BASTION_HOST_CONNECT
 # Fetch ansible playbook, templates and config.
 mkdir -p templates
 mkdir -p payload/templates
-curl -s $PIPELINE_ASSETS_ROOT_URL/deploy.yml -o deploy.yml
-curl -s $PIPELINE_ASSETS_ROOT_URL/templates/env -o templates/env
-curl -s $PIPELINE_ASSETS_ROOT_URL/templates/docker-compose.override.yml -o payload/templates/docker-compose.override.yml
-curl -s $PIPELINE_ASSETS_ROOT_URL/ansible.cfg -o ansible.cfg
+curl -sL $PIPELINE_ASSETS_ROOT_URL/deploy.yml -o deploy.yml
+curl -sL $PIPELINE_ASSETS_ROOT_URL/templates/env -o templates/env
+curl -sL $PIPELINE_ASSETS_ROOT_URL/templates/docker-compose.override.yml -o payload/templates/docker-compose.override.yml
+curl -sL $PIPELINE_ASSETS_ROOT_URL/ansible.cfg -o ansible.cfg
 
 # Replace environment variables in playbook.
 envsubst < deploy.yml > payload/deploy.yml

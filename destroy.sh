@@ -22,8 +22,8 @@ ssh-add keys/id_rsa
 ssh -n -o 'ForwardAgent yes' -o 'StrictHostKeyChecking=No' $BASTION_HOST_CONNECTION_STRING 'ssh-add'
 
 # Fetch ansible playbook and config.
-curl -s https://github.com/unomena/gitlab-pipeline/raw/master/destroy.yml -o destroy.yml
-curl -s https://github.com/unomena/gitlab-pipeline/raw/master/ansible.cfg -o ansible.cfg
+curl -sL https://github.com/unomena/gitlab-pipeline/raw/master/destroy.yml -o destroy.yml
+curl -sL https://github.com/unomena/gitlab-pipeline/raw/master/ansible.cfg -o ansible.cfg
 
 # Replace environment variables in playbook.
 envsubst < destroy.yml > playbook.yml
